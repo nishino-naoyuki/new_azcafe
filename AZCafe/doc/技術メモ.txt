@@ -1,0 +1,5 @@
+checkStyleのコマンドライン実行方法
+java -jar checkstyle-7.0-all.jar -c /sun_checks.xml -o out.txt src\main\java
+
+参考）
+https://qiita.com/opengl-8080/items/cb4122a19269e8e683a4
