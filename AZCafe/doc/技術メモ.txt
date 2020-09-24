@@ -4,6 +4,15 @@ java -jar checkstyle-7.0-all.jar -c /sun_checks.xml -o out.txt src\main\java
 参考）
 https://qiita.com/opengl-8080/items/cb4122a19269e8e683a4
 
+javascriptの実行
+→node.jsを使用する
+コマンドプロンプトで
+ node xxxx.js
+ 
+参考）
+https://jsprimer.net/use-case/nodecli/helloworld/
+
+
 タブの開発）
 https://qiita.com/KenN3/items/7a5b06d8cd04bdeca08b
 
@@ -12,3 +21,21 @@ https://docs.microsoft.com/ja-jp/microsoftteams/platform/tabs/how-to/authenticat
 https://docs.microsoft.com/ja-jp/microsoftteams/platform/tabs/how-to/authentication/auth-aad-sso
 https://www.youtube.com/watch?v=zc9S270c-Dg
 https://www.youtube.com/watch?v=h1OX5bXkCeg
+
+面白そうなＡＰＩ
+（コンパス）
+https://connpass.com/about/api/
+（動物）
+https://dog.ceo/dog-api/
+https://aws.random.cat/meow
+（ポケモン）
+https://pokeapi.co/
+（エラー時）
+https://http.cat/
+（Ｗｉｋｉ）
+https://ja.wikipedia.org/w/api.php
+（フリー画像）
+https://www.whizz-tech.co.jp/5449/
+
+（ＡＩ系）
+http://gagbot.net/machine-learning/api1
