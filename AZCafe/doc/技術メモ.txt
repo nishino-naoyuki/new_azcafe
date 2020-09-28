@@ -22,6 +22,10 @@ https://docs.microsoft.com/ja-jp/microsoftteams/platform/tabs/how-to/authenticat
 https://www.youtube.com/watch?v=zc9S270c-Dg
 https://www.youtube.com/watch?v=h1OX5bXkCeg
 
+SpingBoot)
+・設定ファイル
+https://qiita.com/kazuki43zoo/items/0ce92fce6d6f3b7bf8eb
+
 面白そうなＡＰＩ
 （コンパス）
 https://connpass.com/about/api/

@@ -1,4 +1,4 @@
-package com.example.demo;
+package jp.ac.asojuku.azcafe;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

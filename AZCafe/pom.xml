@@ -38,6 +38,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.4</version><!--$NO-MVN-MAN-VER$-->
+		</dependency>
+		<dependency>
 		    <groupId>org.projectlombok</groupId>
 		    <artifactId>lombok-maven</artifactId>
 		    <version>1.18.4.0</version>
@@ -69,6 +74,11 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -80,4 +90,45 @@
 		</plugins>
 	</build>
 
+	<profiles>
+        <profile>
+                <id>dev</id>
+                <build>
+                        <resources>
+                                <resource>
+                                        <directory>setting/dev</directory>
+                                </resource>
+                                <resource>
+                                        <directory>src/main/resources</directory>
+                                </resource>
+                        </resources>
+                </build>
+        </profile>
+        <profile>
+                <id>production</id>
+                <build>
+                        <resources>
+                                <resource>
+                                        <directory>setting/production</directory>
+                                </resource>
+                                <resource>
+                                        <directory>src/main/resources</directory>
+                                </resource>
+                        </resources>
+                </build>
+        </profile>
+        <profile>
+                <id>staging</id>
+                <build>
+                        <resources>
+                                <resource>
+                                        <directory>setting/staging</directory>
+                                </resource>
+                                <resource>
+                                        <directory>src/main/resources</directory>
+                                </resource>
+                        </resources>
+                </build>
+        </profile>
+	</profiles>
 </project>

@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/asobbs?serverTimezone=JST
+    username: root
+    password: password
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: nishino.aso@gmail.com
+    password: jizlzeuhkrorsarh
+    properties.mail.smtp.auth: true
+    properties.mail.smtp.starttls.enable: true
+    
+azcafe:
+  salt: 5fr2FjxT
