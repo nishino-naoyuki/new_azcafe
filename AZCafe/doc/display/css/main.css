@@ -14,3 +14,8 @@
 .ranking-user-name {
     vertical-align:middle;
 }
+
+.small-icon {
+    padding: 10px;
+    font-size: 0.8em;
+}

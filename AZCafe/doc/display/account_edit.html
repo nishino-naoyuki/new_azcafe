@@ -222,34 +222,16 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <strong><i class="fas fa-idcard mr-1"></i> 学籍番号</strong>
-
                 <p class="text-muted">
                   1234567
                 </p>
-
                 <hr>
-
-                <strong><i class="fas fa-signature mr-1"></i> ニックネーム</strong>
-
-                <p class="text-muted">ああああああああああ</p>
-
-                <hr>
-
-                <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
-
-                <p class="text-muted">
-                  <span class="tag tag-danger">UI Design</span>
-                  <span class="tag tag-success">Coding</span>
-                  <span class="tag tag-info">Javascript</span>
-                  <span class="tag tag-warning">PHP</span>
-                  <span class="tag tag-primary">Node.js</span>
-                </p>
-
-                <hr>
-
-                <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
-
-                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+                <strong><i class="fas fa-signature mr-1"></i> ニックネーム</strong><i id="edit-nickname" class="far fa-edit small-icon" data-toggle="tooltip" title="ニックネームの編集"></i>
+                <p class="text-muted" id="nickname-label">ああああああああああ</p>
+                <div id="nickname-edit" class="d-none">
+                  <input type="text" class="form-control" value="ああああああああああ">
+                  <button class="btn-sm btn-primary" id="btn-nickname-appy">適用</button>
+                </div>
               </div>
               <!-- /.card-body -->
             </div>
@@ -260,9 +242,9 @@
             <div class="card">
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
-                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">解答一覧</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">フォローリスト</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">フォロワーリスト</a></li>
                 </ul>
               </div><!-- /.card-header -->
               <div class="card-body">
@@ -567,6 +549,8 @@
 <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.js"></script>
+<!-- azcafe -->
+<script src="js/azcafe.js"></script>
 
 <!-- PAGE PLUGINS -->
 <!-- jQuery Mapael -->
@@ -581,6 +565,23 @@
 <script src="dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="dist/js/pages/dashboard2.js"></script>
+<script>
+  $(document).on('click', '#edit-nickname', function(){
+        let label = document.getElementById("nickname-label");
+
+        if(label.style.display=="block"){
+          label.style.display = "none";
+          $("#nickname-edit").removeClass("d-none");
+        }else{
+          label.style.display = "block";
+          $("#nickname-edit").addClass("d-none");
+        }
+  });
+
+  $(document).on('click','#btn-nickname-appy',function(){
+    alert("click!")
+  })
+</script>
 </body>
 
 </html>
