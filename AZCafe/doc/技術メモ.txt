@@ -1,3 +1,5 @@
+
+※ソース解析はチェックスタイルで行う！
 checkStyleのコマンドライン実行方法
 java -jar checkstyle-7.0-all.jar -c /sun_checks.xml -o out.txt src\main\java
 
@@ -26,6 +28,9 @@ SpingBoot)
 ・設定ファイル
 https://qiita.com/kazuki43zoo/items/0ce92fce6d6f3b7bf8eb
 
+プログラム専門のエディタACE
+https://qiita.com/naga3/items/1bc268243f2e8a6514e5
+
 面白そうなＡＰＩ
 （コンパス）
 https://connpass.com/about/api/
@@ -43,3 +48,6 @@ https://www.whizz-tech.co.jp/5449/
 
 （ＡＩ系）
 http://gagbot.net/machine-learning/api1
+
+Amazon CodeGuru
+https://aws.amazon.com/jp/codeguru/
