@@ -341,101 +341,15 @@
               <div class="card-header">
                 <h3 class="card-title">ソースコード</h3>
                 <div class="card-tools">
-                  <button type="button" class="btn btn-tool" id="good-btn" data-toggle="tooltip" title="いいねする">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
                     <i class="far fa-thumbs-up"></i>
                   </button>
-                  <span title="" class="badge" id="good-count">3</span>
-                  <span data-toggle="tooltip" title="コメント入力">
-                    <button type="button" class="btn btn-tool" title="Contacts" data-toggle="modal" data-target="#modal-default">
-                      <i class="fas fa-comments"></i>
-                    </button>
-                  </span>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="col-sm-6 d-flex">
-                  <div class="form-group">
-                    <select class="form-control">
-                      <option>main.java</option>
-                      <option>source2.java</option>
-                      <option>source3.java</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <button class="btn btn-primary" id="disp_src_btn">表示</button>
-                  </div>
-                </div>
-                <row class="src-display">
-                  <div id="editor" style="height: 600px"></div>
-                </row>
-                <!--コメント-->
-                <div class="card card-primary card-outline direct-chat direct-chat-primary">
-                  <div class="card-header">
-                    <h3 class="card-title">コメント</h3>
-                  </div>
-                  <div class="card-body">
-                    <div class="direct-chat-messages">
-                      <!--コメント-->
-                      <div class="direct-chat-msg">
-                        <div class="direct-chat-infos clearfix">
-                          <span class="direct-chat-name float-left">Alexander Pierce</span>
-                          <span class="direct-chat-timestamp float-right">23 Jan 2:00 pm</span>
-                        </div>
-                        <!-- /.direct-chat-infos -->
-                        <img class="direct-chat-img" src="dist/img/user1-128x128.jpg" alt="Message User Image">
-                        <!-- /.direct-chat-img -->
-                        <div class="direct-chat-text">
-                          Is this template really for free? That's unbelievable!
-                        </div>
-                      </div>
-                      <!--コメント-->
-                      <div class="direct-chat-msg">
-                        <div class="direct-chat-infos clearfix">
-                          <span class="direct-chat-name float-left">Alexander Pierce</span>
-                          <span class="direct-chat-timestamp float-right">23 Jan 2:00 pm</span>
-                        </div>
-                        <!-- /.direct-chat-infos -->
-                        <img class="direct-chat-img" src="dist/img/user3-128x128.jpg" alt="Message User Image">
-                        <!-- /.direct-chat-img -->
-                        <div class="direct-chat-text">
-                          いいソースコードです
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div><!--/. container-fluid -->
-
-      <div class="modal fade" id="modal-default">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">コメント入力</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="form-group">
-                <textarea class="form-control" rows="3" id="comment-input" placeholder="Enter ..."></textarea>
-                <div class="normal-text" id="comment-length">100/2000文字</div>
-              </div>
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
-              <button type="button" class="btn btn-primary">登録</button>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-      <!-- /.modal -->
-
     </section>
     <!-- /.content -->
   </div>
@@ -481,19 +395,11 @@
   <script src="ace/src/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
 <script>
 
-  const defaultFontSize = 14;
-
-  const editor = ace.edit("editor");
-  editor.setTheme("ace/theme/eclipse");
-  editor.setFontSize(defaultFontSize);
-  editor.session.setMode("ace/mode/java");
 
 
   $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
     $("#result-detail").hide();
-    editor.setValue("aaaaaa\bbbbbb")
-    editor.setReadOnly(true);
   });
 
   //詳細ボタンクリック
@@ -503,22 +409,6 @@
    
   })
   
-  //いいねボタンクリック
-  $(document).on('click','#good-btn',function(){
-    
-    let goodCount = $("#good-count").text();
-    goodCount++;
-    $("#good-count").text(goodCount);
-   
-  })
-
-  //入力エリア更新
-  $(document).bind('input propertychange','#comment-input',function(){
-    
-    const inputText = $("#comment-input").val();
-    const textNum = inputText.length;
-    $("#comment-length").text(textNum+"/2000文字");
-  })
 
 </script>
 
