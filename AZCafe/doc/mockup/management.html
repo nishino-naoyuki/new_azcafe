@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard 2</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.css">
+  <link rel="stylesheet" href="css/main.css">
+  <!-- include summernote css -->
+  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <!-- bootstrap slider -->
+  <link rel="stylesheet" href="plugins/bootstrap-slider/css/bootstrap-slider.min.css">
+
+</head>
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+<div class="wrapper">
+  <!-- Navbar -->
+  
+  <!-- ここからヘッダー -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Notifications Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-bell"></i>
+          <span class="badge badge-warning navbar-badge">15</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <span class="dropdown-item dropdown-header">15 Notifications</span>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-envelope mr-2"></i> 4 new messages
+            <span class="float-right text-muted text-sm">3 mins</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-users mr-2"></i> 8 friend requests
+            <span class="float-right text-muted text-sm">12 hours</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-file mr-2"></i> 3 new reports
+            <span class="float-right text-muted text-sm">2 days</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+  <!-- ここまでヘッダー -->
+
+  <!-- Main Sidebar Container -->
+  <!-- ここからサイドバー -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="dashboad.html" class="brand-link">
+      <img src="img/logo.png" alt="AdminLTE Logo" class="brand-image elevation-3" style="opacity: .8">
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="mt-3 pb-1 mb-3">
+        <div class="department">
+          情報システム専攻科
+        </div>
+      </div>
+      <div class="user-panel mt-3 pb-2 mb-3 d-flex">
+        <div class="image">
+          <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          <a href="#" class="d-block">西野直幸</a>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item">
+            <a href="dashboad.html" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                ダッシュボード
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="pages/widgets.html" class="nav-link">
+              <i class="nav-icon fas fa-code"></i>
+              <p>
+                問題検索
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="pages/widgets.html" class="nav-link">
+              <i class="nav-icon fas fa-crown"></i>
+              <p>
+                ランキング
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="pages/widgets.html" class="nav-link">
+              <i class="nav-icon fas fa-plus-circle"></i>
+              <p>
+                問題作成
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="pages/widgets.html" class="nav-link">
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                ユーザー検索
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="pages/widgets.html" class="nav-link">
+              <i class="nav-icon fas fa-cog"></i>
+              <p>
+                設定
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="pages/widgets.html" class="nav-link">
+              <i class="nav-icon fas fa-unlock-alt"></i>
+              <p>
+                パスワードリセット
+              </p>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+  <!-- ここまでサイドバー --!>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-12">
+            <nav>
+			  <ul class="breadcrumb">
+			    <li class="breadcrumb-item"><a href="#">情報管理</a></li>
+			  </ul>
+			</nav>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+        <div class="row mb-2">
+          <div class="col-sm-12">
+            <h1 class="m-0">情報管理</h1>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- /.col -->
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header p-2">
+                <ul class="nav nav-pills">
+                  <li class="nav-item"><a class="nav-link active" href="#user-regist" data-toggle="tab">ユーザー登録</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#user-csv-regist" data-toggle="tab">ユーザーCSV登録</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#edit-class" data-toggle="tab">クラス編集</a></li>
+                </ul>
+              </div><!-- /.card-header -->
+              <div class="card-body">
+                <div class="tab-content">
+                  <!-- ユーザーの登録 -->
+                  <div class="active tab-pane" id="user-regist">
+                    <form action="#">
+                      <div class="form-group">
+                        <label for="icon" class="label-name">アイコン</label>
+                        <div class="user-icon-dnd-wrapper">
+                          <input type="file" name="icon" id="input_file" accept="image/*">
+                          <div id="preview_field"></div>
+                          <div id="drop_area">drag and drop<br>or<br>click here.</div>
+                          <div id="icon_clear_button"><i class="far fa-times-circle"></i></div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleSelectBorder">ロール</label>
+                        <select class="form-control" id="exampleSelectBorder">
+                          <option>学生</option>
+                          <option>教員</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="student-no">学籍番号（教員は不要）</label>
+                        <input type="text" id="student-no" class="form-control" placeholder="学籍番号">
+                      </div>
+                      <div class="form-group">
+                        <label for="mail">メールアドレス</label>
+                        <input type="text" id="mail" class="form-control" placeholder="メールアドレス">
+                      </div>
+                      <div class="form-group">
+                        <label for="nickname">ニックネーム</label>
+                        <input type="text" id="nickname" class="form-control" placeholder="ニックネーム">
+                      </div>
+                      <div class="form-group">
+                          <button class="btn btn-primary" id="btn-confirm">登録</button>
+                      </div>
+                    </form>
+                  </div>
+                  <!-- ユーザーのCSV登録 -->
+                  <div class="tab-pane" id="user-csv-regist">
+                    <form action="#">
+                      <div class="form-group">
+                        <div class="custom-file">
+                          <input type="file" class="custom-file-input" id="exampleInputFile2">
+                          <label class="custom-file-label" for="exampleInputFile2">Choose file</label>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                          <button class="btn btn-primary" id="btn-confirm">登録</button>
+                      </div>
+                    </form>
+                  </div>
+                  <!-- 問題の本文情報 -->
+                  <div class="tab-pane" id="edit-class">
+                    <table id="example1" class="table table-bordered table-striped">
+                      <thead>
+                      <tr>
+                        <th>クラスID</th>
+                        <th>クラス名</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                        <td>
+                          1
+                        </td> 
+                        <td class="d-flex align-items-center">
+                          <div class="text-muted classname-label">IT1A</div>
+                          <i class="far fa-edit small-icon edit-classname" data-toggle="tooltip" title="クラス名の編集"></i>
+                          <div class="classname-edit d-none">
+                            <input type="text" class="form-control" value="IT1A">
+                            <button class="btn-sm btn-primary btn-classname-appy" data-id="1">適用</button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          2
+                        </td> 
+                        <td class="d-flex align-items-center">
+                          <div class="text-muted classname-label">IT1B</div>
+                          <i class="far fa-edit small-icon edit-classname" data-toggle="tooltip" title="クラス名の編集"></i>
+                          <div class="classname-edit d-none">
+                            <input type="text" class="form-control" value="IT1B">
+                            <button class="btn-sm btn-primary btn-classname-appy" data-id="2">適用</button>
+                          </div>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- /.tab-pane -->
+                </div>
+                <!-- /.tab-content -->
+              </div><!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        </form>          
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+    All rights reserved.
+    <div class="float-right d-none d-sm-inline-block">
+      <b>Version</b> 3.1.0-rc
+    </div>
+  </footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+<!-- jQuery -->
+<script src="plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.js"></script>
+<!-- azcafe -->
+<script src="js/azcafe.js"></script>
+
+<!-- PAGE PLUGINS -->
+<!-- jQuery Mapael -->
+<script src="plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
+<script src="plugins/raphael/raphael.min.js"></script>
+<script src="plugins/jquery-mapael/jquery.mapael.min.js"></script>
+<script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
+<!-- ChartJS -->
+<script src="plugins/chart.js/Chart.min.js"></script>
+<!-- typehead -->
+<script src="js/typeahead.bundle.js"></script>
+<!-- include summernote js -->
+<script src="plugins/summernote/summernote-bs4.min.js"></script>
+<script src="plugins/summernote/lang/summernote-ja-JP.min.js"></script>
+<!-- DataTables  & Plugins -->
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="plugins/jszip/jszip.min.js"></script>
+<script src="plugins/pdfmake/pdfmake.min.js"></script>
+<script src="plugins/pdfmake/vfs_fonts.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+</head>
+
+<script>
+  $(document).on('click', '.edit-classname', function(){
+    let label = $(this).parent().find(".classname-label");
+    //alert($(this).parent().find(".classname-label").css("display"));
+
+    if(label.css("display")=="block"){
+      label.css("display","none");
+      $(this).parent().find(".classname-edit").removeClass("d-none");
+    }else{
+      label.css("display","block");
+      $(this).parent().find(".classname-edit").addClass("d-none");
+    }
+  });
+
+  
+  $(document).on('click', '.btn-classname-appy', function(){
+    let id = $(this).data("id");
+    alert("適用クリック id="+id);
+  });
+  
+  $(function () {
+    // クリックで画像を選択する場合
+    $('#drop_area').on('click', function () {
+      $('#input_file').click();
+    });
+
+    $('#input_file').on('change', function () {
+      // 画像が複数選択されていた場合
+      if (this.files.length > 1) {
+        alert('アップロードできる画像は1つだけです');
+        $('#input_file').val('');
+        return;
+      }
+      handleFiles(this.files);
+    });
+    
+    $('#example1').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+
+  });
+
+  // ドラッグしている要素がドロップ領域に入ったとき・領域にある間
+$('#drop_area').on('dragenter dragover', function (event) {
+  event.stopPropagation();
+  event.preventDefault();
+  $('#drop_area').css('border', '1px solid #333');  // 枠を実線にする
+});
+
+// ドラッグしている要素がドロップ領域から外れたとき
+$('#drop_area').on('dragleave', function (event) {
+  event.stopPropagation();
+  event.preventDefault();
+  $('#drop_area').css('border', '1px dashed #aaa');  // 枠を点線に戻す
+});
+
+// ドラッグしている要素がドロップされたとき
+$('#drop_area').on('drop', function (event) {
+  event.preventDefault();
+
+  $('#input_file')[0].files = event.originalEvent.dataTransfer.files;
+
+  // 画像が複数選択されていた場合
+  if ($('#input_file')[0].files.length > 1) {
+    alert('アップロードできる画像は1つだけです');
+    $('#input_file').val('');
+    return;
+  }
+  handleFiles($('#input_file')[0].files);
+});
+
+// 選択された画像ファイルの操作
+function handleFiles(files) {
+  var file = files[0];
+  var imageType = 'image.*';
+
+  // ファイルが画像が確認する
+  if (! file.type.match(imageType)) {
+    alert('画像を選択してください');
+    $('#input_file').val('');
+    $('#drop_area').css('border', '1px dashed #aaa');
+    return;
+  }
+
+  $('#drop_area').hide();  // いちばん上のdrop_areaを非表示にします
+  $('#icon_clear_button').show();  // icon_clear_buttonを表示させます
+
+  var img = document.createElement('img');  // <img>をつくります
+  var reader = new FileReader();
+  reader.onload = function () {  // 読み込みが完了したら
+    img.src = reader.result;  // readAsDataURLの読み込み結果がresult
+    img.classList.add("img-circle");
+    $('#preview_field').append(img);  // preview_filedに画像を表示
+  }
+  reader.readAsDataURL(file); // ファイル読み込みを非同期でバックグラウンドで開始
+} 
+
+// アイコン画像を消去するボタン
+$('#icon_clear_button').on('click', function () {
+  $('#preview_field').empty();  // 表示していた画像を消去
+  $('#input_file').val('');  // inputの中身を消去
+  $('#drop_area').show();  // drop_areaをいちばん前面に表示
+  $('#icon_clear_button').hide();  // icon_clear_buttonを非表示
+  $('#drop_area').css('border', '1px dashed #aaa');  // 枠を点線に変更
+})
+
+// drop_area以外でファイルがドロップされた場合、ファイルが開いてしまうのを防ぐ
+$(document).on('dragenter', function (event) {
+  event.stopPropagation();
+  event.preventDefault();
+});
+$(document).on('dragover', function (event) {
+  event.stopPropagation();
+  event.preventDefault();
+});
+$(document).on('drop', function (event) {
+  event.stopPropagation();
+  event.preventDefault();
+});
+
+
+</script>
+</body>
+
+</html>

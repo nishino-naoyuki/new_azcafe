@@ -238,6 +238,15 @@
                   <input type="text" class="form-control" value="ああああああああああ">
                   <button class="btn-sm btn-primary" id="btn-nickname-appy">適用</button>
                 </div>
+                <hr>
+                <strong><i class="fas fa-user-lock"></i> パスワード変更</strong>
+                <div id="nickname-edit" class="form-group d-flat">
+                  <form>
+                    <input type="password" class="form-control" value="ああああああああああ">
+                    <input type="password" class="form-control" value="ああああああああああ">
+                    <button class="btn-sm btn-primary" id="btn-password-change">変更</button>
+                  </form>
+                </div>
               </div>
               <!-- /.card-body -->
             </div>
@@ -582,17 +591,20 @@
   });
 
   $(document).on('click','#btn-nickname-appy',function(){
-    alert("click!")
+    alert("click! btn-nickname-appy")
   })
 
+  $(document).on('click','#btn-password-change',function(){
+    alert("click! btn-password-change")
+  })
   $(document).on('click',"#btn-follow-release",function(){
     let id = $(this).data("id");
-    alert("id="+id);
+    alert("btn-follow-release id="+id);
   })
 
   $(document).on('click',"#btn-follow",function(){
     let id = $(this).data("id");
-    alert("id="+id);
+    alert("btn-follow id="+id);
   })
   
   $(function () {

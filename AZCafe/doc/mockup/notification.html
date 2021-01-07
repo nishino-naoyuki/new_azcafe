@@ -11,9 +11,22 @@
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.css">
   <link rel="stylesheet" href="css/main.css">
+  <!-- include summernote css -->
+  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <!-- bootstrap slider -->
+  <link rel="stylesheet" href="plugins/bootstrap-slider/css/bootstrap-slider.min.css">
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -30,11 +43,32 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="notification.html">
+      <!-- Notifications Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell"></i>
           <span class="badge badge-warning navbar-badge">15</span>
         </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <span class="dropdown-item dropdown-header">15 Notifications</span>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-envelope mr-2"></i> 4 new messages
+            <span class="float-right text-muted text-sm">3 mins</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-users mr-2"></i> 8 friend requests
+            <span class="float-right text-muted text-sm">12 hours</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-file mr-2"></i> 3 new reports
+            <span class="float-right text-muted text-sm">2 days</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+        </div>
       </li>
     </ul>
   </nav>
@@ -52,10 +86,9 @@
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
-      <div class="user-panel department mt-1 pb-1 mb-1 d-flex align-items-center">
-        <i class="fas fa-chalkboard"></i>
-        <div class="info">
-          <a href="user-info.html" class="d-block">情報システム専攻科</a>
+      <div class="mt-3 pb-1 mb-3">
+        <div class="department">
+          情報システム専攻科
         </div>
       </div>
       <div class="user-panel mt-3 pb-2 mb-3 d-flex">
@@ -63,7 +96,7 @@
           <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="user-info.html" class="d-block">西野直幸</a>
+          <a href="#" class="d-block">西野直幸</a>
         </div>
       </div>
 
@@ -81,7 +114,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="question-search.html" class="nav-link">
+            <a href="pages/widgets.html" class="nav-link">
               <i class="nav-icon fas fa-code"></i>
               <p>
                 問題検索
@@ -89,7 +122,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="ranking.html" class="nav-link">
+            <a href="pages/widgets.html" class="nav-link">
               <i class="nav-icon fas fa-crown"></i>
               <p>
                 ランキング
@@ -97,7 +130,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="question-create.html" class="nav-link">
+            <a href="pages/widgets.html" class="nav-link">
               <i class="nav-icon fas fa-plus-circle"></i>
               <p>
                 問題作成
@@ -105,7 +138,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="user-search.html" class="nav-link">
+            <a href="pages/widgets.html" class="nav-link">
               <i class="nav-icon fas fa-user"></i>
               <p>
                 ユーザー検索
@@ -113,15 +146,15 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="management.html" class="nav-link">
+            <a href="pages/widgets.html" class="nav-link">
               <i class="nav-icon fas fa-cog"></i>
               <p>
-                管理
+                設定
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="password-reset.html" class="nav-link">
+            <a href="pages/widgets.html" class="nav-link">
               <i class="nav-icon fas fa-unlock-alt"></i>
               <p>
                 パスワードリセット
@@ -145,14 +178,14 @@
           <div class="col-sm-12">
             <nav>
 			  <ul class="breadcrumb">
-			    <li class="breadcrumb-item"><a href="#">ダッシュボード</a></li>
+			    <li class="breadcrumb-item"><a href="#">新着情報</a></li>
 			  </ul>
 			</nav>
           </div><!-- /.col -->
         </div><!-- /.row -->
         <div class="row mb-2">
           <div class="col-sm-12">
-            <h1 class="m-0">ダッシュボード</h1>
+            <h1 class="m-0">新着情報</h1>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -162,131 +195,50 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <!-- Info boxes -->
         <div class="row">
-          <div class="col-12">
-            <div class="info-box d-flex">
-              <div class="info-box-content">
-                 <span class="info-box-text">現在のあなたの称号</span>
-                 <h2>かけだし</h2>
-              <div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box">
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-code"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">解いた問題の数</span>
-                <span class="info-box-number">
-                  10
-                  <small>/20</small>
-                </span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
           <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">イイネの数</span>
-                <span class="info-box-number">41,410</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-
-          <!-- fix for small devices only -->
-          <div class="clearfix hidden-md-up"></div>
-
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-users"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">フォロー数</span>
-                <span class="info-box-number">760</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">フォロワー数</span>
-                <span class="info-box-number">2,000</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-
-        
-        <!-- Main row -->
-        <div class="row">
-          <!-- Left col -->
           <div class="col-md-12">
-            <!-- TABLE: LATEST ORDERS -->
             <div class="card">
-              <div class="card-header border-transparent">
-                <h3 class="card-title">新着情報</h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body p-0">
-                <div class="table-responsive">
-                  <table class="table m-0">
-                    <thead>
-                    <tr>
-                      <th>種類</th>
-                      <th>メッセージ</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                      <td><a href="pages/examples/invoice.html"><span class="badge badge-success">コメント</span></a></td>
-                      <td>〇〇さんからあなたのソースにコメントしました</td>
-                    </tr>
-                    <tr>
-                      <td><a href="pages/examples/invoice.html"><span class="badge badge-warning">問題追加</span></a></td>
-                      <td>問題「〇〇」が追加されました</td>
-                    </tr>
-                    <tr>
-                      <td><a href="pages/examples/invoice.html"><span class="badge badge-danger">イイネ</span></a></td>
-                      <td>〇〇さんがあなたの解答にイイネしました</td>
-                    </tr>
-                    <tr>
-                      <td><a href="pages/examples/invoice.html"><span class="badge badge-info">未提出</span></a></td>
-                      <td>必須問題「」が提出されていません</td>
-                    </tr>
-                    
-                    </tbody>
-                  </table>
-                </div>
-                <!-- /.table-responsive -->
-              </div>
-              <!-- /.card-body -->
+              <div class="card-body">
+                <table class="table m-0">
+                  <thead>
+                  <tr>
+                    <th>種類</th>
+                    <th>メッセージ</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td><a href="pages/examples/invoice.html"><span class="badge badge-success">コメント</span></a></td>
+                    <td>〇〇さんからあなたのソースにコメントしました</td>
+                  </tr>
+                  <tr>
+                    <td><a href="pages/examples/invoice.html"><span class="badge badge-warning">問題追加</span></a></td>
+                    <td>問題「〇〇」が追加されました</td>
+                  </tr>
+                  <tr>
+                    <td><a href="pages/examples/invoice.html"><span class="badge badge-danger">イイネ</span></a></td>
+                    <td>〇〇さんがあなたの解答にイイネしました</td>
+                  </tr>
+                  <tr>
+                    <td><a href="pages/examples/invoice.html"><span class="badge badge-info">未提出</span></a></td>
+                    <td>必須問題「」が提出されていません</td>
+                  </tr>
+                  
+                  </tbody>
+                </table>
+              </div><!-- /.card-body -->
             </div>
             <!-- /.card -->
           </div>
           <!-- /.col -->
         </div>
+        </form>
+        <div class="row">
+          <button class="btn btn-primary" id="btn-confirm">確認</button>
+        </div>                
         <!-- /.row -->
-      </div><!--/. container-fluid -->
+      </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
   </div>
@@ -318,6 +270,8 @@
 <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.js"></script>
+<!-- azcafe -->
+<script src="js/azcafe.js"></script>
 
 <!-- PAGE PLUGINS -->
 <!-- jQuery Mapael -->
@@ -327,10 +281,44 @@
 <script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
 <!-- ChartJS -->
 <script src="plugins/chart.js/Chart.min.js"></script>
+<!-- typehead -->
+<script src="js/typeahead.bundle.js"></script>
+<!-- include summernote js -->
+<script src="plugins/summernote/summernote-bs4.min.js"></script>
+<script src="plugins/summernote/lang/summernote-ja-JP.min.js"></script>
+<!-- DataTables  & Plugins -->
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="plugins/jszip/jszip.min.js"></script>
+<script src="plugins/pdfmake/pdfmake.min.js"></script>
+<script src="plugins/pdfmake/vfs_fonts.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+</head>
 
-<!-- AdminLTE for demo purposes -->
-<script src="dist/js/demo.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="dist/js/pages/dashboard2.js"></script>
+<script>
+  
+  
+  $(function () {
+    
+    $('#public_list').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+
+
+</script>
 </body>
+
 </html>

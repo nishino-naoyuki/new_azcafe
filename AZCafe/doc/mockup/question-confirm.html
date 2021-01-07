@@ -11,6 +11,10 @@
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.css">
   <link rel="stylesheet" href="css/main.css">
@@ -165,14 +169,14 @@
           <div class="col-sm-12">
             <nav>
 			  <ul class="breadcrumb">
-			    <li class="breadcrumb-item"><a href="#">問題詳細</a></li>
+			    <li class="breadcrumb-item"><a href="#">問題作成確認</a></li>
 			  </ul>
 			</nav>
           </div><!-- /.col -->
         </div><!-- /.row -->
         <div class="row mb-2">
           <div class="col-sm-12">
-            <h1 class="m-0">問題詳細</h1>
+            <h1 class="m-0">問題作成確認</h1>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -183,6 +187,9 @@
     <section class="content">
       <div class="container-fluid">        
         <!-- Main row -->
+        <div class="row">
+          以下のような問題を登録します。よろしいですか？
+        </div>
         <div class="row">
           <!-- Left col -->
           <div class="col-md-12">
@@ -219,18 +226,6 @@
                       <div class="info-box-content">
                         <span class="info-box-text">問題難易度</span>
                         <span class="info-box-number">5</span>
-                      </div>
-                      <!-- /.info-box-content -->
-                    </div>
-                  </div>
-                  
-                  <div class="col-md-4">
-                    <div class="info-box">
-                      <span class="info-box-icon bg-danger"><i class="fas fa-file-alt"></i></span>
-        
-                      <div class="info-box-content">
-                        <span class="info-box-text">提出状況</span>
-                        <span class="info-box-number">未提出</span>
                       </div>
                       <!-- /.info-box-content -->
                     </div>
@@ -339,123 +334,71 @@
                   
                   <div class="card">
                     <div class="card-header d-flex p-0">
-                      <h3 class="card-title p-3">解答欄</h3>
-                      <ul class="nav nav-pills ml-auto p-2">
-                        <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">直接入力</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">ファイルアップロード</a></li>
-                      </ul>
+                      <h3 class="card-title p-3">公開設定</h3>
                     </div>
                     <div class="card-body">
-                      
-                      <div class="tab-content">
-                        <!--1ページ目-->
-                        <div class="tab-pane active" id="tab_1">
-                          <div class="editor_container">
-                            <div class="answer_wrap">
-                              <div class="title_wrap mb15">
-                                <h3 class="h3_title">
-                                解答欄
-                                </h3>
-                                <div class="answer_wrap_option d-flex">
-                                    <button class="btn btn-default btn-sm m-r-5" data-placement="bottom" id="code_plus">
-                                    <i class="fa fa-search-plus" data-toggle="tooltip" title="大きくする"></i>
-                                    </button>
-                                    <button class="btn btn-default btn-sm m-r-5" data-placement="bottom" id="code_minus">
-                                    <i class="fa fa-search-minus" data-toggle="tooltip" title="小さくする"></i>
-                                    </button>
-                                  <select class="box form-control" name="language[id]" id="language_id">
-                                    <option value="">使用する言語</option>
-                                    <option value="0">Java</option>
-                                    <option value="1">JavaScript</option>
-                                  </select>
-                                </div>
+                      <table id="public_list" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                          <th>No.</th>
+                          <th>クラス名</th>
+                          <th>公開設定</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>IT1A</td> 
+                            <td>
+                              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn bg-primary active">
+                                  <input type="radio" name="options" id="option_b1" autocomplete="off" checked> 未公開
+                                </label>
+                                <label class="btn bg-primary">
+                                  <input type="radio" name="options" id="option_b2" autocomplete="off"> 公開
+                                </label>
+                                <label class="btn bg-primary">
+                                  <input type="radio" name="options" id="option_b3" autocomplete="off"> 必須公開
+                                </label>
                               </div>
-                              <div id="editor" style="height: 600px"></div>
-                              <div class="footer d-flex justify-content-between">
-                                <div class="col-md-3">
-                                  <button class="btn btn-primary" id="answer_btn" data-toggle="tooltip" title="提出して採点します">提出</button>
-                                </div>
-                                <div class="col-md-3">
-                                  <div class="info-box">
-                                    <span class="info-box-icon bg-primary"><i class="fas fa-pen"></i></span>
-                      
-                                    <div class="info-box-content">
-                                      <span class="info-box-text">採点結果</span>
-                                      <span class="info-box-number">未採点</span>
-                                    </div>
-                                    <!-- /.info-box-content -->
-                                  </div>
-                                </div>
-                              </div>                            
-                            </div>
-                          </div>
-                        </div>
-                        <!--2ページ目-->
-                        <div class="tab-pane" id="tab_2">
-                          <div class="answer_wrap">
-                            <div class="form-group input-file-group d-flex">
-                              <div class="input-group col-md-8">
-                                <div class="custom-file">
-                                  <input type="file" class="custom-file-input" id="exampleInputFile1">
-                                  <label class="custom-file-label" for="exampleInputFile1">Choose file</label>
-                                </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>IT1B</td> 
+                            <td>
+                              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn bg-primary active">
+                                  <input type="radio" name="options" id="option_b1" autocomplete="off" checked> 未公開
+                                </label>
+                                <label class="btn bg-primary">
+                                  <input type="radio" name="options" id="option_b2" autocomplete="off"> 公開
+                                </label>
+                                <label class="btn bg-primary">
+                                  <input type="radio" name="options" id="option_b3" autocomplete="off"> 必須公開
+                                </label>
                               </div>
-                            </div>
-                            <div class="form-group input-file-group d-flex">
-                              <div class="input-group col-md-8">
-                                <div class="custom-file">
-                                  <input type="file" class="custom-file-input" id="exampleInputFile2">
-                                  <label class="custom-file-label" for="exampleInputFile2">Choose file</label>
-                                </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>3</td>
+                            <td>IT1C</td> 
+                            <td>
+                              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn bg-primary active">
+                                  <input type="radio" name="options" id="option_b1" autocomplete="off" checked> 未公開
+                                </label>
+                                <label class="btn bg-primary">
+                                  <input type="radio" name="options" id="option_b2" autocomplete="off"> 公開
+                                </label>
+                                <label class="btn bg-primary">
+                                  <input type="radio" name="options" id="option_b3" autocomplete="off"> 必須公開
+                                </label>
                               </div>
-                            </div>
-                            <div class="form-group input-file-group d-flex">
-                              <div class="input-group col-md-8">
-                                <div class="custom-file">
-                                  <input type="file" class="custom-file-input" id="exampleInputFile3">
-                                  <label class="custom-file-label" for="exampleInputFile3">Choose file</label>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group input-file-group d-flex">
-                              <div class="input-group col-md-8">
-                                <div class="custom-file">
-                                  <input type="file" class="custom-file-input" id="exampleInputFile4">
-                                  <label class="custom-file-label" for="exampleInputFile4">Choose file</label>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group input-file-group d-flex">
-                              <div class="input-group col-md-8">
-                                <div class="custom-file">
-                                  <input type="file" class="custom-file-input" id="exampleInputFile5">
-                                  <label class="custom-file-label" for="exampleInputFile5">Choose file</label>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="footer d-flex justify-content-between">
-                              <div class="col-md-3">
-                                <button class="btn btn-primary" id="answer_file_btn" data-toggle="tooltip" title="提出して採点します">提出</button>
-                              </div>
-                              <div class="col-md-3">
-                                <div class="info-box">
-                                  <span class="info-box-icon bg-primary"><i class="fas fa-pen"></i></span>
-                    
-                                  <div class="info-box-content">
-                                    <span class="info-box-text">採点結果</span>
-                                    <span class="info-box-number">未採点</span>
-                                  </div>
-                                  <!-- /.info-box-content -->
-                                </div>
-                              </div>
-                            </div> 
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="overlay dark" id="waiting">
-                      採点中・・・
-                      <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
@@ -465,6 +408,9 @@
           </div>
           <!-- /.col -->
         </div>
+        <div class="row">
+          <button class="btn btn-primary" id="btn-create">登録</button>
+        </div>          
         <!-- /.row -->
       </div><!--/. container-fluid -->
     </section>
@@ -509,97 +455,24 @@
 <script src="plugins/chart.js/Chart.min.js"></script>
 <!-- bs-custom-file-input -->
 <script src="plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
-<!-- ace -->
-  <script src="ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
-  <script src="ace/src/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
+<!-- DataTables  & Plugins -->
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="plugins/jszip/jszip.min.js"></script>
+<script src="plugins/pdfmake/pdfmake.min.js"></script>
+<script src="plugins/pdfmake/vfs_fonts.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <script>
-$(function () {
-  bsCustomFileInput.init();
-});
 
-  const editor = ace.edit("editor");
-  const defaultFontSize = 14;
-  const MaxFontSize = 30;
-  const MinFontSize = 10;
-  let ctrlNum = 1;
-  let fontsize = localStorage.getItem("codeFont");
-  if( fontsize == null ){
-    fontsize = defaultFontSize;
-  }
-  editor.setOptions({
-      enableSnippets: true
-    });
-  editor.setTheme("ace/theme/eclipse");
-  editor.setFontSize(Number(fontsize));
-  editor.session.setMode("ace/mode/java");
-
-  $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();
-    $("#waiting").hide();
-  });
-
-  //＋ボタンクリック
-  $(document).on('click','#code_plus',function(){
-    checkFontSize();
-    if($(this).prop("disabled") == false){
-      fontsize++;
-      editor.setFontSize(fontsize);
-      localStorage.setItem("codeFont",fontsize);
-    }
-    
-  })
-  //－ボタンクリック
-  $(document).on('click','#code_minus',function(){
-    checkFontSize();
-    if( $(this).prop("disabled") == false ){
-      fontsize--;
-      editor.setFontSize(fontsize);
-      localStorage.setItem("codeFont",fontsize);
-    }
-  })
-  const checkFontSize = () =>{
-    let ret = true;
-    if( fontsize <= MinFontSize ){
-      $("#code_plus").prop("disabled", false);
-      $("#code_minus").prop("disabled", true);
-      ret = false;
-    }else if( fontsize >= MaxFontSize ){
-      $("#code_plus").prop("disabled", true);
-      $("#code_minus").prop("disabled", false);
-      ret = false;
-    }else{
-      $("#code_plus").prop("disabled", false);
-      $("#code_minus").prop("disabled", false);
-    }
-
-    return ret;
-  }
-
-  //提出ボタン
-  $(document).on('click','#answer_btn',function(){
-    const langId = $("#language_id").val();
-    const ansText = editor.getValue();
-    if( langId.length == 0 ){
-      alert("言語を選択してください");
-      return;
-    }
-    $("#waiting").show();
-    //alert(langId+":"+ansText);
-    //$("#waiting").hide();
-  })
-  //提出ボタン（ファイル）
-  $(document).on('click','#answer_file_btn',function(){
-    const inputVal = $("#exampleInputFile1").val();
-    if( inputVal.length == 0 ){
-      alert("ファイルを選択してください");
-      return;
-    }
-    alert(inputVal);
-    $("#waiting").show();
-    //alert(langId+":"+ansText);
-    //$("#waiting").hide();
-  })
-
+$(document).on('click', '#btn-create', function(){
+  alert("登録");
+}
 
 </script>
 
