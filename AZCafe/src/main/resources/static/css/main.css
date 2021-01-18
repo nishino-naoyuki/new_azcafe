@@ -1,0 +1,248 @@
+.department{
+   color:#c2c7d0;
+   padding: 10px;
+   margin: 0px 15px;
+   white-space: nowrap;
+}
+.department div{
+    padding: 0px 10px;
+}
+
+.ranking-user-img {
+    border-radius: 50%;
+    float: left;
+    height: 30px;
+    width: 30px;
+    margin: 0px 15px;
+}
+
+.ranking-user-name {
+    vertical-align:middle;
+}
+
+.small-icon {
+    padding: 0px 10px;
+    font-size: 0.8em;
+}
+
+.answer-list-q{
+    padding: 0px;
+}
+
+.normal-text{
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.2;
+    color: inherit;
+    margin-left: 5px;
+    margin-right: 15px;
+}
+
+.f-list-user-img {
+    border-radius: 50%;
+    float: left;
+    height: 40px;
+    width: 40px;
+    margin: 0px 15px;
+}
+
+.f-list-box hr{
+    padding: 10px 0px;
+}
+
+.answer_wrap {
+    background-color: #f5f5f5;
+    padding: 10px;
+    position: relative;
+}
+
+.answer_wrap .footer {
+    padding: 10px;
+}
+
+.src-display{
+    padding: 10px;
+}
+
+.h3_title {
+    color: #000000;
+    font-size: 16pt;
+    line-height: 1;
+    margin: 10px 0px;
+    padding: 10px 5px 10px 5px;
+    border-bottom: 3px solid #2692AC;
+    border-radius: 0px;
+}
+
+.title_wrap .answer_wrap_option {
+    position: absolute;
+    right: 10px;
+    top: 22px;
+}
+
+.editor_wrap {
+    background-color: #dcdcdc;
+    margin: 0 5px 20px 5px;
+}
+
+.editor_area {
+    height: 100%;
+}
+
+.editor_area .editor_ctr_btn_wrap {
+    position: absolute;
+    z-index: 999;
+    right: 20px;
+}
+.editor_area .editor_ctr_btn_wrap .editor_ctr_btn {
+    margin-bottom: 3px;
+}
+.editor_area .theme_color_box.dark {
+    border: 1px solid #696969;
+    background: #696969;
+}
+.editor_area .theme_color_box.white {
+    border: 1px solid #f5f5f5;
+    background: #f5f5f5;
+}
+.editor_area .theme_color_box.orange {
+    border: 1px solid #ffdead;
+    background: #ffdead;
+}
+.editor_area .theme_color_box {
+    box-shadow: none;
+    border-radius: 4px;
+    width: 23px;
+    height: 23px;
+}
+
+#editor-div {
+    border: 1px solid #DDD;
+}
+.ace-chrome {
+    background-color: #FFFFFF;
+    color: black;
+}
+.ace_editor {
+    position: relative;
+    overflow: hidden;
+    font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+        font-size: 12px;
+    direction: ltr;
+    text-align: left;
+}
+
+.ace-chrome .ace_gutter {
+    background: #ebebeb;
+    color: #333;
+    overflow: hidden;
+}
+.ace_gutter {
+    position: absolute;
+    overflow: hidden;
+    width: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    cursor: default;
+    z-index: 4;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+
+.bs-example {
+  font-family: sans-serif;
+  position: relative;
+  margin: 100px;
+}
+
+.typeahead {
+  background-color: #FFFFFF;
+}
+.typeahead:focus {
+  border: 2px solid #0097CF;
+}
+.tt-query {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+}
+.tt-hint {
+  color: #999999;
+}
+.tt-menu {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  margin-top: 12px;
+  padding: 8px 0;
+  width: 422px;
+}
+.tt-suggestion {
+  font-size: 22px;  /* Set suggestion dropdown font size */
+  padding: 3px 20px;
+}
+.tt-suggestion:hover {
+  cursor: pointer;
+  background-color: #0097CF;
+  color: #FFFFFF;
+}
+.tt-suggestion p {
+  margin: 0;
+}
+    
+.user-icon-dnd-wrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+#preview_field {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+}
+
+#preview_field img{
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+}
+
+#drop_area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+  border: 1px dashed #aaa;
+  cursor: pointer;
+}
+
+#icon_clear_button {
+  display: none;
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+#input_file {
+  width: 100px;
+  height: 100px;
+  opacity: 0;
+}
+
+#input_file:focus {
+  opacity: 1;
+}    
+    
