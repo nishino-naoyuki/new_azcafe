@@ -5,6 +5,7 @@ package jp.ac.asojuku.azcafe.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,8 @@ public class LoginController {
 	
 	@Autowired
 	AZCafeConfig config;
+	@Autowired
+	HttpSession session;
 
 	@RequestMapping(value= {"/login"}, method=RequestMethod.GET)
     public ModelAndView login(
