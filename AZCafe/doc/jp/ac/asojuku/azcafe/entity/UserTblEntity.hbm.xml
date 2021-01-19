@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="jp.ac.asojuku.azcafe.entity">
+
+	<class name="UserTblEntity" table="USER_TBL">
+
+		<id name="userId" type="java.lang.Integer" column="user_id">
+			<generator class="assigned" />
+		</id>
+
+		<property name="orgNo" type="java.lang.String"
+			column="org_no" not-null="true" />
+
+		<property name="nickName" type="java.lang.String"
+			column="nick_name" not-null="true" />
+
+		<property name="name" type="java.lang.String"
+			column="name" not-null="true" />
+
+		<property name="mail" type="java.lang.String"
+			column="mail" not-null="true" />
+
+		<property name="password" type="java.lang.String"
+			column="password" not-null="true" />
+
+		<property name="role" type="java.lang.Integer"
+			column="role" not-null="true" />
+
+		<property name="homeroomId" type="java.lang.Integer"
+			column="homeroom_id" not-null="true" />
+
+		<property name="grade" type="java.lang.Integer"
+			column="grade" not-null="true" />
+
+		<property name="enterYear" type="java.lang.Integer"
+			column="enter_year" not-null="true" />
+
+		<property name="introduction" type="java.lang.String"
+			column="introduction" not-null="true" />
+
+		<property name="levelId" type="java.lang.Integer"
+			column="level_id" not-null="true" />
+
+	</class>
+</hibernate-mapping>

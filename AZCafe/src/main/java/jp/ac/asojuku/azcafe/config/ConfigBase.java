@@ -8,7 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import jp.ac.asojuku.azcafe.controller.AZCafeException;
+import jp.ac.asojuku.azcafe.exception.AZCafeException;
+
 
 /**
  * 設定ファイルベースクラス

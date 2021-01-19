@@ -1,7 +1,7 @@
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost/asobbs?serverTimezone=JST
+    url: jdbc:mysql://localhost/azcafe?serverTimezone=JST
     username: root
     password: password
   jpa:
@@ -19,3 +19,4 @@ spring:
     
 azcafe:
   salt: 5fr2FjxT
+  avaterbasedir: img

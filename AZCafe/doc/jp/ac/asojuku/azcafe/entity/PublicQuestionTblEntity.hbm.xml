@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="jp.ac.asojuku.azcafe.entity">
+
+	<class name="PublicQuestionTblEntity" table="PUBLIC_QUESTION_TBL">
+
+		<property name="questionId" type="java.lang.Integer"
+			column="question_id" not-null="true" />
+
+		<property name="courseId" type="java.lang.Integer"
+			column="course_id" not-null="true" />
+
+		<property name="homeroomId" type="java.lang.Integer"
+			column="homeroom_id" not-null="true" />
+
+		<property name="publicStartDate" type="java.util.Date"
+			column="public_start_date" not-null="false" />
+
+		<property name="publicEndDate" type="java.util.Date"
+			column="public_end_date" not-null="false" />
+
+	</class>
+</hibernate-mapping>

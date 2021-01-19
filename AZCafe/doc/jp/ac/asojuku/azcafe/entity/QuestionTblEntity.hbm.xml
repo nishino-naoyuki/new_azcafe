@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="jp.ac.asojuku.azcafe.entity">
+
+	<class name="QuestionTblEntity" table="QUESTION_TBL">
+
+		<id name="questionId" type="java.lang.Integer" column="question_id">
+			<generator class="assigned" />
+		</id>
+
+		<property name="qgroupId" type="java.lang.Integer"
+			column="qgroup_id" not-null="true" />
+
+		<property name="qgroupInNo" type="java.lang.Integer"
+			column="qgroup_in_no" not-null="true" />
+
+		<property name="title" type="java.lang.String"
+			column="title" not-null="true" />
+
+		<property name="contents" type="java.lang.String"
+			column="contents" not-null="true" />
+
+		<property name="good" type="java.lang.Integer"
+			column="good" not-null="true" />
+
+		<property name="createUserId" type="java.lang.Integer"
+			column="create_user_id" not-null="true" />
+
+		<property name="createDate" type="java.util.Date"
+			column="create_date" not-null="true" />
+
+		<property name="updateUserId" type="java.lang.Integer"
+			column="update_user_id" not-null="true" />
+
+		<property name="updateDate" type="java.util.Date"
+			column="update_date" not-null="true" />
+
+	</class>
+</hibernate-mapping>

@@ -31,6 +31,9 @@ https://qiita.com/kazuki43zoo/items/0ce92fce6d6f3b7bf8eb
 プログラム専門のエディタACE
 https://qiita.com/naga3/items/1bc268243f2e8a6514e5
 
+画像の遅延ロード
+https://designsupply-web.com/media/knowledgeside/6530/
+
 面白そうなＡＰＩ
 （コンパス）
 https://connpass.com/about/api/

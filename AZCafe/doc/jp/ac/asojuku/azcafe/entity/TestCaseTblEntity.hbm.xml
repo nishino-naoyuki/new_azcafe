@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="jp.ac.asojuku.azcafe.entity">
+
+	<class name="TestCaseTblEntity" table="TEST_CASE_TBL">
+
+		<property name="questionId" type="java.lang.Integer"
+			column="question_id" not-null="true" />
+
+		<property name="no" type="java.lang.Integer"
+			column="no" not-null="true" />
+
+		<property name="inputText" type="java.lang.String"
+			column="input_text" not-null="false" />
+
+		<property name="outputTxt" type="java.lang.String"
+			column="output_txt" not-null="true" />
+
+	</class>
+</hibernate-mapping>

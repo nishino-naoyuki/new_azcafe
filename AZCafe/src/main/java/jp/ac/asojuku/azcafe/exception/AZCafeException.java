@@ -1,4 +1,4 @@
-package jp.ac.asojuku.azcafe.controller;
+package jp.ac.asojuku.azcafe.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

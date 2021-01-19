@@ -225,7 +225,7 @@
                       <td>1</td>
                       <td>
                         <div>
-                          <img src="dist/img/user2-160x160.jpg" class="ranking-user-img elevation-2" alt="User Image">
+                          <img data-src="dist/img/user2-160x160.jpg" class="lazyload ranking-user-img elevation-2" alt="User Image">
                           <a href="user-info.html" class="ranking-user-name">ああああああああああ</a>
                         </div>
                       </td> 
@@ -660,11 +660,16 @@
 <script src="dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="dist/js/pages/dashboard2.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
 </body>
 
 <!-- Page specific script -->
 <script>
+  
+  lazyload();
+
   $(function () {
+
     $('#example1').DataTable({
       "paging": true,
       "lengthChange": false,

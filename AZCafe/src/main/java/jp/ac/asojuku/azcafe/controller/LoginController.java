@@ -17,6 +17,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jp.ac.asojuku.azcafe.config.AZCafeConfig;
 import jp.ac.asojuku.azcafe.config.MessageProperty;
+import jp.ac.asojuku.azcafe.dto.LoginInfoDto;
+import jp.ac.asojuku.azcafe.exception.AZCafeException;
+import jp.ac.asojuku.azcafe.param.SessionConst;
+import jp.ac.asojuku.azcafe.service.UserService;
 import jp.ac.asojuku.form.LoginForm;
 
 /**
@@ -25,11 +29,13 @@ import jp.ac.asojuku.form.LoginForm;
  */
 @Controller
 public class LoginController {
-	
+
 	@Autowired
-	AZCafeConfig config;
+	AZCafeConfig cofing;
 	@Autowired
 	HttpSession session;
+	@Autowired
+	UserService userService;
 
 	@RequestMapping(value= {"/login"}, method=RequestMethod.GET)
     public ModelAndView login(
@@ -92,6 +98,17 @@ public class LoginController {
 		
 		url = "redirect:dashboad";
 		
+		//認証
+		LoginInfoDto loginInfo = userService.login(form.getMail(), form.getPassword());
+		if( loginInfo != null) {
+			//トークンを発行して、クッキーに保存
+			//setTokenCookie(loginInfo,request,response);
+			//セッションにログイン情報を保存
+			session.setAttribute(SessionConst.LOGININFO,loginInfo);
+			url = "redirect:dashboad";
+		}else {
+			url = fowardLoginError(redirectAttributes,form);
+		}
 		return url;
 	}
 }

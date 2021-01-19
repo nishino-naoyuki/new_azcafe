@@ -9,15 +9,21 @@
       <div class="user-panel department mt-1 pb-1 mb-1 d-flex align-items-center">
         <i class="fas fa-chalkboard"></i>
         <div class="info">
-          <a href="user-info.html" class="d-block">情報システム専攻科</a>
+          <a href="user-info.html" class="d-block" th:text="${session['LoginInfo'].courseName}"></a>
         </div>
       </div>
       <div class="user-panel mt-3 pb-2 mb-3 d-flex">
         <div class="image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <div th:unless="${session['LoginInfo'].avater}">
+            <img src="img/no_image.png" class="img-circle elevation-2" alt="User Image">
+          </div>
+          <div th:if="${session['LoginInfo'].avater}">
+            <img th:src="@{'getImage/'+${session['LoginInfo'].avater}}" class="img-circle elevation-2" alt="User Image">
+          </div>
+          
         </div>
         <div class="info">
-          <a href="user-info.html" class="d-block">西野直幸</a>
+          <a href="user-info.html" class="d-block" th:text="${session['LoginInfo'].nickName}"></a>
         </div>
       </div>
 

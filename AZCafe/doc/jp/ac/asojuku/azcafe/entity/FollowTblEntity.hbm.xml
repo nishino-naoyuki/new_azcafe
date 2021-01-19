@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="jp.ac.asojuku.azcafe.entity">
+
+	<class name="FollowTblEntity" table="FOLLOW_TBL">
+
+		<property name="userId" type="java.lang.Integer"
+			column="user_id" not-null="true" />
+
+		<property name="follewUserId" type="java.lang.Integer"
+			column="follew_user_id" not-null="true" />
+
+		<property name="followDate" type="java.util.Date"
+			column="follow_date" not-null="true" />
+
+	</class>
+</hibernate-mapping>

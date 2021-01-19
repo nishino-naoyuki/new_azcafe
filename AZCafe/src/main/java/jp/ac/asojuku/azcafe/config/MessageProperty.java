@@ -3,8 +3,8 @@
  */
 package jp.ac.asojuku.azcafe.config;
 
-import jp.ac.asojuku.azcafe.controller.AZCafeException;
 import jp.ac.asojuku.azcafe.err.ErrorCode;
+import jp.ac.asojuku.azcafe.exception.AZCafeException;
 
 /**
  * メッセージプロパティファイルの読み込み

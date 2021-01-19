@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="jp.ac.asojuku.azcafe.entity">
+
+	<class name="AnswerGoodTblEntity" table="ANSWER_GOOD_TBL">
+
+		<property name="answerId" type="java.lang.Integer"
+			column="answer_id" not-null="true" />
+
+		<property name="userId" type="java.lang.Integer"
+			column="user_id" not-null="true" />
+
+		<property name="goodDate" type="java.util.Date"
+			column="good_date" not-null="true" />
+
+	</class>
+</hibernate-mapping>
