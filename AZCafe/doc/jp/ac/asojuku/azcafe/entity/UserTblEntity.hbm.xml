@@ -44,5 +44,26 @@
 		<property name="levelId" type="java.lang.Integer"
 			column="level_id" not-null="true" />
 
+		<property name="avater" type="java.lang.String"
+			column="avater" not-null="false" />
+
+		<property name="point" type="java.lang.Integer"
+			column="point" not-null="true" />
+
+		<property name="followNum" type="java.lang.Integer"
+			column="follow_num" not-null="true" />
+
+		<property name="followerNum" type="java.lang.Integer"
+			column="follower_num" not-null="true" />
+
+		<property name="goodNum" type="java.lang.Integer"
+			column="good_num" not-null="true" />
+
+		<property name="createDate" type="java.util.Date"
+			column="create_date" not-null="true" />
+
+		<property name="updateDate" type="java.util.Date"
+			column="update_date" not-null="true" />
+
 	</class>
 </hibernate-mapping>

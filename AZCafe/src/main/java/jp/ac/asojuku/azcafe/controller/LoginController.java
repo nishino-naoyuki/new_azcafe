@@ -3,10 +3,13 @@
  */
 package jp.ac.asojuku.azcafe.controller;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,7 +22,9 @@ import jp.ac.asojuku.azcafe.config.AZCafeConfig;
 import jp.ac.asojuku.azcafe.config.MessageProperty;
 import jp.ac.asojuku.azcafe.dto.LoginInfoDto;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
+import jp.ac.asojuku.azcafe.param.IntConst;
 import jp.ac.asojuku.azcafe.param.SessionConst;
+import jp.ac.asojuku.azcafe.param.StringConst;
 import jp.ac.asojuku.azcafe.service.UserService;
 import jp.ac.asojuku.form.LoginForm;
 
@@ -30,6 +35,8 @@ import jp.ac.asojuku.form.LoginForm;
 @Controller
 public class LoginController {
 
+	Logger logger = LoggerFactory.getLogger(LoginController.class);
+	
 	@Autowired
 	AZCafeConfig cofing;
 	@Autowired
@@ -41,10 +48,17 @@ public class LoginController {
     public ModelAndView login(
     		ModelAndView mv,
     		@ModelAttribute("msg")String msg,
-    		@ModelAttribute("mail")String mail
-    		) {
+    		@ModelAttribute("mail")String mail,
+    		HttpServletRequest request,
+    		HttpServletResponse response
+    		) throws AZCafeException {
 		
 
+		//トークンによる認証
+        if(  authToken(request,response) ) {
+        	return new ModelAndView("redirect:dashboad");
+        }
+        
         //エラーメッセージがあればメッセージを仕込んでおく
         if( msg != null && msg.length() > 0) {
         	mv.addObject("msg", msg);
@@ -59,6 +73,75 @@ public class LoginController {
 		return mv;
 	}
 
+
+	/**
+	 * クッキーを使った認証を行う
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws AsoBbsSystemErrException
+	 */
+	private boolean authToken(
+			HttpServletRequest request,HttpServletResponse response) throws AZCafeException {
+		boolean isAuthOk = false;
+
+        Cookie[] cookies = request.getCookies();
+        if( cookies == null ) {
+        	logger.info("authToken: cookie is null");
+        	return false;
+        }
+        
+        for(Cookie cookie : cookies) {
+    		logger.info("cookie("+cookie.getName()+")");
+        	if( StringConst.COOKIE_TOKEN.equals( cookie.getName()) ){
+        		String token = cookie.getValue();
+        		LoginInfoDto loginInfo = userService.authToken(token);
+        		if( loginInfo != null) {
+        			//トークンを発行して、クッキーに保存
+        			setTokenCookie(loginInfo,request,response);
+        			//セッションにログイン情報を保存
+        			session.setAttribute(SessionConst.LOGININFO,loginInfo);
+        			isAuthOk =  true;
+        		}
+        	}
+        }
+        return isAuthOk;
+	}
+
+	/**
+	 * ログアウト処理
+	 * @param redirectAttributes
+	 * @return
+	 * @throws AsoBbsSystemErrException
+	 */
+	@RequestMapping(value= {"/logout"}, method=RequestMethod.GET)
+	public String logout(HttpServletRequest request,RedirectAttributes redirectAttributes) throws AZCafeException {
+		//ログアウトメッセージを取得
+		String errMsg = MessageProperty.getInstance().getProperty(MessageProperty.LOGOUT_MSG);
+		//エラーメッセージをセット
+		redirectAttributes.addFlashAttribute("msg", errMsg);
+				
+		//セッション破棄
+		session.invalidate();
+		//DBのトークンを削除する
+		Cookie[] cookies = request.getCookies();
+		if( cookies != null ) {
+			logger.info("logout: cookie is not null");
+	        for(Cookie cookie : cookies) {
+				logger.info("logout: "+cookie.getName());
+	        	if( StringConst.COOKIE_TOKEN.equals( cookie.getName()) ){
+	        		String token = cookie.getValue();
+	        		userService.logout(token);
+	        		break;
+	        	}
+	        }
+		}
+		
+		//ログイン画面へリダイレクト
+		//ログアウトの時はauto=falseをつけて自動ログインを防ぐ
+		return "redirect:login";
+	}
 	/**
 	 * ログインエラー時の処理
 	 * 
@@ -102,7 +185,7 @@ public class LoginController {
 		LoginInfoDto loginInfo = userService.login(form.getMail(), form.getPassword());
 		if( loginInfo != null) {
 			//トークンを発行して、クッキーに保存
-			//setTokenCookie(loginInfo,request,response);
+			setTokenCookie(loginInfo,request,response);
 			//セッションにログイン情報を保存
 			session.setAttribute(SessionConst.LOGININFO,loginInfo);
 			url = "redirect:dashboad";
@@ -111,4 +194,26 @@ public class LoginController {
 		}
 		return url;
 	}
+	
+
+	/**
+	 * 有効期限をセットしてクッキーを保存する
+	 * 
+	 * @param loginInfo
+	 * @param response
+	 * @throws AsoBbsSystemErrException
+	 */
+	private void setTokenCookie(
+			LoginInfoDto loginInfo,HttpServletRequest request,HttpServletResponse response) throws AZCafeException {
+		String token = userService.createLoginToken(loginInfo.getUserId());
+		Cookie cookie = new Cookie(StringConst.COOKIE_TOKEN, token);
+		
+		String path = request.getContextPath();
+		
+		cookie.setMaxAge(IntConst.AUTO_LOGIN_COOKIE);
+		cookie.setPath(path);
+		
+		response.addCookie(cookie);
+	}
+	
 }

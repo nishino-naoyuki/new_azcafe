@@ -5,6 +5,7 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS ANSWER_GOOD_TBL;
 DROP TABLE IF EXISTS COMMENT_TBL;
 DROP TABLE IF EXISTS ANSWER_TBL;
+DROP TABLE IF EXISTS AUTOLOGIN_TBL;
 DROP TABLE IF EXISTS PUBLIC_QUESTION_TBL;
 DROP TABLE IF EXISTS FOLLOW_TBL;
 DROP TABLE IF EXISTS QUESTION_GOOD_TBL;
@@ -45,6 +46,16 @@ CREATE TABLE ANSWER_TBL
 	score int NOT NULL COMMENT '採点結果',
 	correct_flg int DEFAULT 0 NOT NULL,
 	PRIMARY KEY (answer_id)
+);
+
+
+CREATE TABLE AUTOLOGIN_TBL
+(
+	autologin_id int NOT NULL AUTO_INCREMENT,
+	user_id int NOT NULL,
+	token varchar(200) NOT NULL,
+	lmit_date timestamp,
+	PRIMARY KEY (autologin_id)
 );
 
 
@@ -230,6 +241,17 @@ CREATE TABLE USER_TBL
 	-- 自己紹介文
 	introduction varchar(3000) NOT NULL COMMENT '自己紹介文',
 	level_id int NOT NULL,
+	-- 画像のファイル名
+	avater varchar(2000) COMMENT '画像のファイル名',
+	-- 問題を解くたびに更新する
+	-- ランキングのもととなるポイント
+	point int NOT NULL COMMENT '問題を解くたびに更新する
+ランキングのもととなるポイント',
+	follow_num int NOT NULL,
+	follower_num int NOT NULL,
+	good_num int NOT NULL,
+	create_date timestamp NOT NULL,
+	update_date timestamp NOT NULL,
 	PRIMARY KEY (user_id),
 	UNIQUE (org_no)
 );
@@ -350,6 +372,14 @@ ALTER TABLE ANSWER_TBL
 ;
 
 
+ALTER TABLE AUTOLOGIN_TBL
+	ADD FOREIGN KEY (user_id)
+	REFERENCES USER_TBL (user_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
 ALTER TABLE COMMENT_TBL
 	ADD FOREIGN KEY (user_id)
 	REFERENCES USER_TBL (user_id)
@@ -359,7 +389,7 @@ ALTER TABLE COMMENT_TBL
 
 
 ALTER TABLE FOLLOW_TBL
-	ADD FOREIGN KEY (follew_user_id)
+	ADD FOREIGN KEY (user_id)
 	REFERENCES USER_TBL (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -367,7 +397,7 @@ ALTER TABLE FOLLOW_TBL
 
 
 ALTER TABLE FOLLOW_TBL
-	ADD FOREIGN KEY (user_id)
+	ADD FOREIGN KEY (follew_user_id)
 	REFERENCES USER_TBL (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT

@@ -36,7 +36,7 @@
             <div class="info-box d-flex">
               <div class="info-box-content">
                  <span class="info-box-text">現在のあなたの称号</span>
-                 <h2>かけだし</h2>
+                 <h2 th:text="${session['LoginInfo'].levelName}"></h2>
               </div>
             </div>
           </div>
@@ -64,7 +64,7 @@
 
               <div class="info-box-content">
                 <span class="info-box-text">イイネの数</span>
-                <span class="info-box-number">41,410</span>
+                <span class="info-box-number" th:text="${session['LoginInfo'].goodNum}"></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -81,7 +81,7 @@
 
               <div class="info-box-content">
                 <span class="info-box-text">フォロー数</span>
-                <span class="info-box-number">760</span>
+                <span class="info-box-number"  th:text="${session['LoginInfo'].followNum}"></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -93,7 +93,7 @@
               <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">フォロワー数</span>
-                <span class="info-box-number">2,000</span>
+                <span class="info-box-number" th:text="${session['LoginInfo'].followerNum}"></span>
               </div>
               <!-- /.info-box-content -->
             </div>

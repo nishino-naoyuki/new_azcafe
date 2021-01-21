@@ -1,6 +1,7 @@
 package jp.ac.asojuku.azcafe.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -51,11 +52,35 @@ public class UserTblEntity implements Serializable {
 	/** 称号マスターテーブル. */
 	private LevelTblEntity levelTbl;
 
+	/** アバター（アイコン）のパス. */
+	private String avater;
+
+	/** 点数. */
+	private Integer point;
+
+	/** フォロー数. */
+	private Integer followNum;
+
+	/** フォロワー数. */
+	private Integer followerNum;
+
+	/** イイネの数. */
+	private Integer goodNum;
+
+	/** 作成日. */
+	private Date createDate;
+
+	/** 更新日. */
+	private Date updateDate;
+
 	/** 解答いいね 一覧. */
 	private Set<AnswerGoodTblEntity> answerGoodTblSet;
 
 	/** 解答テーブル 一覧. */
 	private Set<AnswerTblEntity> answerTblSet;
+
+	/** 自動ログイン 一覧. */
+	private Set<AutologinTblEntity> autologinTblSet;
 
 	/** コメント 一覧. */
 	private Set<CommentTblEntity> commentTblSet;
@@ -75,6 +100,7 @@ public class UserTblEntity implements Serializable {
 	public UserTblEntity() {
 		this.answerGoodTblSet = new HashSet<AnswerGoodTblEntity>();
 		this.answerTblSet = new HashSet<AnswerTblEntity>();
+		this.autologinTblSet = new HashSet<AutologinTblEntity>();
 		this.commentTblSet = new HashSet<CommentTblEntity>();
 		this.followTblSet = new HashSet<FollowTblEntity>();
 		this.questionGoodTblSet = new HashSet<QuestionGoodTblEntity>();
@@ -309,6 +335,139 @@ public class UserTblEntity implements Serializable {
 	}
 
 	/**
+	 * アバター（アイコン）のパス を設定します.
+	 * 
+	 * @param avater
+	 *            アバター（アイコン）のパス
+	 */
+	public void setAvater(String avater) {
+		this.avater = avater;
+	}
+
+	/**
+	 * アバター（アイコン）のパス を取得します.
+	 * 
+	 * @return アバター（アイコン）のパス
+	 */
+	public String getAvater() {
+		return this.avater;
+	}
+
+	/**
+	 * 点数 を設定します.
+	 * 
+	 * @param point
+	 *            点数
+	 */
+	public void setPoint(Integer point) {
+		this.point = point;
+	}
+
+	/**
+	 * 点数 を取得します.
+	 * 
+	 * @return 点数
+	 */
+	public Integer getPoint() {
+		return this.point;
+	}
+
+	/**
+	 * フォロー数 を設定します.
+	 * 
+	 * @param followNum
+	 *            フォロー数
+	 */
+	public void setFollowNum(Integer followNum) {
+		this.followNum = followNum;
+	}
+
+	/**
+	 * フォロー数 を取得します.
+	 * 
+	 * @return フォロー数
+	 */
+	public Integer getFollowNum() {
+		return this.followNum;
+	}
+
+	/**
+	 * フォロワー数 を設定します.
+	 * 
+	 * @param followerNum
+	 *            フォロワー数
+	 */
+	public void setFollowerNum(Integer followerNum) {
+		this.followerNum = followerNum;
+	}
+
+	/**
+	 * フォロワー数 を取得します.
+	 * 
+	 * @return フォロワー数
+	 */
+	public Integer getFollowerNum() {
+		return this.followerNum;
+	}
+
+	/**
+	 * イイネの数 を設定します.
+	 * 
+	 * @param goodNum
+	 *            イイネの数
+	 */
+	public void setGoodNum(Integer goodNum) {
+		this.goodNum = goodNum;
+	}
+
+	/**
+	 * イイネの数 を取得します.
+	 * 
+	 * @return イイネの数
+	 */
+	public Integer getGoodNum() {
+		return this.goodNum;
+	}
+
+	/**
+	 * 作成日 を設定します.
+	 * 
+	 * @param createDate
+	 *            作成日
+	 */
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	/**
+	 * 作成日 を取得します.
+	 * 
+	 * @return 作成日
+	 */
+	public Date getCreateDate() {
+		return this.createDate;
+	}
+
+	/**
+	 * 更新日 を設定します.
+	 * 
+	 * @param updateDate
+	 *            更新日
+	 */
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+
+	/**
+	 * 更新日 を取得します.
+	 * 
+	 * @return 更新日
+	 */
+	public Date getUpdateDate() {
+		return this.updateDate;
+	}
+
+	/**
 	 * 解答いいね 一覧を設定します.
 	 * 
 	 * @param answerGoodTblSet
@@ -364,6 +523,35 @@ public class UserTblEntity implements Serializable {
 	 */
 	public Set<AnswerTblEntity> getAnswerTblSet() {
 		return this.answerTblSet;
+	}
+
+	/**
+	 * 自動ログイン 一覧を設定します.
+	 * 
+	 * @param autologinTblSet
+	 *            自動ログイン 一覧
+	 */
+	public void setAutologinTblSet(Set<AutologinTblEntity> autologinTblSet) {
+		this.autologinTblSet = autologinTblSet;
+	}
+
+	/**
+	 * 自動ログイン を追加します.
+	 * 
+	 * @param autologinTbl
+	 *            自動ログイン
+	 */
+	public void addAutologinTbl(AutologinTblEntity autologinTbl) {
+		this.autologinTblSet.add(autologinTbl);
+	}
+
+	/**
+	 * 自動ログイン 一覧を取得します.
+	 * 
+	 * @return 自動ログイン 一覧
+	 */
+	public Set<AutologinTblEntity> getAutologinTblSet() {
+		return this.autologinTblSet;
 	}
 
 	/**

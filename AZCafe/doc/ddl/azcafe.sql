@@ -5,15 +5,18 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS ANSWER_GOOD_TBL;
 DROP TABLE IF EXISTS COMMENT_TBL;
 DROP TABLE IF EXISTS ANSWER_TBL;
+DROP TABLE IF EXISTS AUTOLOGIN_TBL;
 DROP TABLE IF EXISTS PUBLIC_QUESTION_TBL;
 DROP TABLE IF EXISTS FOLLOW_TBL;
 DROP TABLE IF EXISTS QUESTION_GOOD_TBL;
 DROP TABLE IF EXISTS USER_TBL;
 DROP TABLE IF EXISTS HOMEROOM_TBL;
 DROP TABLE IF EXISTS COURSE_TBL;
+DROP TABLE IF EXISTS LEVEL_TBL;
 DROP TABLE IF EXISTS TEST_CASE_TBL;
 DROP TABLE IF EXISTS QUESTION_TBL;
 DROP TABLE IF EXISTS QGROUP_TBL;
+DROP TABLE IF EXISTS USER_DELETE_TBL;
 
 
 
@@ -43,6 +46,16 @@ CREATE TABLE ANSWER_TBL
 	score int NOT NULL COMMENT '採点結果',
 	correct_flg int DEFAULT 0 NOT NULL,
 	PRIMARY KEY (answer_id)
+);
+
+
+CREATE TABLE AUTOLOGIN_TBL
+(
+	autologin_id int NOT NULL AUTO_INCREMENT,
+	user_id int NOT NULL,
+	token varchar(200) NOT NULL,
+	lmit_date timestamp,
+	PRIMARY KEY (autologin_id)
 );
 
 
@@ -84,6 +97,15 @@ CREATE TABLE HOMEROOM_TBL
 	-- クラスが無い学科はＮＵＬＬ
 	name varchar(100) COMMENT 'クラスが無い学科はＮＵＬＬ',
 	PRIMARY KEY (homeroom_id)
+);
+
+
+CREATE TABLE LEVEL_TBL
+(
+	level_id int NOT NULL AUTO_INCREMENT,
+	name varchar(100) NOT NULL,
+	description varchar(2000) NOT NULL,
+	PRIMARY KEY (level_id)
 );
 
 
@@ -153,6 +175,41 @@ CREATE TABLE TEST_CASE_TBL
 );
 
 
+CREATE TABLE USER_DELETE_TBL
+(
+	user_id int NOT NULL,
+	-- 学生の場合は学籍番号
+	-- 教員の場合は社員番号
+	org_no varchar(10) NOT NULL COMMENT '学生の場合は学籍番号
+教員の場合は社員番号',
+	nick_name varchar(100) NOT NULL,
+	name varchar(100) NOT NULL,
+	-- ログインアカウントでもある
+	mail varchar(256) NOT NULL COMMENT 'ログインアカウントでもある',
+	-- パスワード（ハッシュ）
+	-- ソルト＋メアド＋パスワード＋ソルト
+	-- のハッシュ値
+	password varchar(100) NOT NULL COMMENT 'パスワード（ハッシュ）
+ソルト＋メアド＋パスワード＋ソルト
+のハッシュ値',
+	-- ０：学生
+	-- １：教員
+	role int DEFAULT 0 NOT NULL COMMENT '０：学生
+１：教員',
+	homeroom_id int NOT NULL,
+	-- 学年
+	grade int NOT NULL COMMENT '学年',
+	-- 入学年度
+	-- 教員の場合は入社年度（教員の場合みないので適当でＯＫ）
+	enter_year int NOT NULL COMMENT '入学年度
+教員の場合は入社年度（教員の場合みないので適当でＯＫ）',
+	-- 自己紹介文
+	introduction varchar(3000) NOT NULL COMMENT '自己紹介文',
+	PRIMARY KEY (user_id),
+	UNIQUE (org_no)
+);
+
+
 CREATE TABLE USER_TBL
 (
 	user_id int NOT NULL AUTO_INCREMENT,
@@ -183,6 +240,18 @@ CREATE TABLE USER_TBL
 教員の場合は入社年度（教員の場合みないので適当でＯＫ）',
 	-- 自己紹介文
 	introduction varchar(3000) NOT NULL COMMENT '自己紹介文',
+	level_id int NOT NULL,
+	-- 画像のファイル名
+	avater varchar(2000) COMMENT '画像のファイル名',
+	-- 問題を解くたびに更新する
+	-- ランキングのもととなるポイント
+	point int NOT NULL COMMENT '問題を解くたびに更新する
+ランキングのもととなるポイント',
+	follow_num int NOT NULL,
+	follower_num int NOT NULL,
+	good_num int NOT NULL,
+	create_date timestamp NOT NULL,
+	update_date timestamp NOT NULL,
 	PRIMARY KEY (user_id),
 	UNIQUE (org_no)
 );
@@ -234,6 +303,14 @@ ALTER TABLE PUBLIC_QUESTION_TBL
 ALTER TABLE USER_TBL
 	ADD FOREIGN KEY (homeroom_id)
 	REFERENCES HOMEROOM_TBL (homeroom_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE USER_TBL
+	ADD FOREIGN KEY (level_id)
+	REFERENCES LEVEL_TBL (level_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
@@ -295,6 +372,14 @@ ALTER TABLE ANSWER_TBL
 ;
 
 
+ALTER TABLE AUTOLOGIN_TBL
+	ADD FOREIGN KEY (user_id)
+	REFERENCES USER_TBL (user_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
 ALTER TABLE COMMENT_TBL
 	ADD FOREIGN KEY (user_id)
 	REFERENCES USER_TBL (user_id)
@@ -304,7 +389,7 @@ ALTER TABLE COMMENT_TBL
 
 
 ALTER TABLE FOLLOW_TBL
-	ADD FOREIGN KEY (follew_user_id)
+	ADD FOREIGN KEY (user_id)
 	REFERENCES USER_TBL (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -312,7 +397,7 @@ ALTER TABLE FOLLOW_TBL
 
 
 ALTER TABLE FOLLOW_TBL
-	ADD FOREIGN KEY (user_id)
+	ADD FOREIGN KEY (follew_user_id)
 	REFERENCES USER_TBL (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT

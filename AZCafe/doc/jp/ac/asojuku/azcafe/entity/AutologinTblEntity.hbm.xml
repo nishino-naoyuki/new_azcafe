@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="jp.ac.asojuku.azcafe.entity">
+
+	<class name="AutologinTblEntity" table="AUTOLOGIN_TBL">
+
+		<id name="autologinId" type="java.lang.Integer" column="autologin_id">
+			<generator class="assigned" />
+		</id>
+
+		<property name="userId" type="java.lang.Integer"
+			column="user_id" not-null="true" />
+
+		<property name="token" type="java.lang.String"
+			column="token" not-null="true" />
+
+		<property name="lmitDate" type="java.util.Date"
+			column="lmit_date" not-null="false" />
+
+	</class>
+</hibernate-mapping>

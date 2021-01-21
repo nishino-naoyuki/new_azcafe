@@ -1,6 +1,7 @@
 package jp.ac.asojuku.azcafe.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -72,7 +73,25 @@ public class UserTblEntity implements Serializable {
 
 	/** アバター */
 	private String avater;
-	
+
+	/** 点数. */
+	private Integer point;
+
+	/** フォロー数. */
+	private Integer followNum;
+
+	/** フォロワー数. */
+	private Integer followerNum;
+
+	/** イイネの数. */
+	private Integer goodNum;
+
+	/** 作成日. */
+	private Date createDate;
+
+	/** 更新日. */
+	private Date updateDate;
+
 	/** 解答いいね 一覧. */
 	//private Set<AnswerGoodTblEntity> answerGoodTblSet;
 

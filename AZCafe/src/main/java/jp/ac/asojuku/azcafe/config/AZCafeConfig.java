@@ -1,6 +1,5 @@
 package jp.ac.asojuku.azcafe.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -14,4 +13,5 @@ public class AZCafeConfig {
 	
 	private String salt;	//パスワードハッシュソルト
 	private String avaterbasedir;//
+	private Integer tokenlimit;	//自動ログイン期限（日）
 }
