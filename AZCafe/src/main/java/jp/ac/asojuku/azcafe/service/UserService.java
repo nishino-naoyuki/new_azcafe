@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jp.ac.asojuku.azcafe.config.AZCafeConfig;
+import jp.ac.asojuku.azcafe.dto.CreateUserDto;
 import jp.ac.asojuku.azcafe.dto.LoginInfoDto;
 import jp.ac.asojuku.azcafe.entity.AutologinTblEntity;
+import jp.ac.asojuku.azcafe.entity.HomeroomTblEntity;
+import jp.ac.asojuku.azcafe.entity.LevelTblEntity;
 import jp.ac.asojuku.azcafe.entity.UserTblEntity;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
 import jp.ac.asojuku.azcafe.param.RoleId;
@@ -27,6 +30,19 @@ public class UserService {
 	@Autowired
 	AZCafeConfig config;
 	
+	/**
+	 * 1件追加
+	 * 
+	 * @param createUserDto
+	 * @throws AZCafeException
+	 */
+	public void insert(CreateUserDto createUserDto) throws AZCafeException {
+		
+		//DTO->Entity
+		UserTblEntity entity = getFrom(createUserDto,true);
+		
+		userRepository.saveAndFlush(entity);
+	}
 	/**
 	 * ログイン処理を行う
 	 * @param mail
@@ -121,6 +137,26 @@ public class UserService {
 			autoLoginRepository.delete(autologinTblEntity);
 		}
 	}
+
+	/**
+	 * 指定したメールアドレスが既に存在するかどうかを検査する
+	 * 
+	 * @param mail
+	 * @return
+	 */
+	public boolean isExistMailadress(String mail) {
+		return ( userRepository.getUserByMail(mail) != null ? true:false);
+	}
+	
+	
+	/**
+	 * 学籍番号が存在するかどうかを返す
+	 * @param studentNo
+	 * @return
+	 */
+	public boolean isExistStudentNo(String studentNo) {
+		return ( userRepository.getUserByStudentNo(studentNo) != null ? true:false);
+	}
 	
 	/**
 	 * EntityからDTOを作成する
@@ -147,6 +183,46 @@ public class UserService {
 		dto.setSubmittedQNum(0);
 		
 		return dto;
+	}
+	
+	/**
+	 * @param createUserDto
+	 * @param isNew
+	 * @return
+	 * @throws AZCafeException
+	 */
+	private UserTblEntity getFrom(CreateUserDto createUserDto,boolean isNew) throws AZCafeException {
+		UserTblEntity entity = new UserTblEntity();
+
+		//ハッシュ計算する
+		String hashedPwd  = Digest.createPassword(createUserDto.getMail(), createUserDto.getPass());
+		entity.setPassword(hashedPwd);
+		
+		entity.setAvater(createUserDto.getIconFileName());
+		entity.setRole(createUserDto.getRoleId());
+		entity.setOrgNo(createUserDto.getStudentNo());
+		entity.setName(createUserDto.getNickname());
+		entity.setNickName(createUserDto.getNickname());
+		entity.setMail(createUserDto.getMail());
+		entity.setEnterYear(createUserDto.getAdmissionYear());
+		entity.setIntroduction("");
+		
+		HomeroomTblEntity homeroomTblEntity = new HomeroomTblEntity();
+		homeroomTblEntity.setHomeroomId(createUserDto.getHomeroomId());
+		entity.setHomeroomTbl(homeroomTblEntity);
+		
+		if( isNew ) {
+			LevelTblEntity levelTblEntity = new LevelTblEntity();
+			levelTblEntity.setLevelId(1);
+			entity.setLevelTbl(levelTblEntity);
+			entity.setFollowerNum(0);
+			entity.setFollowNum(0);
+			entity.setGoodNum(0);
+			entity.setGrade(1);
+			entity.setPoint(0);
+		}
+		
+		return entity;
 	}
 
 }

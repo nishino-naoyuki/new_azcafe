@@ -23,15 +23,14 @@ import jp.ac.asojuku.azcafe.config.AZCafeConfig;
 public class FileController {
 	@Autowired
 	ResourceLoader resourceLoader;
-	@Autowired
-	AZCafeConfig config;
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/getImage/{id}", method = {RequestMethod.GET })
 	public HttpEntity<byte[]> getImage(@PathVariable String id) throws IOException {
 		
 		// リソースファイルを読み込み
-		String imgdir = config.getAvaterbasedir();
+		String imgdir = AZCafeConfig.getInstance().getAvaterbasedir();
 		//Resource resource = resourceLoader.getResource("classpath:" + "/static/image/" + id);
 		Resource resource = resourceLoader.getResource("file:C:\\img\\" + id);
 		InputStream image = resource.getInputStream();

@@ -38,8 +38,6 @@ public class LoginController {
 	Logger logger = LoggerFactory.getLogger(LoginController.class);
 	
 	@Autowired
-	AZCafeConfig cofing;
-	@Autowired
 	HttpSession session;
 	@Autowired
 	UserService userService;

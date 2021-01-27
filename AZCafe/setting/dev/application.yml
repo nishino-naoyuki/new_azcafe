@@ -21,3 +21,4 @@ azcafe:
   salt: 5fr2FjxT
   avaterbasedir: img
   tokenlimit: 1
+  passwordpolicy: 

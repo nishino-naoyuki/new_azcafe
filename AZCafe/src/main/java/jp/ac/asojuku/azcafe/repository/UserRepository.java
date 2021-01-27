@@ -11,4 +11,10 @@ public interface UserRepository extends JpaSpecificationExecutor<UserTblEntity>,
 
 	@Query("select u from UserTblEntity u where mail = :mail and password = :password")
 	public UserTblEntity getUser(@Param("mail")String mail,@Param("password")String password);
+	
+	@Query("select u from UserTblEntity u where mail = :mail")
+	public UserTblEntity getUserByMail(@Param("mail")String mail);
+
+	@Query("select u from UserTblEntity u where orgNo = :studentno")
+	public UserTblEntity getUserByStudentNo(@Param("studentno")String studentno);
 }

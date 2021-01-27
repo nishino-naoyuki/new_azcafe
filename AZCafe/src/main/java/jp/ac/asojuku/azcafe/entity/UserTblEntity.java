@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -118,5 +120,15 @@ public class UserTblEntity implements Serializable {
 		//this.questionGoodTblSet = new HashSet<QuestionGoodTblEntity>();
 	}
 
+	@PrePersist
+    public void onPrePersist() {
+		setCreateDate(new Date());
+		setUpdateDate(new Date());
+    }
+
+    @PreUpdate
+    public void onPreUpdate() {
+    	setUpdateDate(new Date());
+    }
 
 }

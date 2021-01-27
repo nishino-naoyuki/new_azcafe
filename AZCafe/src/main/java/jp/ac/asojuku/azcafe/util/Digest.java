@@ -31,13 +31,6 @@ import jp.ac.asojuku.azcafe.exception.AZCafeException;
  */
 @Component
 public class Digest {
-	
-	private static AZCafeConfig config;
-	
-	@Autowired
-	public void setCofing(AZCafeConfig config) {
-		Digest.config = config;
-	}
 
 	public static String create(String msg){
 		// 16進数文字列でMD5値を取得する
@@ -59,7 +52,7 @@ public class Digest {
 	public static String createPassword(String mailadress,String pwd) throws AZCafeException{
 
 		//パスワードソルトを取得
-		String pwdHashSalt = config.getSalt();
+		String pwdHashSalt = AZCafeConfig.getInstance().getSalt();
 		// 16進数文字列でMD5値を取得する
 		String hexString = DigestUtils.md5Hex(pwdHashSalt+mailadress+pwd+pwdHashSalt);
 

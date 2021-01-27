@@ -53,8 +53,9 @@
               <div class="card-body">
                 <div class="tab-content">
                   <!-- ユーザーの登録 -->
-                  <div class="active tab-pane" id="user-regist">
-                    <form action="#">
+                  <div class="active tab-pane" id="user-regist">                    
+                    <form th:action="@{/manage/user_confirm}" method="POST"  enctype="multipart/form-data" th:object="${userInputForm}">
+                      <p id="error" th:each="error : ${#fields.detailedErrors()}" th:text="${error.message}"></p>
                       <div class="form-group">
                         <label for="icon" class="label-name">アイコン</label>
                         <div class="user-icon-dnd-wrapper">
@@ -66,30 +67,40 @@
                       </div>
                       <div class="form-group">
                         <label for="exampleSelectBorder">ロール</label>
-                        <select class="form-control" id="exampleSelectBorder">
-                          <option>学生</option>
-                          <option>教員</option>
+                        <select class="form-control" id="exampleSelectBorder" name="roleId">
+                          <option value="0">学生</option>
+                          <option value="1">教員</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="classSelect">クラス</label>
+                        <select class="form-control" id="classSelect" name="homeroomId">
+                        	<option th:each="dto:${homeroomList}" th:value="${dto.homeroomId}" th:text="${dto.horoomeName}" ></option>
                         </select>
                       </div>
                       <div class="form-group">
                         <label for="student-no">学籍番号（教員は不要）</label>
-                        <input type="text" id="student-no" class="form-control" placeholder="学籍番号">
+                        <input type="text"  name="studentNo" id="student-no" class="form-control" placeholder="学籍番号">
                       </div>
                       <div class="form-group">
                         <label for="mail">メールアドレス</label>
-                        <input type="text" id="mail" class="form-control" placeholder="メールアドレス">
+                        <input type="text" name="mail" id="mail" class="form-control" placeholder="メールアドレス">
                       </div>
                       <div class="form-group">
                         <label for="nickname">ニックネーム</label>
-                        <input type="text" id="nickname" class="form-control" placeholder="ニックネーム">
+                        <input type="text"  name="nickname" id="nickname" class="form-control" placeholder="ニックネーム">
                       </div>
                       <div class="form-group">
                         <label for="password">パスワード</label>
-                        <input type="password" id="password" class="form-control" placeholder="パスワード">
+                        <input type="password" name="pass1" id="password" class="form-control" placeholder="パスワード">
                       </div>
                       <div class="form-group">
                         <label for="password-confirm">パスワード（確認）</label>
-                        <input type="password" id="password-confirm" class="form-control" placeholder="パスワード（確認）">
+                        <input type="password" id="pass2" name="pass2"  class="form-control" placeholder="パスワード（確認）">
+                      </div>
+                      <div class="form-group">
+                        <label for="admissionYear">入学（入社）年度</label>
+                        <input type="text"  name="admissionYear" id="admissionYear" class="form-control" placeholder="入学（入社）年度">
                       </div>
                       <div class="form-group">
                           <button class="btn btn-primary" id="btn-confirm">登録</button>
