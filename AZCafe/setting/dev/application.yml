@@ -19,6 +19,7 @@ spring:
     
 azcafe:
   salt: 5fr2FjxT
-  avaterbasedir: img
+  avaterbasedir: C:/img
   tokenlimit: 1
   passwordpolicy: 
+  csvuploaddir: C:/upload

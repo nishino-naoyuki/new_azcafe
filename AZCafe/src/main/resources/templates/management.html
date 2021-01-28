@@ -45,7 +45,7 @@
             <div class="card">
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
-                  <li class="nav-item"><a class="nav-link active" href="#user-regist" data-toggle="tab">ユーザー登録</a></li>
+                  <li class="nav-item"><a class="nav-link" th:classappend="${kind.equals('user')} ? active : '' " href="#user-regist" data-toggle="tab">ユーザー登録</a></li>
                   <li class="nav-item"><a class="nav-link" href="#user-csv-regist" data-toggle="tab">ユーザーCSV登録</a></li>
                   <li class="nav-item"><a class="nav-link" href="#edit-class" data-toggle="tab">クラス編集</a></li>
                 </ul>
@@ -67,28 +67,28 @@
                       </div>
                       <div class="form-group">
                         <label for="exampleSelectBorder">ロール</label>
-                        <select class="form-control" id="exampleSelectBorder" name="roleId">
+                        <select class="form-control" id="exampleSelectBorder" name="roleId" th:field="*{roleId}">
                           <option value="0">学生</option>
                           <option value="1">教員</option>
                         </select>
                       </div>
                       <div class="form-group">
                         <label for="classSelect">クラス</label>
-                        <select class="form-control" id="classSelect" name="homeroomId">
+                        <select class="form-control" id="classSelect" name="homeroomId" th:field="*{homeroomId}">
                         	<option th:each="dto:${homeroomList}" th:value="${dto.homeroomId}" th:text="${dto.horoomeName}" ></option>
                         </select>
                       </div>
                       <div class="form-group">
                         <label for="student-no">学籍番号（教員は不要）</label>
-                        <input type="text"  name="studentNo" id="student-no" class="form-control" placeholder="学籍番号">
+                        <input type="text"  name="studentNo" id="student-no" class="form-control" placeholder="学籍番号"  th:field="*{studentNo}">
                       </div>
                       <div class="form-group">
                         <label for="mail">メールアドレス</label>
-                        <input type="text" name="mail" id="mail" class="form-control" placeholder="メールアドレス">
+                        <input type="text" name="mail" id="mail" class="form-control" placeholder="メールアドレス" th:field="*{mail}">
                       </div>
                       <div class="form-group">
                         <label for="nickname">ニックネーム</label>
-                        <input type="text"  name="nickname" id="nickname" class="form-control" placeholder="ニックネーム">
+                        <input type="text"  name="nickname" id="nickname" class="form-control" placeholder="ニックネーム" th:field="*{nickname}">
                       </div>
                       <div class="form-group">
                         <label for="password">パスワード</label>
@@ -100,7 +100,7 @@
                       </div>
                       <div class="form-group">
                         <label for="admissionYear">入学（入社）年度</label>
-                        <input type="text"  name="admissionYear" id="admissionYear" class="form-control" placeholder="入学（入社）年度">
+                        <input type="text"  name="admissionYear" id="admissionYear" class="form-control" placeholder="入学（入社）年度" th:field="*{admissionYear}">
                       </div>
                       <div class="form-group">
                           <button class="btn btn-primary" id="btn-confirm">登録</button>
@@ -217,7 +217,9 @@
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 </head>
-
+<script th:if="${completeflg}">
+alert("登録完了しました");
+</script>
 <script>
   $(document).on('click', '.edit-classname', function(){
     let label = $(this).parent().find(".classname-label");

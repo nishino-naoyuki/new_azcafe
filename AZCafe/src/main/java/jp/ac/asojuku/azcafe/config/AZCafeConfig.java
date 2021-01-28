@@ -28,4 +28,5 @@ public class AZCafeConfig {
 	private String avaterbasedir;//
 	private Integer tokenlimit;	//自動ログイン期限（日）
 	private String passwordpolicy;	//パスワードポリシー
+	private String csvuploaddir;	//CSVのアップロードディレクトリ
 }

@@ -137,7 +137,6 @@ public class LoginController {
 		}
 		
 		//ログイン画面へリダイレクト
-		//ログアウトの時はauto=falseをつけて自動ログインを防ぐ
 		return "redirect:login";
 	}
 	/**
@@ -213,5 +212,5 @@ public class LoginController {
 		
 		response.addCookie(cookie);
 	}
-	
+
 }

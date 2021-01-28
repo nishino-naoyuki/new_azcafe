@@ -32,7 +32,7 @@ public class FileController {
 		// リソースファイルを読み込み
 		String imgdir = AZCafeConfig.getInstance().getAvaterbasedir();
 		//Resource resource = resourceLoader.getResource("classpath:" + "/static/image/" + id);
-		Resource resource = resourceLoader.getResource("file:C:\\img\\" + id);
+		Resource resource = resourceLoader.getResource("file:" + imgdir + "/" + id);
 		InputStream image = resource.getInputStream();
 		
 		// byteへ変換
