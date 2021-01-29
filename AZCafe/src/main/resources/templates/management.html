@@ -3,13 +3,13 @@
 <head>
   <meta id="parent" th:replace="/header/include_css"></meta>
   <!-- include summernote css -->
-  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <link rel="stylesheet" th:href="@{/plugins/summernote/summernote-bs4.min.css}">
   <!-- DataTables -->
-  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}">
   <!-- bootstrap slider -->
-  <link rel="stylesheet" href="plugins/bootstrap-slider/css/bootstrap-slider.min.css">
+  <link rel="stylesheet" th:href="@{/plugins/bootstrap-slider/css/bootstrap-slider.min.css}">
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -109,15 +109,18 @@
                   </div>
                   <!-- ユーザーのCSV登録 -->
                   <div class="tab-pane" id="user-csv-regist">
-                    <form action="#">
+                    <form id="data_upload_form" enctype="multipart/form-data" method="post" >
+                	  <div id="error">
+                		<p id="errorMsg" ></p>
+                	  </div>
                       <div class="form-group">
                         <div class="custom-file">
-                          <input type="file" class="custom-file-input" id="exampleInputFile2">
-                          <label class="custom-file-label" for="exampleInputFile2">Choose file</label>
+                          <input type="file" class="custom-file-input" id="customFile" name="uploadFile">
+                          <label class="custom-file-label" for="customFile">Choose file</label>
                         </div>
                       </div>
                       <div class="form-group">
-                          <button class="btn btn-primary" id="btn-confirm">登録</button>
+                          <button class="btn btn-primary"  id="csv_start">登録</button>
                       </div>
                     </form>
                   </div>
@@ -125,38 +128,23 @@
                   <div class="tab-pane" id="edit-class">
                     <table id="example1" class="table table-bordered table-striped">
                       <thead>
-                      <tr>
-                        <th>クラスID</th>
-                        <th>クラス名</th>
-                      </tr>
+                        <tr>
+                          <th>クラスID</th>
+                          <th>クラス名</th>
+                        </tr>
                       </thead>
                       <tbody>
-                      <tr>
-                        <td>
-                          1
-                        </td> 
-                        <td class="d-flex align-items-center">
-                          <div class="text-muted classname-label">IT1A</div>
-                          <i class="far fa-edit small-icon edit-classname" data-toggle="tooltip" title="クラス名の編集"></i>
-                          <div class="classname-edit d-none">
-                            <input type="text" class="form-control" value="IT1A">
-                            <button class="btn-sm btn-primary btn-classname-appy" data-id="1">適用</button>
-                          </div>
+                        <tr th:each="dto:${homeroomList}">
+                          	<td th:text="${dto.homeroomId}" ></td>
+	                        <td class="d-flex align-items-center">
+	                          <div class="text-muted classname-label hoomroomname" th:text="${dto.horoomeName}"></div>
+	                          <i class="far fa-edit small-icon edit-classname" data-toggle="tooltip" title="クラス名の編集"></i>
+	                          <div class="classname-edit d-none">
+	                            <input type="text" name="hoomroomname" class="form-control hoomroomname"  th:value="${dto.horoomeName}">
+	                            <button class="btn-sm btn-primary btn-classname-appy" th:data-id="${dto.homeroomId}"  >適用</button>
+	                          </div>
                         </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          2
-                        </td> 
-                        <td class="d-flex align-items-center">
-                          <div class="text-muted classname-label">IT1B</div>
-                          <i class="far fa-edit small-icon edit-classname" data-toggle="tooltip" title="クラス名の編集"></i>
-                          <div class="classname-edit d-none">
-                            <input type="text" class="form-control" value="IT1B">
-                            <button class="btn-sm btn-primary btn-classname-appy" data-id="2">適用</button>
-                          </div>
-                        </td>
-                      </tr>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
@@ -192,30 +180,30 @@
 
 <!-- PAGE PLUGINS -->
 <!-- jQuery Mapael -->
-<script src="plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
-<script src="plugins/raphael/raphael.min.js"></script>
-<script src="plugins/jquery-mapael/jquery.mapael.min.js"></script>
-<script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
+<script th:src="@{/plugins/jquery-mousewheel/jquery.mousewheel.js}"></script>
+<script th:src="@{/plugins/raphael/raphael.min.js}"></script>
+<script th:src="@{/plugins/jquery-mapael/jquery.mapael.min.js}"></script>
+<script th:src="@{/plugins/jquery-mapael/maps/usa_states.min.js}"></script>
 <!-- ChartJS -->
-<script src="plugins/chart.js/Chart.min.js"></script>
+<script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
 <!-- typehead -->
-<script src="js/typeahead.bundle.js"></script>
+<script th:src="@{/js/typeahead.bundle.js}"></script>
 <!-- include summernote js -->
-<script src="plugins/summernote/summernote-bs4.min.js"></script>
-<script src="plugins/summernote/lang/summernote-ja-JP.min.js"></script>
+<script th:src="@{/plugins/summernote/summernote-bs4.min.js}"></script>
+<script th:src="@{/plugins/summernote/lang/summernote-ja-JP.min.js}"></script>
 <!-- DataTables  & Plugins -->
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="plugins/jszip/jszip.min.js"></script>
-<script src="plugins/pdfmake/pdfmake.min.js"></script>
-<script src="plugins/pdfmake/vfs_fonts.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/jszip/jszip.min.js}"></script>
+<script th:src="@{/plugins/pdfmake/pdfmake.min.js}"></script>
+<script th:src="@{/plugins/pdfmake/vfs_fonts.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 </head>
 <script th:if="${completeflg}">
 alert("登録完了しました");
@@ -237,7 +225,27 @@ alert("登録完了しました");
   
   $(document).on('click', '.btn-classname-appy', function(){
     let id = $(this).data("id");
-    alert("適用クリック id="+id);
+    let name = $(this).siblings(".hoomroomname").val();
+    let label = $(this).parent().siblings(".hoomroomname")
+    //alert("適用クリック id="+id + " name=" + name);
+
+    var ajaxUrl = /*[[@{/homeroom/update}]]*/ "/homeroom/update";
+
+	$.ajax({
+        type : "POST",                  // HTTP通信の種類
+        url  : /*[[@{/homeroom/update}]]*/ "/homeroom/update",                 // リクエストを送信する先のURL
+        dataType : "text",              // サーバーから返されるデータの型
+        data : {id: id, name:name}
+	}).done(function(data) {
+		if( data == "ok"){
+			label.html(name);
+			alert("クラス名を更新しました");
+		}else{
+			alert("登録に失敗しました");
+		}
+	}).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
+        alert("登録に失敗しました");
+    });
   });
   
   $(function () {
@@ -346,7 +354,81 @@ $(document).on('drop', function (event) {
   event.preventDefault();
 });
 
+////CSV処理///
 
+	$('#csv_start').on('click', function() {
+		//alert("csv_start")
+		// 要素規定の動作をキャンセルする
+        //event.preventDefault();
+		
+		if( !confirm("処理を開始します。途中で中断はできません。\nよろしいですか？")){
+			return;
+		}
+		
+        var ajaxUrl = /*[[@{/user/csvinput}]]*/ "/user/csvinput";
+        //alert(ajaxUrl)
+		//Ajax！
+        if(window.FormData){
+        	var formData = new FormData($('#data_upload_form').get()[0]);
+        	$.ajax({
+                type : "POST",                  // HTTP通信の種類
+                url  : ajaxUrl,                 // リクエストを送信する先のURL
+                dataType : "json",              // サーバーから返されるデータの型
+                data : formData,                // サーバーに送信するデータ
+                processData : false,
+                contentType: false,
+
+    	        beforeSend : function(xhr, settings) {
+    	            // disturb double submit
+    	            $("#csv_start").attr('disabled', true);
+    	    		dispLoading("CSV登録処理中...");
+    	        },
+    	        complete : function(xhr, textStatus) {
+    	            // allow resubmit
+    	            $("#csv_start").attr('disabled', false);
+    	        }
+    	        
+            }).done(function(json) {        // Ajax通信が成功した時の処理
+                $("#csv_start").attr('disabled', false);
+    			$("#errorMsg").text("");
+    			//エラーメッセージがある場合はエラーを表示する
+        		if( json.errorMsg != null){
+    	    		$("#errorMsg").text(json.errorMsg);
+        		}else if(json.now > 0){
+        			alert("登録完了しました！\n処理件数"+json.total+"件");
+        		}
+                removeLoading();
+            }).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
+                alert("アップロードが失敗しました。"+textStatus+" errorThrown:"+errorThrown);
+            });
+        }else{
+        	alert("アップロードに対応できていないブラウザです。");
+        }
+	});
+	
+
+	// Loadingイメージ表示関数
+	function dispLoading(msg){
+	    // 画面表示メッセージ
+	    var dispMsg = "";
+
+	    $("#loading").remove();
+	    // 引数が空の場合は画像のみ
+	    if( msg != "" ){
+	        dispMsg = "<div class='loadingMsg'>" + msg + "</div>";
+	    }
+	    // ローディング画像が表示されていない場合のみ表示
+	    //if($("#loading").size() == 0){
+	        $("body").append("<div id='loading'>" + dispMsg + "</div>");
+	    //}
+	}
+
+
+	// Loadingイメージ削除関数
+	function removeLoading(){
+	 $("#loading").remove();
+	}
+	
 </script>
 </body>
 

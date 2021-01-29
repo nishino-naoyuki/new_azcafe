@@ -40,4 +40,17 @@ public class HomeroomService {
 		
 		return dtoList;
 	}
+	
+	/**
+	 * クラスの更新
+	 * @param id
+	 * @param name
+	 */
+	public void update(Integer id,String name) {
+		HomeroomTblEntity homeroomTblEntity = homeroomRepository.getOne(id);
+		
+		homeroomTblEntity.setName(name);
+		
+		homeroomRepository.saveAndFlush(homeroomTblEntity);
+	}
 }

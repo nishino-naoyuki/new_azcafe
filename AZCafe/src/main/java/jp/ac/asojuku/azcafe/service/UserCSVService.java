@@ -15,6 +15,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 
 import jp.ac.asojuku.azcafe.csv.UserCSV;
 import jp.ac.asojuku.azcafe.entity.HomeroomTblEntity;
+import jp.ac.asojuku.azcafe.entity.LevelTblEntity;
 import jp.ac.asojuku.azcafe.entity.UserTblEntity;
 import jp.ac.asojuku.azcafe.err.ErrorCode;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
@@ -109,7 +110,7 @@ public class UserCSVService {
 		//すでに登録済みかどうかをチェック
 		UserTblEntity entity = userRepository.getUserByMail(userCSV.getMailAddress());
 		
-		UserTblEntity iuEntity = createEntityFromUserCSV(userCSV);
+		UserTblEntity iuEntity = createEntityFromUserCSV(userCSV,entity);
 		if( entity == null ) {
 			//追加
 			userRepository.save(iuEntity);
@@ -127,21 +128,31 @@ public class UserCSVService {
 	 * @return
 	 * @throws AsoBbsSystemErrException
 	 */
-	private UserTblEntity createEntityFromUserCSV(UserCSV userCSV) throws AZCafeException {
-		UserTblEntity entity = new UserTblEntity();
-
+	private UserTblEntity createEntityFromUserCSV(UserCSV userCSV,UserTblEntity entity) throws AZCafeException {
+		
+		if( entity == null ) {
+			entity = new UserTblEntity();
+			LevelTblEntity levelTblEntity = new LevelTblEntity();
+			levelTblEntity.setLevelId(1);
+			entity.setLevelTbl(levelTblEntity);
+			entity.setFollowerNum(0);
+			entity.setFollowNum(0);
+			entity.setGoodNum(0);
+			entity.setGrade(1);
+			entity.setPoint(0);
+		}
+		
 		//ハッシュ計算する
 		String hashedPwd  = Digest.createPassword(userCSV.getMailAddress(), userCSV.getPassword());
 		
-		if( RoleId.STUDENT.equals(userCSV.getRoleId())){
-			entity.setEnterYear(Integer.parseInt(userCSV.getAdmissionYear()));
-		}
 		entity.setGrade(1);//後でバッチで更新
 		entity.setMail(userCSV.getMailAddress());
 		entity.setName(userCSV.getName());
 		entity.setNickName(userCSV.getNickName());
 		entity.setPassword(hashedPwd);
 		entity.setOrgNo(userCSV.getName());
+		entity.setEnterYear(Integer.parseInt(userCSV.getAdmissionYear()));
+		entity.setIntroduction("");
 		
 		HomeroomTblEntity homeroomTblEntity = new HomeroomTblEntity();
 		homeroomTblEntity.setHomeroomId(userCSV.getCourseId());

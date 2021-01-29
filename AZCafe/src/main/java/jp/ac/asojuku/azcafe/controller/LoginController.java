@@ -22,11 +22,11 @@ import jp.ac.asojuku.azcafe.config.AZCafeConfig;
 import jp.ac.asojuku.azcafe.config.MessageProperty;
 import jp.ac.asojuku.azcafe.dto.LoginInfoDto;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
+import jp.ac.asojuku.azcafe.form.LoginForm;
 import jp.ac.asojuku.azcafe.param.IntConst;
 import jp.ac.asojuku.azcafe.param.SessionConst;
 import jp.ac.asojuku.azcafe.param.StringConst;
 import jp.ac.asojuku.azcafe.service.UserService;
-import jp.ac.asojuku.form.LoginForm;
 
 /**
  * @author nishino

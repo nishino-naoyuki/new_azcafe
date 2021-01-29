@@ -1,4 +1,4 @@
-package jp.ac.asojuku.form;
+package jp.ac.asojuku.azcafe.form;
 
 import lombok.Data;
 

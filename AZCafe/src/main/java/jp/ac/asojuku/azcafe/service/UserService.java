@@ -31,6 +31,18 @@ public class UserService {
 	AZCafeConfig config;
 	
 	/**
+	 * ユーザーIDを指定してユーザー情報を取得する
+	 * ユーザー情報の再取得の時に使用する
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public LoginInfoDto getLoginInfo(Integer userId) {
+		UserTblEntity userTblEntity = userRepository.getOne(userId);
+		
+		return getFrom(userTblEntity);
+	}
+	/**
 	 * 1件追加
 	 * 
 	 * @param createUserDto
