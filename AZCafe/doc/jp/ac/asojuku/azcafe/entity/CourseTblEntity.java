@@ -27,15 +27,11 @@ public class CourseTblEntity implements Serializable {
 	/** 新規テーブル 一覧. */
 	private Set<HomeroomTblEntity> homeroomTblSet;
 
-	/** 公開設定 一覧. */
-	private Set<PublicQuestionTblEntity> publicQuestionTblSet;
-
 	/**
 	 * コンストラクタ.
 	 */
 	public CourseTblEntity() {
 		this.homeroomTblSet = new HashSet<HomeroomTblEntity>();
-		this.publicQuestionTblSet = new HashSet<PublicQuestionTblEntity>();
 	}
 
 	/**
@@ -122,35 +118,6 @@ public class CourseTblEntity implements Serializable {
 	 */
 	public Set<HomeroomTblEntity> getHomeroomTblSet() {
 		return this.homeroomTblSet;
-	}
-
-	/**
-	 * 公開設定 一覧を設定します.
-	 * 
-	 * @param publicQuestionTblSet
-	 *            公開設定 一覧
-	 */
-	public void setPublicQuestionTblSet(Set<PublicQuestionTblEntity> publicQuestionTblSet) {
-		this.publicQuestionTblSet = publicQuestionTblSet;
-	}
-
-	/**
-	 * 公開設定 を追加します.
-	 * 
-	 * @param publicQuestionTbl
-	 *            公開設定
-	 */
-	public void addPublicQuestionTbl(PublicQuestionTblEntity publicQuestionTbl) {
-		this.publicQuestionTblSet.add(publicQuestionTbl);
-	}
-
-	/**
-	 * 公開設定 一覧を取得します.
-	 * 
-	 * @return 公開設定 一覧
-	 */
-	public Set<PublicQuestionTblEntity> getPublicQuestionTblSet() {
-		return this.publicQuestionTblSet;
 	}
 
 	/**

@@ -57,7 +57,6 @@ public class ManagementController {
 	@Autowired
 	UserService userService;
 	
-	
 	@Autowired
 	HomeroomService homeroomService;
 

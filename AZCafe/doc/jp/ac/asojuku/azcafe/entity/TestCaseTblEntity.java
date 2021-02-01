@@ -14,7 +14,7 @@ public class TestCaseTblEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** 問題テーブル. */
-	private QuestionTblEntity questionTbl;
+	private AssignmentTblEntity assignmentTbl;
 
 	/** テスト番号. */
 	private Integer no;
@@ -34,11 +34,11 @@ public class TestCaseTblEntity implements Serializable {
 	/**
 	 * 問題テーブル を設定します.
 	 * 
-	 * @param questionTbl
+	 * @param assignmentTbl
 	 *            問題テーブル
 	 */
-	public void setQuestionTbl(QuestionTblEntity questionTbl) {
-		this.questionTbl = questionTbl;
+	public void setAssignmentTbl(AssignmentTblEntity assignmentTbl) {
+		this.assignmentTbl = assignmentTbl;
 	}
 
 	/**
@@ -46,8 +46,8 @@ public class TestCaseTblEntity implements Serializable {
 	 * 
 	 * @return 問題テーブル
 	 */
-	public QuestionTblEntity getQuestionTbl() {
-		return this.questionTbl;
+	public AssignmentTblEntity getAssignmentTbl() {
+		return this.assignmentTbl;
 	}
 
 	/**

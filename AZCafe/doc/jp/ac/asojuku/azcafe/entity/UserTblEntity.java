@@ -79,6 +79,9 @@ public class UserTblEntity implements Serializable {
 	/** 解答テーブル 一覧. */
 	private Set<AnswerTblEntity> answerTblSet;
 
+	/** 問題イイネテーブル 一覧. */
+	private Set<AssignmentGoodTblEntity> assignmentGoodTblSet;
+
 	/** 自動ログイン 一覧. */
 	private Set<AutologinTblEntity> autologinTblSet;
 
@@ -91,19 +94,16 @@ public class UserTblEntity implements Serializable {
 	/** フォロー 一覧. */
 	private Set<FollowTblEntity> followTblSet;
 
-	/** 問題イイネテーブル 一覧. */
-	private Set<QuestionGoodTblEntity> questionGoodTblSet;
-
 	/**
 	 * コンストラクタ.
 	 */
 	public UserTblEntity() {
 		this.answerGoodTblSet = new HashSet<AnswerGoodTblEntity>();
 		this.answerTblSet = new HashSet<AnswerTblEntity>();
+		this.assignmentGoodTblSet = new HashSet<AssignmentGoodTblEntity>();
 		this.autologinTblSet = new HashSet<AutologinTblEntity>();
 		this.commentTblSet = new HashSet<CommentTblEntity>();
 		this.followTblSet = new HashSet<FollowTblEntity>();
-		this.questionGoodTblSet = new HashSet<QuestionGoodTblEntity>();
 	}
 
 	/**
@@ -526,6 +526,35 @@ public class UserTblEntity implements Serializable {
 	}
 
 	/**
+	 * 問題イイネテーブル 一覧を設定します.
+	 * 
+	 * @param assignmentGoodTblSet
+	 *            問題イイネテーブル 一覧
+	 */
+	public void setAssignmentGoodTblSet(Set<AssignmentGoodTblEntity> assignmentGoodTblSet) {
+		this.assignmentGoodTblSet = assignmentGoodTblSet;
+	}
+
+	/**
+	 * 問題イイネテーブル を追加します.
+	 * 
+	 * @param assignmentGoodTbl
+	 *            問題イイネテーブル
+	 */
+	public void addAssignmentGoodTbl(AssignmentGoodTblEntity assignmentGoodTbl) {
+		this.assignmentGoodTblSet.add(assignmentGoodTbl);
+	}
+
+	/**
+	 * 問題イイネテーブル 一覧を取得します.
+	 * 
+	 * @return 問題イイネテーブル 一覧
+	 */
+	public Set<AssignmentGoodTblEntity> getAssignmentGoodTblSet() {
+		return this.assignmentGoodTblSet;
+	}
+
+	/**
 	 * 自動ログイン 一覧を設定します.
 	 * 
 	 * @param autologinTblSet
@@ -639,35 +668,6 @@ public class UserTblEntity implements Serializable {
 	 */
 	public Set<FollowTblEntity> getFollowTblSet() {
 		return this.followTblSet;
-	}
-
-	/**
-	 * 問題イイネテーブル 一覧を設定します.
-	 * 
-	 * @param questionGoodTblSet
-	 *            問題イイネテーブル 一覧
-	 */
-	public void setQuestionGoodTblSet(Set<QuestionGoodTblEntity> questionGoodTblSet) {
-		this.questionGoodTblSet = questionGoodTblSet;
-	}
-
-	/**
-	 * 問題イイネテーブル を追加します.
-	 * 
-	 * @param questionGoodTbl
-	 *            問題イイネテーブル
-	 */
-	public void addQuestionGoodTbl(QuestionGoodTblEntity questionGoodTbl) {
-		this.questionGoodTblSet.add(questionGoodTbl);
-	}
-
-	/**
-	 * 問題イイネテーブル 一覧を取得します.
-	 * 
-	 * @return 問題イイネテーブル 一覧
-	 */
-	public Set<QuestionGoodTblEntity> getQuestionGoodTblSet() {
-		return this.questionGoodTblSet;
 	}
 
 	/**

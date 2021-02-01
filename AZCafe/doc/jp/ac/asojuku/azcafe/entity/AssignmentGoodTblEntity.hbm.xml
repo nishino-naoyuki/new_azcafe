@@ -5,19 +5,16 @@
 
 <hibernate-mapping package="jp.ac.asojuku.azcafe.entity">
 
-	<class name="TestCaseTblEntity" table="TEST_CASE_TBL">
+	<class name="AssignmentGoodTblEntity" table="ASSIGNMENT_GOOD_TBL">
 
 		<property name="assignmentId" type="java.lang.Integer"
 			column="assignment_id" not-null="true" />
 
-		<property name="no" type="java.lang.Integer"
-			column="no" not-null="true" />
+		<property name="userId" type="java.lang.Integer"
+			column="user_id" not-null="true" />
 
-		<property name="inputText" type="java.lang.String"
-			column="input_text" not-null="false" />
-
-		<property name="outputTxt" type="java.lang.String"
-			column="output_txt" not-null="true" />
+		<property name="goodDate" type="java.util.Date"
+			column="good_date" not-null="true" />
 
 	</class>
 </hibernate-mapping>

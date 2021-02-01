@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta id="parent" th:replace="/header/include_css"></meta>
+
+  <!-- DataTables -->
+  <link rel="stylesheet" th:href="@{/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}">
+  <!-- include summernote css -->
+  <link rel="stylesheet" th:href="@{/plugins/summernote/summernote-bs4.min.css}">
+  <!-- bootstrap slider -->
+  <link rel="stylesheet" th:href="@{/plugins/bootstrap-slider/css/bootstrap-slider.min.css}">
+
+</head>
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+<div class="wrapper">
+  <!-- Navbar -->
+  <!-- ヘッダー -->
+   <div id="parent" th:replace="/header/header"></div>   
+
+  <!-- サイドバー -->
+    <div id="parent" th:replace="/header/sidebar"></div>  
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-12">
+            <h1 class="m-0">問題作成</h1>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <form th:action="@{/assignment/confirm}" id="question-form" method="POST" th:object="${assignmentForm}">
+        <p id="error" th:each="error : ${#fields.detailedErrors()}" th:text="${error.message}"></p>
+        <div class="row">
+          <!-- /.col -->
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header p-2">
+                <ul class="nav nav-pills">
+                  <li class="nav-item"><a class="nav-link active" href="#question-header" data-toggle="tab">問題情報</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#question-body" data-toggle="tab">問題本文</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#answer-list" data-toggle="tab">解答設定</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#public-setting" data-toggle="tab">公開設定</a></li>
+                </ul>
+              </div><!-- /.card-header -->
+              <div class="card-body">
+                <div class="tab-content">
+                  <!-- 問題のヘッダー情報 -->
+                  <div class="active tab-pane" id="question-header">
+                    <div class="form-group">
+                      <label for="q-group">問題グループ</label>
+                      <input type="text" name="group" id="q-group" class="form-control typeahead" placeholder="問題グループ"  th:field="*{group}">
+                    </div>
+                    <div class="form-group">
+                      <label for="q-title">問題タイトル</label>
+                      <input type="text" name="title" id="q-title" class="form-control" placeholder="問題名" th:field="*{title}">
+                    </div>
+                    <div class="form-group">
+                      <label for="q-difficalty">問題難易度</label>
+                      <select name="dificalty" class="form-control" id="q-difficalty" th:field="*{dificalty}">
+                        <option value="1">簡単</option>
+                        <option value="2">やや簡単</option>
+                        <option value="3">普通</option>
+                        <option value="4">やや難</option>
+                        <option value="5">難</option>
+                      </select>
+                    </div>
+                  </div>
+                  <!-- 問題の本文情報 -->
+                  <div class="tab-pane" id="question-body">
+                    <div class="normal-text">文字数残り</div>
+                    <div class="progress">
+                      <div id="comment-length" class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="normal-text">※Shift＋Enterで「改行」通常のEnterのみは「次の段落」です</div>
+                    <textarea  id="summernote" name="content"  th:field="*{content}"></textarea >
+                  </div>
+                  <!-- 問題の解答情報 -->
+                  <div class="tab-pane" id="answer-list">
+                    <div class="form-group">
+                      <button class="btn btn-default" id="btn-ans-add">解答追加</button>
+                    </div>
+                    <div class="col-md-12" id="answer-list-elements">
+                      <div class="card card-primary answer-list-element" id="element-base" style="display: none;">
+                        <div class="card-header">
+                          <h3 class="card-title">見出し</h3>
+                          <div class="card-tools">
+                            <button type="button" id="btn-ans-del" class="btn btn-tool" data-toggle="tooltip" title="この解答を削除する"><i class="fas fa-times"></i>
+                            </button>
+                          </div>
+                        </div>
+                        <div class="card-body d-flex">
+                          <div class="form-group col-md-6">
+                            <label for="ans-input">入力値</label>
+                            <textarea id="ans-input" class="form-control ans-input" name="answerList[0].input" placeholder="入力値"></textarea>
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label for="ans-output">出力値</label>
+                            <textarea id="ans-output" class="form-control ans-output" name="answerList[0].output" placeholder="出力値1"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card card-primary answer-list-element" th:id="|answer-list-element-${status.index}|" th:each="answer,status:${assignmentForm.answerList}">
+                        <div class="card-header">
+                          <h3 class="card-title" th:text="|解答${status.count}|">解答1</h3>
+                          <div class="card-tools">
+                            <button type="button" id="btn-ans-del" class="btn btn-tool" data-toggle="tooltip" title="この解答を削除する"><i class="fas fa-times"></i>
+                            </button>
+                          </div>
+                        </div>
+                        <div class="card-body d-flex">
+                          <div class="form-group col-md-6">
+                            <label for="ans-input">入力値</label>
+                            <textarea id="ans-input" class="form-control ans-input" th:name="|answerList[${status.index}].input|" placeholder="入力値" th:text="${answer.input}"></textarea>
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label for="ans-output">出力値</label>
+                            <textarea id="ans-output" class="form-control ans-output" th:name="|answerList[${status.index}].output|" placeholder="出力値1" th:text="${answer.output}"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </div>
+                  <!-- 問題の公開情報 -->
+                  <div class="tab-pane" id="public-setting">
+
+                    <table id="public_list" class="table table-bordered table-striped">
+                      <thead>
+                      <tr>
+                        <th>No.</th>
+                        <th>クラス名</th>
+                        <th>公開設定</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      	<tr th:each="dto,status:${homeroomList}">
+                      	  <td th:text="${status.count}">1</td>
+                      	  <td th:text="${dto.horoomeName}"></td> 
+                          <td>
+                            <input type="hidden" th:name="|publicStateList[${status.index}].homeroomId|" th:value="${dto.homeroomId}">
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                              <label class="btn bg-primary active">
+                                <input type="radio" th:name="|publicStateList[${status.index}].publicState|" id="option_b1" autocomplete="off" value="0" checked  > 未公開
+                              </label>
+                              <label class="btn bg-primary">
+                                <input type="radio" th:name="|publicStateList[${status.index}].publicState|" id="option_b2" value="1" autocomplete="off" > 公開
+                              </label>
+                              <label class="btn bg-primary">
+                                <input type="radio" th:name="|publicStateList[${status.index}].publicState|" id="option_b3" value="2" autocomplete="off" > 必須公開
+                              </label>
+                            </div>
+                      	</tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- /.tab-pane -->
+                </div>
+                <!-- /.tab-content -->
+              </div><!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        </form>
+        <div class="row">
+          <button class="btn btn-primary" id="btn-confirm">確認</button>
+        </div>                
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+<meta id="parent" th:replace="/header/include_js"></meta>
+
+<!-- PAGE PLUGINS -->
+<!-- jQuery Mapael -->
+<script th:src="@{/plugins/jquery-mousewheel/jquery.mousewheel.js}"></script>
+<script th:src="@{/plugins/raphael/raphael.min.js}"></script>
+<script th:src="@{/plugins/jquery-mapael/jquery.mapael.min.js}"></script>
+<script th:src="@{/plugins/jquery-mapael/maps/usa_states.min.js}"></script>
+<!-- ChartJS -->
+<script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
+<!-- typehead -->
+<script th:src="@{/js/typeahead.bundle.js}"></script>
+<!-- include summernote js -->
+<script th:src="@{/plugins/summernote/summernote-bs4.min.js}"></script>
+<script th:src="@{/plugins/summernote/lang/summernote-ja-JP.min.js}"></script>
+<!-- DataTables  & Plugins -->
+<script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/jszip/jszip.min.js}"></script>
+<script th:src="@{/plugins/pdfmake/pdfmake.min.js}"></script>
+<script th:src="@{/plugins/pdfmake/vfs_fonts.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
+</head>
+
+<script>
+  const maxLength = 20000; //問題の文字数
+  const list = ["JK-1", "JK-2","JK-3","SK-1","SK-2"]; 
+  const suggestions = new Bloodhound({ 
+      datumTokenizer: Bloodhound.tokenizers.whitespace, 
+      queryTokenizer: Bloodhound.tokenizers.whitespace, 
+      local: list, 
+  }); 
+  
+  //.testclassに対象のクラス名を入れます。 
+  $('#q-group').typeahead(
+    { 
+        hint: true, 
+        highlight: true, 
+        minLength: 1 
+    },
+    { 
+        name: 'suggestions', 
+        source: suggestions 
+  });
+
+  //登録
+  $(document).on('click', '#btn-confirm', function(){
+    const markupStr = $('#summernote').summernote('code');
+    alert(markupStr);
+    $("#question-form").submit();
+  });
+  
+  const remake_answerlist = (i,baseElement) => {
+	  const title = baseElement.find(".card-title");
+      const input = baseElement.find(".ans-input");
+      const output = baseElement.find(".ans-output");
+      title.text("解答"+(i+1));
+      baseElement.attr('id','answer-list-element-' + (i));
+      input.attr('name','answerList[' + (i) + '].input');
+      output.attr('name','answerList[' + (i) + '].output');
+  };
+
+  //解答追加
+  $(document).on('click', '#btn-ans-add', function(){
+    const element = $('#element-base').clone();
+    element.css("display", "block");
+    element.attr('id','answer-list-element-');
+    element.appendTo("#answer-list-elements");
+    $('[id^="answer-list-element-"]').each(function(i){
+    	//答えリストの属性を振りなおす
+        remake_answerlist(i,$(this));
+    });
+    $('[data-toggle="tooltip"]').tooltip();
+    return false;
+  });
+  //解答削除
+  $(document).on('click', '#btn-ans-del', function(){
+    var contents_num = $("#answer-list-elements").children('[id^="answer-list-element-"]').length;
+    if( contents_num <= 1 ){
+      alert("解答は必ず1つは必要です");
+      return;
+    }
+    if( confirm("削除した解答は元に戻せません。削除してよろしいですか？") == false){
+      return;
+    }
+    $(this).tooltip('hide');//これが無いとツールチップが残る
+    $(this).parent().parent().parent().remove();
+    $('[id^="answer-list-element-"]').each(function(i){
+    	//答えリストの属性を振りなおす
+        remake_answerlist(i,$(this));
+    });
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+  
+  $(function () {
+    
+    $('#summernote').summernote({
+      height:320,
+      placeholder: 'ここに問題文を入力してください',
+      lang:"ja-JP",
+      toolbar: [
+        // [groupName, [list of button]]
+        ['style', ['bold', 'italic', 'underline', 'clear']],
+        ['font', ['superscript', 'subscript']],
+        ['color', ['color']],
+        ['para', ['style','ul', 'ol', 'paragraph']],
+        ['Insert',['picture','link','hr']],
+        ['height', ['height']],
+        ['Misc',['fullscreen','undo','redo','help']]
+      ],
+      callbacks: {
+        onChange: function(contents, $editable) {
+          const textNum = contents.length;
+          const progress = (textNum/maxLength);
+          console.log('onChange:', contents, textNum);
+          $("#comment-length").css("width",progress+"%")
+          $("#comment-length").text(textNum+"/"+maxLength+"文字");
+        }
+      }
+    });
+
+    
+    $('#public_list').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+
+
+</script>
+</body>
+
+</html>

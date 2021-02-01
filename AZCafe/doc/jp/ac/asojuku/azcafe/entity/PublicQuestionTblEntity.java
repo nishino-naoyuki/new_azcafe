@@ -15,13 +15,13 @@ public class PublicQuestionTblEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** 問題テーブル. */
-	private QuestionTblEntity questionTbl;
-
-	/** 新規テーブル. */
-	private CourseTblEntity courseTbl;
+	private AssignmentTblEntity assignmentTbl;
 
 	/** 新規テーブル. */
 	private HomeroomTblEntity homeroomTbl;
+
+	/** 公開設定. */
+	private Integer publicState;
 
 	/** 公開開始日時. */
 	private Date publicStartDate;
@@ -38,11 +38,11 @@ public class PublicQuestionTblEntity implements Serializable {
 	/**
 	 * 問題テーブル を設定します.
 	 * 
-	 * @param questionTbl
+	 * @param assignmentTbl
 	 *            問題テーブル
 	 */
-	public void setQuestionTbl(QuestionTblEntity questionTbl) {
-		this.questionTbl = questionTbl;
+	public void setAssignmentTbl(AssignmentTblEntity assignmentTbl) {
+		this.assignmentTbl = assignmentTbl;
 	}
 
 	/**
@@ -50,27 +50,8 @@ public class PublicQuestionTblEntity implements Serializable {
 	 * 
 	 * @return 問題テーブル
 	 */
-	public QuestionTblEntity getQuestionTbl() {
-		return this.questionTbl;
-	}
-
-	/**
-	 * 新規テーブル を設定します.
-	 * 
-	 * @param courseTbl
-	 *            新規テーブル
-	 */
-	public void setCourseTbl(CourseTblEntity courseTbl) {
-		this.courseTbl = courseTbl;
-	}
-
-	/**
-	 * 新規テーブル を取得します.
-	 * 
-	 * @return 新規テーブル
-	 */
-	public CourseTblEntity getCourseTbl() {
-		return this.courseTbl;
+	public AssignmentTblEntity getAssignmentTbl() {
+		return this.assignmentTbl;
 	}
 
 	/**
@@ -90,6 +71,25 @@ public class PublicQuestionTblEntity implements Serializable {
 	 */
 	public HomeroomTblEntity getHomeroomTbl() {
 		return this.homeroomTbl;
+	}
+
+	/**
+	 * 公開設定 を設定します.
+	 * 
+	 * @param publicState
+	 *            公開設定
+	 */
+	public void setPublicState(Integer publicState) {
+		this.publicState = publicState;
+	}
+
+	/**
+	 * 公開設定 を取得します.
+	 * 
+	 * @return 公開設定
+	 */
+	public Integer getPublicState() {
+		return this.publicState;
 	}
 
 	/**

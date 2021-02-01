@@ -15,7 +15,7 @@ public class PublicQuestionTblEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** 問題テーブル. */
-	private QuestionTblEntity questionTbl;
+	private AssignmentTblEntity questionTbl;
 
 	/** 新規テーブル. */
 	private CourseTblEntity courseTbl;
@@ -41,7 +41,7 @@ public class PublicQuestionTblEntity implements Serializable {
 	 * @param questionTbl
 	 *            問題テーブル
 	 */
-	public void setQuestionTbl(QuestionTblEntity questionTbl) {
+	public void setQuestionTbl(AssignmentTblEntity questionTbl) {
 		this.questionTbl = questionTbl;
 	}
 
@@ -50,7 +50,7 @@ public class PublicQuestionTblEntity implements Serializable {
 	 * 
 	 * @return 問題テーブル
 	 */
-	public QuestionTblEntity getQuestionTbl() {
+	public AssignmentTblEntity getQuestionTbl() {
 		return this.questionTbl;
 	}
 

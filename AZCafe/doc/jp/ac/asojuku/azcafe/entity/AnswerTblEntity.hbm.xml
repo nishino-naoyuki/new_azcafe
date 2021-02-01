@@ -11,8 +11,8 @@
 			<generator class="assigned" />
 		</id>
 
-		<property name="questionId" type="java.lang.Integer"
-			column="question_id" not-null="true" />
+		<property name="assignmentId" type="java.lang.Integer"
+			column="assignment_id" not-null="true" />
 
 		<property name="userId" type="java.lang.Integer"
 			column="user_id" not-null="true" />

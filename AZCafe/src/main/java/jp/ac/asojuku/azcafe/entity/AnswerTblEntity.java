@@ -19,7 +19,7 @@ public class AnswerTblEntity implements Serializable {
 	private Integer answerId;
 
 	/** 問題テーブル. */
-	private QuestionTblEntity questionTbl;
+	private AssignmentTblEntity questionTbl;
 
 	/** ユーザー. */
 	private UserTblEntity userTbl;
@@ -75,7 +75,7 @@ public class AnswerTblEntity implements Serializable {
 	 * @param questionTbl
 	 *            問題テーブル
 	 */
-	public void setQuestionTbl(QuestionTblEntity questionTbl) {
+	public void setQuestionTbl(AssignmentTblEntity questionTbl) {
 		this.questionTbl = questionTbl;
 	}
 
@@ -84,7 +84,7 @@ public class AnswerTblEntity implements Serializable {
 	 * 
 	 * @return 問題テーブル
 	 */
-	public QuestionTblEntity getQuestionTbl() {
+	public AssignmentTblEntity getQuestionTbl() {
 		return this.questionTbl;
 	}
 
