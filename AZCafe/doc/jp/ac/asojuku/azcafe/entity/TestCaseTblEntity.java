@@ -13,6 +13,9 @@ public class TestCaseTblEntity implements Serializable {
 	/** serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
+	/** testcase_id. */
+	private Integer testcaseId;
+
 	/** 問題テーブル. */
 	private AssignmentTblEntity assignmentTbl;
 
@@ -29,6 +32,25 @@ public class TestCaseTblEntity implements Serializable {
 	 * コンストラクタ.
 	 */
 	public TestCaseTblEntity() {
+	}
+
+	/**
+	 * testcase_id を設定します.
+	 * 
+	 * @param testcaseId
+	 *            testcase_id
+	 */
+	public void setTestcaseId(Integer testcaseId) {
+		this.testcaseId = testcaseId;
+	}
+
+	/**
+	 * testcase_id を取得します.
+	 * 
+	 * @return testcase_id
+	 */
+	public Integer getTestcaseId() {
+		return this.testcaseId;
 	}
 
 	/**
@@ -107,5 +129,40 @@ public class TestCaseTblEntity implements Serializable {
 		return this.outputTxt;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((testcaseId == null) ? 0 : testcaseId.hashCode());
+		return result;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		TestCaseTblEntity other = (TestCaseTblEntity) obj;
+		if (testcaseId == null) {
+			if (other.testcaseId != null) {
+				return false;
+			}
+		} else if (!testcaseId.equals(other.testcaseId)) {
+			return false;
+		}
+		return true;
+	}
 
 }

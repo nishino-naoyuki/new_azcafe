@@ -53,7 +53,7 @@ public class AssignmentTblEntity implements Serializable {
 	private Set<AssignmentGoodTblEntity> assignmentGoodTblSet;
 
 	/** 公開設定 一覧. */
-	private Set<PublicQuestionTblEntity> publicQuestionTblSet;
+	private Set<PublicAssignmentTblEntity> publicAssignmentTblSet;
 
 	/** テストケース 一覧. */
 	private Set<TestCaseTblEntity> testCaseTblSet;
@@ -64,7 +64,7 @@ public class AssignmentTblEntity implements Serializable {
 	public AssignmentTblEntity() {
 		this.answerTblSet = new HashSet<AnswerTblEntity>();
 		this.assignmentGoodTblSet = new HashSet<AssignmentGoodTblEntity>();
-		this.publicQuestionTblSet = new HashSet<PublicQuestionTblEntity>();
+		this.publicAssignmentTblSet = new HashSet<PublicAssignmentTblEntity>();
 		this.testCaseTblSet = new HashSet<TestCaseTblEntity>();
 	}
 
@@ -319,21 +319,21 @@ public class AssignmentTblEntity implements Serializable {
 	/**
 	 * 公開設定 一覧を設定します.
 	 * 
-	 * @param publicQuestionTblSet
+	 * @param publicAssignmentTblSet
 	 *            公開設定 一覧
 	 */
-	public void setPublicQuestionTblSet(Set<PublicQuestionTblEntity> publicQuestionTblSet) {
-		this.publicQuestionTblSet = publicQuestionTblSet;
+	public void setPublicAssignmentTblSet(Set<PublicAssignmentTblEntity> publicAssignmentTblSet) {
+		this.publicAssignmentTblSet = publicAssignmentTblSet;
 	}
 
 	/**
 	 * 公開設定 を追加します.
 	 * 
-	 * @param publicQuestionTbl
+	 * @param publicAssignmentTbl
 	 *            公開設定
 	 */
-	public void addPublicQuestionTbl(PublicQuestionTblEntity publicQuestionTbl) {
-		this.publicQuestionTblSet.add(publicQuestionTbl);
+	public void addPublicAssignmentTbl(PublicAssignmentTblEntity publicAssignmentTbl) {
+		this.publicAssignmentTblSet.add(publicAssignmentTbl);
 	}
 
 	/**
@@ -341,8 +341,8 @@ public class AssignmentTblEntity implements Serializable {
 	 * 
 	 * @return 公開設定 一覧
 	 */
-	public Set<PublicQuestionTblEntity> getPublicQuestionTblSet() {
-		return this.publicQuestionTblSet;
+	public Set<PublicAssignmentTblEntity> getPublicAssignmentTblSet() {
+		return this.publicAssignmentTblSet;
 	}
 
 	/**

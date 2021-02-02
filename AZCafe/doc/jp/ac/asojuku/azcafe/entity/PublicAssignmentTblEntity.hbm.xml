@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="jp.ac.asojuku.azcafe.entity">
+
+	<class name="PublicAssignmentTblEntity" table="PUBLIC_ASSIGNMENT_TBL">
+
+		<id name="publicAssignmentId" type="java.lang.Integer" column="public_assignment_id">
+			<generator class="assigned" />
+		</id>
+
+		<property name="assignmentId" type="java.lang.Integer"
+			column="assignment_id" not-null="true" />
+
+		<property name="homeroomId" type="java.lang.Integer"
+			column="homeroom_id" not-null="true" />
+
+		<property name="publicState" type="java.lang.Integer"
+			column="public_state" not-null="false" />
+
+		<property name="publicStartDate" type="java.util.Date"
+			column="public_start_date" not-null="false" />
+
+		<property name="publicEndDate" type="java.util.Date"
+			column="public_end_date" not-null="false" />
+
+	</class>
+</hibernate-mapping>

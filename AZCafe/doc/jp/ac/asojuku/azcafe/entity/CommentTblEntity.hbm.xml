@@ -7,6 +7,10 @@
 
 	<class name="CommentTblEntity" table="COMMENT_TBL">
 
+		<id name="commentId" type="java.lang.Integer" column="comment_id">
+			<generator class="assigned" />
+		</id>
+
 		<property name="answerId" type="java.lang.Integer"
 			column="answer_id" not-null="true" />
 

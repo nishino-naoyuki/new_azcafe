@@ -41,9 +41,9 @@
         <div class="row">
           <!-- Left col -->
           <div class="col-md-12">
-            <div class="card card-primary shadow-none">
+            <div class="card card-primary shadow-none" th:object="${assignmentDto}">
               <div class="card-header">
-                <h1 class="card-title">問題の題名あああああああああああああああいいいいいいいいいい</h1>
+                <h1 class="card-title" th:text="*{title}"></h1>
 
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -61,7 +61,7 @@
         
                       <div class="info-box-content">
                         <span class="info-box-text">問題グループ</span>
-                        <span class="info-box-number">JK-1</span>
+                        <span class="info-box-number" th:text="*{group}"></span>
                       </div>
                       <!-- /.info-box-content -->
                     </div>
@@ -73,7 +73,7 @@
         
                       <div class="info-box-content">
                         <span class="info-box-text">問題難易度</span>
-                        <span class="info-box-number">5</span>
+                        <span class="info-box-number" th:text="*{difficulty}">5</span>
                       </div>
                       <!-- /.info-box-content -->
                     </div>
@@ -87,97 +87,38 @@
                     <div class="card-header">
                       <h3 class="card-title">問題文</h3>
                     </div>
-                    <div class="card-body">
-問題文　問題文中はHTMLタグが使用可能。<br>
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああ
+                    <div class="card-body"  th:utext="*{content}">
                     </div>
                   </div>
                 </div>
-                <!-- 回答欄 -->
+                <!-- 解答設定 -->
+                <div class="col-md-12">
+                  
+                  <div class="card">
+                    <div class="card-header d-flex p-0">
+                      <h3 class="card-title p-3">解答</h3>
+                    </div>
+                    <div class="card-body">
+                      <table id="public_list" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                          <th>No.</th>
+                          <th>入力値</th>
+                          <th>出力値</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                          <tr th:each="dto,status:${assignmentDto.answerList}">
+                            <td th:text="${status.count}">1</td>
+                            <td><textarea th:text="${dto.input}" disabled></textarea></td> 
+                            <td><textarea th:text="${dto.output}" disabled ></textarea></td> 
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <!-- 公開設定 -->
                 <div class="col-md-12">
                   
                   <div class="card">
@@ -194,53 +135,19 @@
                         </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>IT1A</td> 
+                          <tr th:each="dto,status:${assignmentDto.publicStateList}">
+                            <td th:text="${status.count}">1</td>
+                            <td th:text="${dto.homeroomName}"></td> 
                             <td>
                               <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                 <label class="btn bg-primary active">
-                                  <input type="radio" name="options" id="option_b1" autocomplete="off" checked> 未公開
+                                  <input type="radio" name="options" id="option_b1" autocomplete="off" disabled th:checked="${dto.publicState == 0 or dto.publicState == null }" > 未公開
                                 </label>
                                 <label class="btn bg-primary">
-                                  <input type="radio" name="options" id="option_b2" autocomplete="off"> 公開
+                                  <input type="radio" name="options" id="option_b2" autocomplete="off" disabled th:checked="${dto.publicState == 1}"> 公開
                                 </label>
                                 <label class="btn bg-primary">
-                                  <input type="radio" name="options" id="option_b3" autocomplete="off"> 必須公開
-                                </label>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>IT1B</td> 
-                            <td>
-                              <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                <label class="btn bg-primary active">
-                                  <input type="radio" name="options" id="option_b1" autocomplete="off" checked> 未公開
-                                </label>
-                                <label class="btn bg-primary">
-                                  <input type="radio" name="options" id="option_b2" autocomplete="off"> 公開
-                                </label>
-                                <label class="btn bg-primary">
-                                  <input type="radio" name="options" id="option_b3" autocomplete="off"> 必須公開
-                                </label>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>3</td>
-                            <td>IT1C</td> 
-                            <td>
-                              <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                <label class="btn bg-primary active">
-                                  <input type="radio" name="options" id="option_b1" autocomplete="off" checked> 未公開
-                                </label>
-                                <label class="btn bg-primary">
-                                  <input type="radio" name="options" id="option_b2" autocomplete="off"> 公開
-                                </label>
-                                <label class="btn bg-primary">
-                                  <input type="radio" name="options" id="option_b3" autocomplete="off"> 必須公開
+                                  <input type="radio" name="options" id="option_b3" autocomplete="off" disabled th:checked="${dto.publicState == 2}"> 必須公開
                                 </label>
                               </div>
                             </td>
@@ -256,8 +163,13 @@
           </div>
           <!-- /.col -->
         </div>
-        <div class="row">
-          <button class="btn btn-primary" id="btn-create">登録</button>
+        <div class="row col-md-6">
+        	<div class="col-2">
+        	  <button class="btn btn-primary" id="btn-create">登録</button>
+        	</div>
+        	<div class="col-2">
+        		<button class="btn btn-primary" id="btn-return">戻る</button>
+        	</div>
         </div>          
         <!-- /.row -->
       </div><!--/. container-fluid -->
@@ -272,14 +184,6 @@
   </aside>
   <!-- /.control-sidebar -->
 
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.1.0-rc
-    </div>
-  </footer>
 </div>
 <!-- ./wrapper -->
 
@@ -288,24 +192,38 @@
 <meta id="parent" th:replace="/header/include_js"></meta>
 
 <!-- DataTables  & Plugins -->
-<script th:src="@/plugins/datatables/jquery.dataTables.min.js}"></script>
-<script th:src="@/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
-<script th:src="@/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
-<script th:src="@/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
-<script th:src="@/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
-<script th:src="@/plugins/datatables-buttons/js/buttons.bootstrap4.min.js}"></script>
-<script th:src="@/plugins/jszip/jszip.min.js}"></script>
-<script th:src="@/plugins/pdfmake/pdfmake.min.js}"></script>
-<script th:src="@/plugins/pdfmake/vfs_fonts.js}"></script>
-<script th:src="@/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
-<script th:src="@/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
-<script th:src="@/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
+<script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/jszip/jszip.min.js}"></script>
+<script th:src="@{/plugins/pdfmake/pdfmake.min.js}"></script>
+<script th:src="@{/plugins/pdfmake/vfs_fonts.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 <script>
 
 $(document).on('click', '#btn-create', function(){
-  alert("登録");
-}
 
+	$.ajax({
+        type : "POST",                  // HTTP通信の種類
+        url  : /*[[@{/assignment/insert}]]*/ "/assignment/insert",                 // リクエストを送信する先のURL
+        dataType : "text"              // サーバーから返されるデータの型
+	}).done(function(data) {
+		alert(data);
+	}).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
+        alert("登録に失敗しました");
+    });
+});
+
+$(document).on('click', '#btn-return', function(){
+	var url = /*[[@{/assignment/create}]]*/ "/assignment/create";
+	url = url + "?returnFlg=1";
+	window.location.href = url;
+});
 </script>
 
 </body>

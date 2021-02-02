@@ -58,16 +58,16 @@
                   <!-- 問題のヘッダー情報 -->
                   <div class="active tab-pane" id="question-header">
                     <div class="form-group">
-                      <label for="q-group">問題グループ</label>
+                      <label for="q-group">問題グループ<span class="float-right text-danger">（必須）</span></label>
                       <input type="text" name="group" id="q-group" class="form-control typeahead" placeholder="問題グループ"  th:field="*{group}">
                     </div>
                     <div class="form-group">
-                      <label for="q-title">問題タイトル</label>
+                      <label for="q-title">問題タイトル<span class="float-right text-danger">（必須）</span></label>
                       <input type="text" name="title" id="q-title" class="form-control" placeholder="問題名" th:field="*{title}">
                     </div>
                     <div class="form-group">
                       <label for="q-difficalty">問題難易度</label>
-                      <select name="dificalty" class="form-control" id="q-difficalty" th:field="*{dificalty}">
+                      <select name="difficulty" class="form-control" id="q-difficalty" th:field="*{difficulty}">
                         <option value="1">簡単</option>
                         <option value="2">やや簡単</option>
                         <option value="3">普通</option>
@@ -102,11 +102,11 @@
                         <div class="card-body d-flex">
                           <div class="form-group col-md-6">
                             <label for="ans-input">入力値</label>
-                            <textarea id="ans-input" class="form-control ans-input" name="answerList[0].input" placeholder="入力値"></textarea>
+                            <textarea id="ans-input" class="form-control ans-input" name="" placeholder="入力値"></textarea>
                           </div>
                           <div class="form-group col-md-6">
-                            <label for="ans-output">出力値</label>
-                            <textarea id="ans-output" class="form-control ans-output" name="answerList[0].output" placeholder="出力値1"></textarea>
+                            <label for="ans-output">出力値<span class="float-right text-danger">（必須）</span></label>
+                            <textarea id="ans-output" class="form-control ans-output" name="" placeholder="出力値"></textarea>
                           </div>
                         </div>
                       </div>
@@ -124,8 +124,8 @@
                             <textarea id="ans-input" class="form-control ans-input" th:name="|answerList[${status.index}].input|" placeholder="入力値" th:text="${answer.input}"></textarea>
                           </div>
                           <div class="form-group col-md-6">
-                            <label for="ans-output">出力値</label>
-                            <textarea id="ans-output" class="form-control ans-output" th:name="|answerList[${status.index}].output|" placeholder="出力値1" th:text="${answer.output}"></textarea>
+                            <label for="ans-output">出力値<span class="float-right text-danger">（必須）</span></label>
+                            <textarea id="ans-output" class="form-control ans-output" th:name="|answerList[${status.index}].output|" placeholder="出力値" th:text="${answer.output}"></textarea>
                           </div>
                         </div>
                       </div>
@@ -144,20 +144,21 @@
                       </tr>
                       </thead>
                       <tbody>
-                      	<tr th:each="dto,status:${homeroomList}">
+                      	<tr th:each="dto,status:${assignmentForm.publicStateList}">
                       	  <td th:text="${status.count}">1</td>
-                      	  <td th:text="${dto.horoomeName}"></td> 
+                      	  <td th:text="${dto.homeroomName}"></td> 
                           <td>
                             <input type="hidden" th:name="|publicStateList[${status.index}].homeroomId|" th:value="${dto.homeroomId}">
+                            <input type="hidden" th:name="|publicStateList[${status.index}].homeroomName|" th:value="${dto.homeroomName}">
                             <div class="btn-group btn-group-toggle" data-toggle="buttons">
                               <label class="btn bg-primary active">
-                                <input type="radio" th:name="|publicStateList[${status.index}].publicState|" id="option_b1" autocomplete="off" value="0" checked  > 未公開
+                                <input type="radio" th:name="|publicStateList[${status.index}].publicState|" id="option_b1" autocomplete="off" value="0" th:checked="${dto.publicState == 0 or dto.publicState == null }"  > 未公開
                               </label>
                               <label class="btn bg-primary">
-                                <input type="radio" th:name="|publicStateList[${status.index}].publicState|" id="option_b2" value="1" autocomplete="off" > 公開
+                                <input type="radio" th:name="|publicStateList[${status.index}].publicState|" id="option_b2" value="1" autocomplete="off"   th:checked="${dto.publicState == 1}"> 公開
                               </label>
                               <label class="btn bg-primary">
-                                <input type="radio" th:name="|publicStateList[${status.index}].publicState|" id="option_b3" value="2" autocomplete="off" > 必須公開
+                                <input type="radio" th:name="|publicStateList[${status.index}].publicState|" id="option_b3" value="2" autocomplete="off" th:checked="${dto.publicState == 2}" > 必須公開
                               </label>
                             </div>
                       	</tr>
@@ -247,8 +248,9 @@
 
   //登録
   $(document).on('click', '#btn-confirm', function(){
-    const markupStr = $('#summernote').summernote('code');
-    alert(markupStr);
+    //const markupStr = $('#answer-list-element-0');
+    //const input = markupStr.find(".ans-input");
+    //alert(input.val());
     $("#question-form").submit();
   });
   
@@ -257,9 +259,9 @@
       const input = baseElement.find(".ans-input");
       const output = baseElement.find(".ans-output");
       title.text("解答"+(i+1));
-      baseElement.attr('id','answer-list-element-' + (i));
-      input.attr('name','answerList[' + (i) + '].input');
-      output.attr('name','answerList[' + (i) + '].output');
+      baseElement.attr('id','answer-list-element-' + i);
+      input.attr('name','answerList[' + i + '].input');
+      output.attr('name','answerList[' + i + '].output');
   };
 
   //解答追加

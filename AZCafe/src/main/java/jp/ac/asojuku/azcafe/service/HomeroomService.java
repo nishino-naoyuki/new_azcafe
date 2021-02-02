@@ -32,7 +32,7 @@ public class HomeroomService {
 			HomeroomDto dto = new HomeroomDto();
 			
 			dto.setHomeroomId(entity.getHomeroomId());
-			dto.setHoroomeName(entity.getName());
+			dto.setHomeroomName(entity.getName());
 			dto.setCourseName(entity.getCourseTbl().getName());
 			
 			dtoList.add(dto);

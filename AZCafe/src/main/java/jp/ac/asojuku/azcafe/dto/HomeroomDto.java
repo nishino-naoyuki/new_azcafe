@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class HomeroomDto {
 	private Integer homeroomId;
-	private String horoomeName;
+	private String homeroomName;
 	private String courseName;
 }

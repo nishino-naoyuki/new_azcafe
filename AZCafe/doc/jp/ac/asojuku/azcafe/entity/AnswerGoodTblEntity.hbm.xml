@@ -7,6 +7,10 @@
 
 	<class name="AnswerGoodTblEntity" table="ANSWER_GOOD_TBL">
 
+		<id name="answerGoodId" type="java.lang.Integer" column="answer_good_id">
+			<generator class="assigned" />
+		</id>
+
 		<property name="answerId" type="java.lang.Integer"
 			column="answer_id" not-null="true" />
 

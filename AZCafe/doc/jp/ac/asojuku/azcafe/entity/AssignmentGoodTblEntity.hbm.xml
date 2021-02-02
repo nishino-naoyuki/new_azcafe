@@ -7,6 +7,10 @@
 
 	<class name="AssignmentGoodTblEntity" table="ASSIGNMENT_GOOD_TBL">
 
+		<id name="assignmentGoodId" type="java.lang.Integer" column="assignment_good_id">
+			<generator class="assigned" />
+		</id>
+
 		<property name="assignmentId" type="java.lang.Integer"
 			column="assignment_id" not-null="true" />
 

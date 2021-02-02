@@ -75,7 +75,7 @@
                       <div class="form-group">
                         <label for="classSelect">クラス</label>
                         <select class="form-control" id="classSelect" name="homeroomId" th:field="*{homeroomId}">
-                        	<option th:each="dto:${homeroomList}" th:value="${dto.homeroomId}" th:text="${dto.horoomeName}" ></option>
+                        	<option th:each="dto:${homeroomList}" th:value="${dto.homeroomId}" th:text="${dto.homeroomName}" ></option>
                         </select>
                       </div>
                       <div class="form-group">
@@ -83,15 +83,15 @@
                         <input type="text"  name="studentNo" id="student-no" class="form-control" placeholder="学籍番号"  th:field="*{studentNo}">
                       </div>
                       <div class="form-group">
-                        <label for="mail">メールアドレス</label>
+                        <label for="mail">メールアドレス<span class="float-right text-danger">（必須）</span></label>
                         <input type="text" name="mail" id="mail" class="form-control" placeholder="メールアドレス" th:field="*{mail}">
                       </div>
                       <div class="form-group">
-                        <label for="nickname">ニックネーム</label>
+                        <label for="nickname">ニックネーム<span class="float-right text-danger">（必須）</span></label>
                         <input type="text"  name="nickname" id="nickname" class="form-control" placeholder="ニックネーム" th:field="*{nickname}">
                       </div>
                       <div class="form-group">
-                        <label for="password">パスワード</label>
+                        <label for="password">パスワード<span class="float-right text-danger">（必須）</span></label>
                         <input type="password" name="pass1" id="password" class="form-control" placeholder="パスワード">
                       </div>
                       <div class="form-group">
@@ -99,7 +99,7 @@
                         <input type="password" id="pass2" name="pass2"  class="form-control" placeholder="パスワード（確認）">
                       </div>
                       <div class="form-group">
-                        <label for="admissionYear">入学（入社）年度</label>
+                        <label for="admissionYear">入学（入社）年度<span class="float-right text-danger">（必須）</span></label>
                         <input type="text"  name="admissionYear" id="admissionYear" class="form-control" placeholder="入学（入社）年度" th:field="*{admissionYear}">
                       </div>
                       <div class="form-group">
@@ -137,10 +137,10 @@
                         <tr th:each="dto:${homeroomList}">
                           	<td th:text="${dto.homeroomId}" ></td>
 	                        <td class="d-flex align-items-center">
-	                          <div class="text-muted classname-label hoomroomname" th:text="${dto.horoomeName}"></div>
+	                          <div class="text-muted classname-label hoomroomname" th:text="${dto.homeroomName}"></div>
 	                          <i class="far fa-edit small-icon edit-classname" data-toggle="tooltip" title="クラス名の編集"></i>
 	                          <div class="classname-edit d-none">
-	                            <input type="text" name="hoomroomname" class="form-control hoomroomname"  th:value="${dto.horoomeName}">
+	                            <input type="text" name="hoomroomname" class="form-control hoomroomname"  th:value="${dto.homeroomName}">
 	                            <button class="btn-sm btn-primary btn-classname-appy" th:data-id="${dto.homeroomId}"  >適用</button>
 	                          </div>
                         </td>

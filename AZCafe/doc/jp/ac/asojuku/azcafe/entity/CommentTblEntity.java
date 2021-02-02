@@ -14,6 +14,9 @@ public class CommentTblEntity implements Serializable {
 	/** serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
+	/** comment_id. */
+	private Integer commentId;
+
 	/** 解答テーブル. */
 	private AnswerTblEntity answerTbl;
 
@@ -30,6 +33,25 @@ public class CommentTblEntity implements Serializable {
 	 * コンストラクタ.
 	 */
 	public CommentTblEntity() {
+	}
+
+	/**
+	 * comment_id を設定します.
+	 * 
+	 * @param commentId
+	 *            comment_id
+	 */
+	public void setCommentId(Integer commentId) {
+		this.commentId = commentId;
+	}
+
+	/**
+	 * comment_id を取得します.
+	 * 
+	 * @return comment_id
+	 */
+	public Integer getCommentId() {
+		return this.commentId;
 	}
 
 	/**
@@ -108,5 +130,40 @@ public class CommentTblEntity implements Serializable {
 		return this.entryDate;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((commentId == null) ? 0 : commentId.hashCode());
+		return result;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		CommentTblEntity other = (CommentTblEntity) obj;
+		if (commentId == null) {
+			if (other.commentId != null) {
+				return false;
+			}
+		} else if (!commentId.equals(other.commentId)) {
+			return false;
+		}
+		return true;
+	}
 
 }

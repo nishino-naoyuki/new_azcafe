@@ -14,6 +14,9 @@ public class AnswerGoodTblEntity implements Serializable {
 	/** serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
+	/** answer_good_id. */
+	private Integer answerGoodId;
+
 	/** 解答テーブル. */
 	private AnswerTblEntity answerTbl;
 
@@ -27,6 +30,25 @@ public class AnswerGoodTblEntity implements Serializable {
 	 * コンストラクタ.
 	 */
 	public AnswerGoodTblEntity() {
+	}
+
+	/**
+	 * answer_good_id を設定します.
+	 * 
+	 * @param answerGoodId
+	 *            answer_good_id
+	 */
+	public void setAnswerGoodId(Integer answerGoodId) {
+		this.answerGoodId = answerGoodId;
+	}
+
+	/**
+	 * answer_good_id を取得します.
+	 * 
+	 * @return answer_good_id
+	 */
+	public Integer getAnswerGoodId() {
+		return this.answerGoodId;
 	}
 
 	/**
@@ -86,5 +108,40 @@ public class AnswerGoodTblEntity implements Serializable {
 		return this.goodDate;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((answerGoodId == null) ? 0 : answerGoodId.hashCode());
+		return result;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		AnswerGoodTblEntity other = (AnswerGoodTblEntity) obj;
+		if (answerGoodId == null) {
+			if (other.answerGoodId != null) {
+				return false;
+			}
+		} else if (!answerGoodId.equals(other.answerGoodId)) {
+			return false;
+		}
+		return true;
+	}
 
 }

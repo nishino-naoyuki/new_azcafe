@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS ANSWER_GOOD_TBL;
 DROP TABLE IF EXISTS COMMENT_TBL;
 DROP TABLE IF EXISTS ANSWER_TBL;
 DROP TABLE IF EXISTS ASSIGNMENT_GOOD_TBL;
-DROP TABLE IF EXISTS PUBLIC_QUESTION_TBL;
+DROP TABLE IF EXISTS PUBLIC_ASSIGNMENT_TBL;
 DROP TABLE IF EXISTS TEST_CASE_TBL;
 DROP TABLE IF EXISTS ASSIGNMENT_TBL;
 DROP TABLE IF EXISTS AUTOLOGIN_TBL;
@@ -25,9 +25,11 @@ DROP TABLE IF EXISTS USER_DELETE_TBL;
 
 CREATE TABLE ANSWER_GOOD_TBL
 (
+	answer_good_id int NOT NULL AUTO_INCREMENT,
 	answer_id int NOT NULL,
 	user_id int NOT NULL,
-	good_date timestamp NOT NULL
+	good_date timestamp NOT NULL,
+	PRIMARY KEY (answer_good_id)
 );
 
 
@@ -51,9 +53,11 @@ CREATE TABLE ANSWER_TBL
 
 CREATE TABLE ASSIGNMENT_GOOD_TBL
 (
+	assignment_good_id int NOT NULL AUTO_INCREMENT,
 	assignment_id int NOT NULL,
 	user_id int NOT NULL,
-	good_date timestamp NOT NULL
+	good_date timestamp NOT NULL,
+	PRIMARY KEY (assignment_good_id)
 );
 
 
@@ -89,12 +93,14 @@ CREATE TABLE AUTOLOGIN_TBL
 
 CREATE TABLE COMMENT_TBL
 (
+	comment_id int NOT NULL AUTO_INCREMENT,
 	answer_id int NOT NULL,
 	user_id int NOT NULL,
 	-- コメント
 	comment varchar(4000) NOT NULL COMMENT 'コメント',
 	-- 登録日
-	entry_date timestamp NOT NULL COMMENT '登録日'
+	entry_date timestamp NOT NULL COMMENT '登録日',
+	PRIMARY KEY (comment_id)
 );
 
 
@@ -147,8 +153,9 @@ CREATE TABLE LEVEL_TBL
 );
 
 
-CREATE TABLE PUBLIC_QUESTION_TBL
+CREATE TABLE PUBLIC_ASSIGNMENT_TBL
 (
+	public_assignment_id int NOT NULL AUTO_INCREMENT,
 	assignment_id int NOT NULL,
 	homeroom_id int NOT NULL,
 	-- 0:未公開
@@ -160,12 +167,14 @@ CREATE TABLE PUBLIC_QUESTION_TBL
 	-- nullの場合は即時公開
 	public_start_date timestamp COMMENT 'nullの場合は即時公開',
 	-- nullだと設定無し
-	public_end_date timestamp COMMENT 'nullだと設定無し'
+	public_end_date timestamp COMMENT 'nullだと設定無し',
+	PRIMARY KEY (public_assignment_id)
 );
 
 
 CREATE TABLE TEST_CASE_TBL
 (
+	testcase_id int NOT NULL AUTO_INCREMENT,
 	assignment_id int NOT NULL,
 	-- 1~
 	no int NOT NULL COMMENT '1~',
@@ -176,7 +185,8 @@ CREATE TABLE TEST_CASE_TBL
 	-- テストケースの答え
 	-- 実行結果とこの項目が一致するかどうかで正解かどうかを判定する
 	output_txt varchar(2000) NOT NULL COMMENT 'テストケースの答え
-実行結果とこの項目が一致するかどうかで正解かどうかを判定する'
+実行結果とこの項目が一致するかどうかで正解かどうかを判定する',
+	PRIMARY KEY (testcase_id)
 );
 
 
@@ -297,7 +307,7 @@ ALTER TABLE ASSIGNMENT_GOOD_TBL
 ;
 
 
-ALTER TABLE PUBLIC_QUESTION_TBL
+ALTER TABLE PUBLIC_ASSIGNMENT_TBL
 	ADD FOREIGN KEY (assignment_id)
 	REFERENCES ASSIGNMENT_TBL (assignment_id)
 	ON UPDATE RESTRICT
@@ -329,7 +339,7 @@ ALTER TABLE ASSIGNMENT_TBL
 ;
 
 
-ALTER TABLE PUBLIC_QUESTION_TBL
+ALTER TABLE PUBLIC_ASSIGNMENT_TBL
 	ADD FOREIGN KEY (homeroom_id)
 	REFERENCES HOMEROOM_TBL (homeroom_id)
 	ON UPDATE RESTRICT
