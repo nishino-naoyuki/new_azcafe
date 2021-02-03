@@ -16,10 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import jp.ac.asojuku.azcafe.dto.AssignmentDto;
+import jp.ac.asojuku.azcafe.dto.AssignmentElementDto;
+import jp.ac.asojuku.azcafe.dto.GroupDto;
 import jp.ac.asojuku.azcafe.dto.HomeroomDto;
 import jp.ac.asojuku.azcafe.form.AssignmentForm;
 import jp.ac.asojuku.azcafe.param.SessionConst;
 import jp.ac.asojuku.azcafe.service.AssignmentService;
+import jp.ac.asojuku.azcafe.service.GroupService;
 import jp.ac.asojuku.azcafe.service.HomeroomService;
 
 /**
@@ -37,7 +40,20 @@ public class AssignmentController {
 	AssignmentService assignmentService;
 	@Autowired
 	HttpSession session;
-	
+	@Autowired
+	GroupService groupService;
+
+	@RequestMapping(value= {"/list"}, method=RequestMethod.GET)
+	public ModelAndView list(ModelAndView mv) {
+
+		//一覧取得
+		List<AssignmentElementDto> assignmentList = assignmentService.getAll();
+		
+		mv.addObject("assignmentList",assignmentList);
+		
+        mv.setViewName("assignment_list");
+        return mv;
+	}
 	/**
 	 * 問題作成のメソッド
 	 * @param mv
@@ -49,6 +65,10 @@ public class AssignmentController {
 			ModelAndView mv,
 			@RequestParam(required = false) Integer returnFlg) {
 
+		//課題グループを取得する
+		List<GroupDto> groupList = groupService.getAll();
+		mv.addObject("groupList",groupList);
+		
 		if( returnFlg != null && returnFlg == 1) {
 			//確認画面からの戻り
 			getFormFromSession(assignmentForm);
@@ -58,6 +78,7 @@ public class AssignmentController {
 			mv.addObject("homeroomList", list);
 			assignmentForm.initPublicStateList(list); 
 		}
+		
 		
         mv.setViewName("assignment_create");
         return mv;

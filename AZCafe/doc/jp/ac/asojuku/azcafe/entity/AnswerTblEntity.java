@@ -24,17 +24,14 @@ public class AnswerTblEntity implements Serializable {
 	/** ユーザー. */
 	private UserTblEntity userTbl;
 
-	/** 答え. */
-	private String answer;
-
-	/** ファイル名. */
-	private String fileName;
-
 	/** 点数. */
 	private Integer score;
 
 	/** 正解フラグ. */
 	private Integer correctFlg;
+
+	/** 解答詳細テーブル 一覧. */
+	private Set<AnswerDetailTblEntity> answerDetailTblSet;
 
 	/** 解答いいね 一覧. */
 	private Set<AnswerGoodTblEntity> answerGoodTblSet;
@@ -46,6 +43,7 @@ public class AnswerTblEntity implements Serializable {
 	 * コンストラクタ.
 	 */
 	public AnswerTblEntity() {
+		this.answerDetailTblSet = new HashSet<AnswerDetailTblEntity>();
 		this.answerGoodTblSet = new HashSet<AnswerGoodTblEntity>();
 		this.commentTblSet = new HashSet<CommentTblEntity>();
 	}
@@ -108,44 +106,6 @@ public class AnswerTblEntity implements Serializable {
 	}
 
 	/**
-	 * 答え を設定します.
-	 * 
-	 * @param answer
-	 *            答え
-	 */
-	public void setAnswer(String answer) {
-		this.answer = answer;
-	}
-
-	/**
-	 * 答え を取得します.
-	 * 
-	 * @return 答え
-	 */
-	public String getAnswer() {
-		return this.answer;
-	}
-
-	/**
-	 * ファイル名 を設定します.
-	 * 
-	 * @param fileName
-	 *            ファイル名
-	 */
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
-	/**
-	 * ファイル名 を取得します.
-	 * 
-	 * @return ファイル名
-	 */
-	public String getFileName() {
-		return this.fileName;
-	}
-
-	/**
 	 * 点数 を設定します.
 	 * 
 	 * @param score
@@ -181,6 +141,35 @@ public class AnswerTblEntity implements Serializable {
 	 */
 	public Integer getCorrectFlg() {
 		return this.correctFlg;
+	}
+
+	/**
+	 * 解答詳細テーブル 一覧を設定します.
+	 * 
+	 * @param answerDetailTblSet
+	 *            解答詳細テーブル 一覧
+	 */
+	public void setAnswerDetailTblSet(Set<AnswerDetailTblEntity> answerDetailTblSet) {
+		this.answerDetailTblSet = answerDetailTblSet;
+	}
+
+	/**
+	 * 解答詳細テーブル を追加します.
+	 * 
+	 * @param answerDetailTbl
+	 *            解答詳細テーブル
+	 */
+	public void addAnswerDetailTbl(AnswerDetailTblEntity answerDetailTbl) {
+		this.answerDetailTblSet.add(answerDetailTbl);
+	}
+
+	/**
+	 * 解答詳細テーブル 一覧を取得します.
+	 * 
+	 * @return 解答詳細テーブル 一覧
+	 */
+	public Set<AnswerDetailTblEntity> getAnswerDetailTblSet() {
+		return this.answerDetailTblSet;
 	}
 
 	/**

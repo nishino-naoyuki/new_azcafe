@@ -48,6 +48,9 @@ public class AssignmentTblEntity implements Serializable {
 
 	/** タイトル. */
 	private String title;
+	
+	/** 難易度. */
+	private Integer difficulty;
 
 	/** 内容. */
 	private String contents;
@@ -68,9 +71,9 @@ public class AssignmentTblEntity implements Serializable {
 	private Date updateDate;
 
 	/** 解答テーブル 一覧. */
-	@OneToMany
-	@JoinColumn(name="answerId",insertable=false ,updatable=false)
-	private Set<AnswerTblEntity> answerTblSet;
+	@OneToOne
+    @JoinColumn(name="assignmentId",insertable=false ,updatable=false)
+	private AnswerTblEntity answerTbl;
 
 	/** 問題イイネテーブル 一覧. */
 	@OneToMany
@@ -91,7 +94,6 @@ public class AssignmentTblEntity implements Serializable {
 	 * コンストラクタ.
 	 */
 	public AssignmentTblEntity() {
-		this.answerTblSet = new HashSet<AnswerTblEntity>();
 		this.assignmentGoodTblSet = new HashSet<AssignmentGoodTblEntity>();
 		this.publicQuestionTblSet = new HashSet<PublicAssignmentTblEntity>();
 		this.testCaseTblSet = new HashSet<TestCaseTblEntity>();

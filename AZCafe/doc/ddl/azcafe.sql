@@ -2,6 +2,7 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 
 /* Drop Tables */
 
+DROP TABLE IF EXISTS ANSWER_DETAIL_TBL;
 DROP TABLE IF EXISTS ANSWER_GOOD_TBL;
 DROP TABLE IF EXISTS COMMENT_TBL;
 DROP TABLE IF EXISTS ANSWER_TBL;
@@ -23,6 +24,17 @@ DROP TABLE IF EXISTS USER_DELETE_TBL;
 
 /* Create Tables */
 
+CREATE TABLE ANSWER_DETAIL_TBL
+(
+	answer_detail_id int NOT NULL AUTO_INCREMENT,
+	answer_id int NOT NULL,
+	-- ファイルアップロード時は、アップロードしたファイル名、Webテキストでの提出の時は「ユーザーID_課題ID」となる（Webテキストでは複数提出はできない）
+	filename varchar(512) NOT NULL COMMENT 'ファイルアップロード時は、アップロードしたファイル名、Webテキストでの提出の時は「ユーザーID_課題ID」となる（Webテキストでは複数提出はできない）',
+	answer varchar(21845) NOT NULL,
+	PRIMARY KEY (answer_detail_id)
+);
+
+
 CREATE TABLE ANSWER_GOOD_TBL
 (
 	answer_good_id int NOT NULL AUTO_INCREMENT,
@@ -38,12 +50,6 @@ CREATE TABLE ANSWER_TBL
 	answer_id int NOT NULL AUTO_INCREMENT,
 	assignment_id int NOT NULL,
 	user_id int NOT NULL,
-	-- 解答
-	-- 解答は圧縮して格納する
-	answer varchar(21845) NOT NULL COMMENT '解答
-解答は圧縮して格納する',
-	-- ソースファイル名
-	file_name varchar(256) NOT NULL COMMENT 'ソースファイル名',
 	-- 採点結果
 	score int NOT NULL COMMENT '採点結果',
 	correct_flg int DEFAULT 0 NOT NULL,
@@ -274,6 +280,14 @@ CREATE TABLE USER_TBL
 
 
 /* Create Foreign Keys */
+
+ALTER TABLE ANSWER_DETAIL_TBL
+	ADD FOREIGN KEY (answer_id)
+	REFERENCES ANSWER_TBL (answer_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
 
 ALTER TABLE ANSWER_GOOD_TBL
 	ADD FOREIGN KEY (answer_id)

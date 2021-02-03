@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jp.ac.asojuku.azcafe.dto.AssignmentTestCaseDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentDto;
+import jp.ac.asojuku.azcafe.dto.AssignmentElementDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentPublicDto;
 import jp.ac.asojuku.azcafe.entity.AssignmentTblEntity;
 import jp.ac.asojuku.azcafe.entity.GroupTblEntity;
 import jp.ac.asojuku.azcafe.entity.PublicAssignmentTblEntity;
 import jp.ac.asojuku.azcafe.entity.TestCaseTblEntity;
+import jp.ac.asojuku.azcafe.param.Difficulty;
 import jp.ac.asojuku.azcafe.repository.AssignmentRepository;
 import jp.ac.asojuku.azcafe.repository.GroupRepository;
 import jp.ac.asojuku.azcafe.repository.PublicAssignmentRepository;
@@ -36,6 +39,23 @@ public class AssignmentService {
 	@Autowired
 	TestCaseRepository testCaseRepository;
 	
+	/**
+	 * 課題リストを取得する
+	 * @return
+	 */
+	public List<AssignmentElementDto> getAll(){
+		List<AssignmentElementDto> list = new ArrayList<>();
+		
+		List<AssignmentTblEntity> entityList = 
+				assignmentRepository.findAll(Sort.by(Sort.Direction.ASC, "groupId","groupInNo"));
+		
+		for( AssignmentTblEntity entity : entityList ) {
+			AssignmentElementDto dto = getFrom(entity);
+			list.add(dto);
+		}
+		
+		return list;
+	}
 	/**
 	 * 課題を挿入する
 	 * @param dto
@@ -85,6 +105,7 @@ public class AssignmentService {
 		
 		entity.setTitle(dto.getTitle());
 		entity.setContents(dto.getContent());	
+		entity.setDifficulty(dto.getDifficultyAsInt());
 		entity.setGood(0);
 		entity.setGroupInNo(1);//TODO:要調整
 		entity.setCreateUserId(0);//TODO:要調整
@@ -140,5 +161,27 @@ public class AssignmentService {
 		}
 		
 		testCaseRepository.saveAll(testCaseList);
+	}
+	
+	/**
+	 * リスト用のDTOをEntityより取得する
+	 * @param assignmentTblEntity
+	 * @return
+	 */
+	private AssignmentElementDto getFrom(AssignmentTblEntity assignmentTblEntity) {
+		AssignmentElementDto dto = new AssignmentElementDto();
+		
+		dto.setGroupName(assignmentTblEntity.getGroupTbl().getName());
+		dto.setTitle(assignmentTblEntity.getTitle());
+		dto.setAssignmentId(assignmentTblEntity.getAssignmentId());
+		dto.setDifficulty(assignmentTblEntity.getDifficulty());
+		if( assignmentTblEntity.getAnswerTbl() != null ) {
+			dto.setScore(assignmentTblEntity.getAnswerTbl().getScore());
+		}else {
+			dto.setScore(null);
+		}
+		
+		
+		return dto;
 	}
 }

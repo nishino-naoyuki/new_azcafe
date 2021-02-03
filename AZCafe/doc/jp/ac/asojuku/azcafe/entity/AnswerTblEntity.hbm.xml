@@ -17,12 +17,6 @@
 		<property name="userId" type="java.lang.Integer"
 			column="user_id" not-null="true" />
 
-		<property name="answer" type="java.lang.String"
-			column="answer" not-null="true" />
-
-		<property name="fileName" type="java.lang.String"
-			column="file_name" not-null="true" />
-
 		<property name="score" type="java.lang.Integer"
 			column="score" not-null="true" />
 

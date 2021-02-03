@@ -225,9 +225,15 @@
 <script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 </head>
 
-<script>
+<script th:inline="javascript">
   const maxLength = 20000; //問題の文字数
-  const list = ["JK-1", "JK-2","JK-3","SK-1","SK-2"]; 
+  
+  const list = [
+  [# th:each="salut : ${groupList}"]    
+  [[${salut.name}]]  ,
+  [/]
+  ];
+ 
   const suggestions = new Bloodhound({ 
       datumTokenizer: Bloodhound.tokenizers.whitespace, 
       queryTokenizer: Bloodhound.tokenizers.whitespace, 
@@ -239,6 +245,8 @@
     { 
         hint: true, 
         highlight: true, 
+        order: "asc",
+        searchOnFocus: true,
         minLength: 1 
     },
     { 

@@ -41,13 +41,9 @@ public class AnswerTblEntity implements Serializable {
 	private AssignmentTblEntity questionTbl;
 
 	/** ユーザー. */
+	@OneToOne
+    @JoinColumn(name="userId",insertable=false ,updatable=false)
 	private UserTblEntity userTbl;
-
-	/** 答え. */
-	private String answer;
-
-	/** ファイル名. */
-	private String fileName;
 
 	/** 点数. */
 	private Integer score;
@@ -55,6 +51,11 @@ public class AnswerTblEntity implements Serializable {
 	/** 正解フラグ. */
 	private Integer correctFlg;
 
+	/** 解答詳細テーブル 一覧. */
+	@OneToMany
+	@JoinColumn(name="answerId",insertable=true ,updatable=true)
+	private Set<AnswerDetailTblEntity> answerDetailTblSet;
+	
 	/** 解答いいね 一覧. */
 	@OneToMany
 	@JoinColumn(name="answerId",insertable=true ,updatable=true)
