@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import jp.ac.asojuku.azcafe.dto.AssignmentDetailDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentElementDto;
 import jp.ac.asojuku.azcafe.dto.GroupDto;
@@ -54,6 +55,25 @@ public class AssignmentController {
         mv.setViewName("assignment_list");
         return mv;
 	}
+	
+	/**
+	 * 詳細情報を取得する
+	 * @param mv
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value= {"/detail"}, method=RequestMethod.GET)
+	public ModelAndView detail(
+			ModelAndView mv,@RequestParam(required = false) Integer id) {
+
+		AssignmentDetailDto assignmentdetailDto = assignmentService.getDetail(id);
+		
+		mv.addObject("assignmentdetailDto",assignmentdetailDto);
+		
+        mv.setViewName("assignment_detail");
+        return mv;
+	}
+	
 	/**
 	 * 問題作成のメソッド
 	 * @param mv

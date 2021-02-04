@@ -28,8 +28,8 @@ CREATE TABLE ANSWER_DETAIL_TBL
 (
 	answer_detail_id int NOT NULL AUTO_INCREMENT,
 	answer_id int NOT NULL,
-	-- ファイルアップロード時は、アップロードしたファイル名、Webテキストでの提出の時は「ユーザーID_課題ID」となる（Webテキストでは複数提出はできない）
-	filename varchar(512) NOT NULL COMMENT 'ファイルアップロード時は、アップロードしたファイル名、Webテキストでの提出の時は「ユーザーID_課題ID」となる（Webテキストでは複数提出はできない）',
+	-- ファイルアップロード時は、アップロードしたファイル名、Webテキストでの提出の時はnull
+	filename varchar(512) COMMENT 'ファイルアップロード時は、アップロードしたファイル名、Webテキストでの提出の時はnull',
 	answer varchar(21845) NOT NULL,
 	PRIMARY KEY (answer_detail_id)
 );
@@ -48,8 +48,8 @@ CREATE TABLE ANSWER_GOOD_TBL
 CREATE TABLE ANSWER_TBL
 (
 	answer_id int NOT NULL AUTO_INCREMENT,
-	assignment_id int NOT NULL,
 	user_id int NOT NULL,
+	assignment_id int NOT NULL,
 	-- 採点結果
 	score int NOT NULL COMMENT '採点結果',
 	correct_flg int DEFAULT 0 NOT NULL,
@@ -75,6 +75,18 @@ CREATE TABLE ASSIGNMENT_TBL
 	group_in_no int NOT NULL COMMENT '画面の表示されるときにグループ内の若い番号から順に表示される',
 	title varchar(200) NOT NULL,
 	contents longtext NOT NULL,
+	-- 1～5
+	-- 1:簡単
+	-- 2:やや簡単
+	-- 3:普通
+	-- 4:やや難
+	-- 5:難
+	difficulty int NOT NULL COMMENT '1～5
+1:簡単
+2:やや簡単
+3:普通
+4:やや難
+5:難',
 	-- QUESTION_GOOD_TBLのCOUNT
 	good int NOT NULL COMMENT 'QUESTION_GOOD_TBLのCOUNT',
 	create_user_id int NOT NULL,
@@ -418,7 +430,7 @@ ALTER TABLE COMMENT_TBL
 
 
 ALTER TABLE FOLLOW_TBL
-	ADD FOREIGN KEY (follew_user_id)
+	ADD FOREIGN KEY (user_id)
 	REFERENCES USER_TBL (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -426,7 +438,7 @@ ALTER TABLE FOLLOW_TBL
 
 
 ALTER TABLE FOLLOW_TBL
-	ADD FOREIGN KEY (user_id)
+	ADD FOREIGN KEY (follew_user_id)
 	REFERENCES USER_TBL (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT

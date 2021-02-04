@@ -1,18 +1,21 @@
 package jp.ac.asojuku.azcafe.util;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -263,6 +266,34 @@ public class FileUtils {
 
 		//ファイルの一覧を取得する
 		return  new File(dir).listFiles(filter);
+	}
+	
+	/**
+	 * dirで指定されたディレクトリにfnameで指定されたファイル名で
+	 * contnetの内容を出力する
+	 * 
+	 * @param dir
+	 * @param fname
+	 * @param content
+	 * @return
+	 * @throws AZCafeException
+	 */
+	public static Path outputFile(String dir,String fname,String content) throws AZCafeException {
+		Path path = Paths.get(dir,fname);
+		
+		if( !Files.isWritable(path.getParent()) ) {
+			makeDir(path.getParent().toString());
+		}
+		try (BufferedWriter bw = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+            // ファイルへの書き込み
+			bw.write(content);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new AZCafeException(e);
+        }
+		
+		return path;
 	}
 
 }

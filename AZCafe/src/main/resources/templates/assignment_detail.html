@@ -1,175 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Dashboard 2</title>
-
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/adminlte.css">
-  <link rel="stylesheet" href="css/main.css">
+  <meta id="parent" th:replace="/header/include_css"></meta>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
   <!-- Navbar -->
-  
-  <!-- ここからヘッダー -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-    <!-- Left navbar links -->
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-      </li>
-    </ul>
+  <!-- ヘッダー -->
+   <div id="parent" th:replace="/header/header"></div>   
 
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-      <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">15 Notifications</span>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-        </div>
-      </li>
-    </ul>
-  </nav>
-  <!-- /.navbar -->
-  <!-- ここまでヘッダー -->
-
-  <!-- Main Sidebar Container -->
-  <!-- ここからサイドバー -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="dashboad.html" class="brand-link">
-      <img src="img/logo.png" alt="AdminLTE Logo" class="brand-image elevation-3" style="opacity: .8">
-    </a>
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-1 mb-3">
-        <div class="department">
-          情報システム専攻科
-        </div>
-      </div>
-      <div class="user-panel mt-3 pb-2 mb-3 d-flex">
-        <div class="image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-        </div>
-        <div class="info">
-          <a href="#" class="d-block">西野直幸</a>
-        </div>
-      </div>
-
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          <li class="nav-item">
-            <a href="dashboad.html" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                ダッシュボード
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
-              <i class="nav-icon fas fa-code"></i>
-              <p>
-                問題検索
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
-              <i class="nav-icon fas fa-crown"></i>
-              <p>
-                ランキング
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
-              <i class="nav-icon fas fa-plus-circle"></i>
-              <p>
-                問題作成
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
-              <i class="nav-icon fas fa-user"></i>
-              <p>
-                ユーザー検索
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
-              <i class="nav-icon fas fa-cog"></i>
-              <p>
-                設定
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
-              <i class="nav-icon fas fa-unlock-alt"></i>
-              <p>
-                パスワードリセット
-              </p>
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-  </aside>
-  <!-- ここまでサイドバー --!>
+  <!-- サイドバー -->
+    <div id="parent" th:replace="/header/sidebar"></div>  
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-12">
-            <nav>
-			  <ul class="breadcrumb">
-			    <li class="breadcrumb-item"><a href="#">問題詳細</a></li>
-			  </ul>
-			</nav>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
         <div class="row mb-2">
           <div class="col-sm-12">
             <h1 class="m-0">問題詳細</h1>
@@ -188,7 +35,7 @@
           <div class="col-md-12">
             <div class="card card-primary shadow-none">
               <div class="card-header">
-                <h1 class="card-title">問題の題名あああああああああああああああいいいいいいいいいい</h1>
+                <h1 class="card-title" th:text="${assignmentdetailDto.title}"></h1>
 
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" id="question-edit" data-toggle="tooltip" title="この問題を編集する">
@@ -209,7 +56,7 @@
         
                       <div class="info-box-content">
                         <span class="info-box-text">問題グループ</span>
-                        <span class="info-box-number">JK-1</span>
+                        <span class="info-box-number" th:text="${assignmentdetailDto.groupName}"></span>
                       </div>
                       <!-- /.info-box-content -->
                     </div>
@@ -221,7 +68,7 @@
         
                       <div class="info-box-content">
                         <span class="info-box-text">問題難易度</span>
-                        <span class="info-box-number">5</span>
+                        <span class="info-box-number" th:text="${assignmentdetailDto.difficulty}"></span>
                       </div>
                       <!-- /.info-box-content -->
                     </div>
@@ -231,9 +78,9 @@
                     <div class="info-box">
                       <span class="info-box-icon bg-danger"><i class="fas fa-file-alt"></i></span>
         
-                      <div class="info-box-content">
+                      <div class="info-box-content score_result" data-toggle="tooltip" title="提出済みの場合はクリックで詳細へ">
                         <span class="info-box-text">提出状況</span>
-                        <span class="info-box-number">未提出</span>
+                        <span class="info-box-number" th:text="${assignmentdetailDto.score}"></span>
                       </div>
                       <!-- /.info-box-content -->
                     </div>
@@ -247,93 +94,7 @@
                     <div class="card-header">
                       <h3 class="card-title">問題文</h3>
                     </div>
-                    <div class="card-body">
-問題文　問題文中はHTMLタグが使用可能。<br>
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああああああああああ
-あああああああああああああ
+                    <div class="card-body" th:utext="${assignmentdetailDto.content}">
                     </div>
                   </div>
                 </div>
@@ -348,114 +109,119 @@
                         <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">ファイルアップロード</a></li>
                       </ul>
                     </div>
-                    <div class="card-body">
-                      
-                      <div class="tab-content">
-                        <!--1ページ目-->
-                        <div class="tab-pane active" id="tab_1">
-                          <div class="editor_container">
-                            <div class="answer_wrap">
-                              <div class="title_wrap mb15">
-                                <h3 class="h3_title">
-                                解答欄
-                                </h3>
-                                <div class="answer_wrap_option d-flex">
-                                    <button class="btn btn-default btn-sm m-r-5" data-placement="bottom" id="code_plus">
-                                    <i class="fa fa-search-plus" data-toggle="tooltip" title="大きくする"></i>
-                                    </button>
-                                    <button class="btn btn-default btn-sm m-r-5" data-placement="bottom" id="code_minus">
-                                    <i class="fa fa-search-minus" data-toggle="tooltip" title="小さくする"></i>
-                                    </button>
-                                  <select class="box form-control" name="language[id]" id="language_id">
-                                    <option value="">使用する言語</option>
-                                    <option value="0">Java</option>
-                                    <option value="1">JavaScript</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div id="editor" style="height: 600px"></div>
-                              <div class="footer d-flex justify-content-between">
-                                <div class="col-md-3">
-                                  <button class="btn btn-primary" id="answer_btn" data-toggle="tooltip" title="提出して採点します">提出</button>
-                                </div>
-                                <div class="col-md-3">
-                                  <div class="info-box">
-                                    <span class="info-box-icon bg-primary"><i class="fas fa-pen"></i></span>
-                      
-                                    <div class="info-box-content">
-                                      <span class="info-box-text">採点結果</span>
-                                      <span class="info-box-number">未採点</span>
-                                    </div>
-                                    <!-- /.info-box-content -->
-                                  </div>
-                                </div>
-                              </div>                            
-                            </div>
-                          </div>
-                        </div>
-                        <!--2ページ目-->
-                        <div class="tab-pane" id="tab_2">
-                          <div class="answer_wrap">
-                            <div class="form-group input-file-group d-flex">
-                              <div class="input-group col-md-8">
-                                <div class="custom-file">
-                                  <input type="file" class="custom-file-input" id="exampleInputFile1">
-                                  <label class="custom-file-label" for="exampleInputFile1">Choose file</label>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group input-file-group d-flex">
-                              <div class="input-group col-md-8">
-                                <div class="custom-file">
-                                  <input type="file" class="custom-file-input" id="exampleInputFile2">
-                                  <label class="custom-file-label" for="exampleInputFile2">Choose file</label>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group input-file-group d-flex">
-                              <div class="input-group col-md-8">
-                                <div class="custom-file">
-                                  <input type="file" class="custom-file-input" id="exampleInputFile3">
-                                  <label class="custom-file-label" for="exampleInputFile3">Choose file</label>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group input-file-group d-flex">
-                              <div class="input-group col-md-8">
-                                <div class="custom-file">
-                                  <input type="file" class="custom-file-input" id="exampleInputFile4">
-                                  <label class="custom-file-label" for="exampleInputFile4">Choose file</label>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group input-file-group d-flex">
-                              <div class="input-group col-md-8">
-                                <div class="custom-file">
-                                  <input type="file" class="custom-file-input" id="exampleInputFile5">
-                                  <label class="custom-file-label" for="exampleInputFile5">Choose file</label>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="footer d-flex justify-content-between">
-                              <div class="col-md-3">
-                                <button class="btn btn-primary" id="answer_file_btn" data-toggle="tooltip" title="提出して採点します">提出</button>
-                              </div>
-                              <div class="col-md-3">
-                                <div class="info-box">
-                                  <span class="info-box-icon bg-primary"><i class="fas fa-pen"></i></span>
+	                    <div class="card-body">
+	                      <div class="tab-content">
+	                        <!--1ページ目-->
+	                        <div class="tab-pane active" id="tab_1">
+                    		  <form id="answer_text_form">
+		                          <div class="editor_container">
+		                            <div class="answer_wrap">
+		                              <div class="title_wrap mb15">
+		                                <h3 class="h3_title">
+		                                解答欄
+		                                </h3>
+		                                <div class="answer_wrap_option d-flex">
+		                                    <button class="btn btn-default btn-sm m-r-5" data-placement="bottom" id="code_plus">
+		                                    <i class="fa fa-search-plus" data-toggle="tooltip" title="大きくする"></i>
+		                                    </button>
+		                                    <button class="btn btn-default btn-sm m-r-5" data-placement="bottom" id="code_minus">
+		                                    <i class="fa fa-search-minus" data-toggle="tooltip" title="小さくする"></i>
+		                                    </button>
+		                                  <select class="box form-control" name="language" id="language_id">
+		                                    <option value="">使用する言語</option>
+		                                    <option value="0">Java</option>
+		                                    <option value="1">JavaScript</option>
+		                                  </select>
+		                                </div>
+		                              </div>
+		                              <div id="editor" style="height: 600px" th:text="${assignmentdetailDto.answer}" ></div>
+		                              <textarea id="answer_text" name="answerText" style="display: none;" ></textarea>
+		                              <div class="footer d-flex justify-content-between">
+		                                <div class="col-md-3">
+		                                  <button type="button" class="btn btn-primary" id="answer_btn" data-toggle="tooltip" title="提出して採点します">提出</button>
+		                                </div>
+		                                <div class="col-md-3">
+		                                  <div class="info-box">
+		                                    <span class="info-box-icon bg-primary"><i class="fas fa-pen"></i></span>
+		                      
+		                                    <div class="info-box-content score_result"  data-toggle="tooltip" title="提出済みの場合はクリックで詳細へ">
+		                                      <span class="info-box-text">採点結果</span>
+		                                      <span class="info-box-number" th:text="${assignmentdetailDto.score}"></span>
+		                                    </div>
+		                                    <!-- /.info-box-content -->
+		                                  </div>
+		                                </div>
+		                              </div>                            
+		                            </div>
+		                          </div>
+	                          </form>
+	                        </div>
+	                        <!--2ページ目-->
+	                        <div class="tab-pane" id="tab_2">
+	                          <form id="answer_file_form">
+		                          <div class="answer_wrap">
+		                            <div class="form-group input-file-group d-flex">
+		                              <div class="input-group col-md-8">
+		                                <div class="custom-file">
+		                                  <input type="file" class="custom-file-input" id="exampleInputFile1" name="answerFile1" >
+		                                  <label class="custom-file-label" for="exampleInputFile1">Choose file</label>
+		                                </div>
+		                              </div>
+		                            </div>
+		                            <div class="form-group input-file-group d-flex">
+		                              <div class="input-group col-md-8">
+		                                <div class="custom-file">
+		                                  <input type="file" class="custom-file-input" id="exampleInputFile2" name="answerFile2" >
+		                                  <label class="custom-file-label" for="exampleInputFile2">Choose file</label>
+		                                </div>
+		                              </div>
+		                            </div>
+		                            <div class="form-group input-file-group d-flex">
+		                              <div class="input-group col-md-8">
+		                                <div class="custom-file">
+		                                  <input type="file" class="custom-file-input" id="exampleInputFile3" name="answerFile3" >
+		                                  <label class="custom-file-label" for="exampleInputFile3">Choose file</label>
+		                                </div>
+		                              </div>
+		                            </div>
+		                            <div class="form-group input-file-group d-flex">
+		                              <div class="input-group col-md-8">
+		                                <div class="custom-file">
+		                                  <input type="file" class="custom-file-input" id="exampleInputFile4" name="answerFile4" >
+		                                  <label class="custom-file-label" for="exampleInputFile4">Choose file</label>
+		                                </div>
+		                              </div>
+		                            </div>
+		                            <div class="form-group input-file-group d-flex">
+		                              <div class="input-group col-md-8">
+		                                <div class="custom-file">
+		                                  <input type="file" class="custom-file-input" id="exampleInputFile5" name="answerFile5" >
+		                                  <label class="custom-file-label" for="exampleInputFile5">Choose file</label>
+		                                </div>
+		                              </div>
+		                            </div>
+		                            <div class="footer d-flex justify-content-between">
+		                              <div class="col-md-3">
+		                                <button type="button" class="btn btn-primary" id="answer_file_btn" data-toggle="tooltip" title="提出して採点します">提出</button>
+		                              </div>
+		                              <div class="col-md-3">
+		                                <div class="info-box">
+		                                  <span class="info-box-icon bg-primary"><i class="fas fa-pen"></i></span>
+		                    
+		                                  <div class="info-box-content score_result" data-toggle="tooltip" title="提出済みの場合はクリックで詳細へ">
+		                                    <span class="info-box-text">採点結果</span>
+		                                    <span class="info-box-number" th:text="${assignmentdetailDto.score}"></span>
+		                                  </div>
+		                                  <!-- /.info-box-content -->
+		                                </div>
+		                              </div>
+		                            </div> 
+		                          </div>
+	                          </form>
+	                        </div>
+	                      </div>
+	                    </div>
                     
-                                  <div class="info-box-content">
-                                    <span class="info-box-text">採点結果</span>
-                                    <span class="info-box-number">未採点</span>
-                                  </div>
-                                  <!-- /.info-box-content -->
-                                </div>
-                              </div>
-                            </div> 
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                     <div class="overlay dark" id="waiting">
                       採点中・・・
                       <i class="fas fa-2x fa-sync-alt fa-spin"></i>
@@ -481,40 +247,17 @@
   </aside>
   <!-- /.control-sidebar -->
 
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.1.0-rc
-    </div>
-  </footer>
 </div>
 <!-- ./wrapper -->
 
 <!-- REQUIRED SCRIPTS -->
-<!-- jQuery -->
-<script src="plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- overlayScrollbars -->
-<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-<!-- AdminLTE App -->
-<script src="dist/js/adminlte.js"></script>
+<meta id="parent" th:replace="/header/include_js"></meta>
 
-<!-- PAGE PLUGINS -->
-<!-- jQuery Mapael -->
-<script src="plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
-<script src="plugins/raphael/raphael.min.js"></script>
-<script src="plugins/jquery-mapael/jquery.mapael.min.js"></script>
-<script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
-<!-- ChartJS -->
-<script src="plugins/chart.js/Chart.min.js"></script>
 <!-- bs-custom-file-input -->
-<script src="plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+<script th:src="@{/plugins/bs-custom-file-input/bs-custom-file-input.min.js}"></script>
 <!-- ace -->
-  <script src="ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
-  <script src="ace/src/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
+  <script th:src="@{/ace/src/ace.js}" type="text/javascript" charset="utf-8"></script>
+  <script th:src="@{ace/src/ext-language_tools.js}" type="text/javascript" charset="utf-8"></script>
 <script>
 $(function () {
   bsCustomFileInput.init();
@@ -586,15 +329,39 @@ $(function () {
   //提出ボタン
   $(document).on('click','#answer_btn',function(){
     const langId = $("#language_id").val();
-    const ansText = editor.getValue();
+   
     if( langId.length == 0 ){
       alert("言語を選択してください");
       return;
     }
+    
     $("#waiting").show();
+    
+    const ansText = editor.getValue();
+    $("#answer_text").val(ansText);
+    const formdata = new FormData($('#answer_text_form').get(0));
+    const ajaxUrl = /*[[@{/grading/file}]]*/ "/grading/file";
+    $.ajax({
+        url  : ajaxUrl,
+        type : "POST",
+        data : formdata,
+        cache       : false,
+        contentType : false,
+        processData : false,
+        dataType    : "html"
+    })
+    .done(function(data, textStatus, jqXHR){
+        alert(data);
+        $("#waiting").hide();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown){
+        alert("fail");
+        $("#waiting").hide();
+    });
     //alert(langId+":"+ansText);
     //$("#waiting").hide();
   })
+  
   //提出ボタン（ファイル）
   $(document).on('click','#answer_file_btn',function(){
     const inputVal = $("#exampleInputFile1").val();
@@ -608,6 +375,10 @@ $(function () {
     //$("#waiting").hide();
   })
 
+  //スコア詳細ボタン
+  $(document).on('click','.score_result',function(){
+	  alert("!");
+  });
 
 </script>
 

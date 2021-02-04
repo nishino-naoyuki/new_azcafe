@@ -29,4 +29,8 @@ public class AZCafeConfig {
 	private Integer tokenlimit;	//自動ログイン期限（日）
 	private String passwordpolicy;	//パスワードポリシー
 	private String csvuploaddir;	//CSVのアップロードディレクトリ
+	private String batchdir;	//バッチファイルがあるディレクトリ
+	private String codedir;	//ソースコードのベースディレクトリ
+	private String srcPrefix;	//ソースファイルのプレフィクス
+	private String batchfileext;	//バッチファイルの拡張子
 }

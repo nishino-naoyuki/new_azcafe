@@ -1,61 +1,64 @@
 
-¦ƒ\[ƒX‰ğÍ‚Íƒ`ƒFƒbƒNƒXƒ^ƒCƒ‹‚Ås‚¤I
-checkStyle‚ÌƒRƒ}ƒ“ƒhƒ‰ƒCƒ“Às•û–@
+â€»ã‚½ãƒ¼ã‚¹è§£æã¯ãƒã‚§ãƒƒã‚¯ã‚¹ã‚¿ã‚¤ãƒ«ã§è¡Œã†ï¼
+checkStyleã®ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å®Ÿè¡Œæ–¹æ³•
 java -jar checkstyle-7.0-all.jar -c /sun_checks.xml -o out.txt src\main\java
 
-Qlj
+å‚è€ƒï¼‰
 https://qiita.com/opengl-8080/items/cb4122a19269e8e683a4
 
-javascript‚ÌÀs
-¨node.js‚ğg—p‚·‚é
-ƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg‚Å
+javascriptã®å®Ÿè¡Œ
+â†’node.jsã‚’ä½¿ç”¨ã™ã‚‹
+ã‚³ãƒãƒ³ãƒ‰ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆã§
  node xxxx.js
  
-Qlj
+å‚è€ƒï¼‰
 https://jsprimer.net/use-case/nodecli/helloworld/
 
 
-ƒ^ƒu‚ÌŠJ”­j
+ã‚¿ãƒ–ã®é–‹ç™ºï¼‰
 https://qiita.com/KenN3/items/7a5b06d8cd04bdeca08b
 
-SSOj
+SSOï¼‰
 https://docs.microsoft.com/ja-jp/microsoftteams/platform/tabs/how-to/authentication/auth-tab-aad
 https://docs.microsoft.com/ja-jp/microsoftteams/platform/tabs/how-to/authentication/auth-aad-sso
 https://www.youtube.com/watch?v=zc9S270c-Dg
 https://www.youtube.com/watch?v=h1OX5bXkCeg
 
 SpingBoot)
-Eİ’èƒtƒ@ƒCƒ‹
+ãƒ»è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«
 https://qiita.com/kazuki43zoo/items/0ce92fce6d6f3b7bf8eb
 
-ƒvƒƒOƒ‰ƒ€ê–å‚ÌƒGƒfƒBƒ^ACE
+ãƒ—ãƒ­ã‚°ãƒ©ãƒ å°‚é–€ã®ã‚¨ãƒ‡ã‚£ã‚¿ACE
 https://qiita.com/naga3/items/1bc268243f2e8a6514e5
 
-‰æ‘œ‚Ì’x‰„ƒ[ƒh
+ç”»åƒã®é…å»¶ãƒ­ãƒ¼ãƒ‰
 https://designsupply-web.com/media/knowledgeside/6530/
 
-–Ê”’‚»‚¤‚È‚`‚o‚h
-iƒRƒ“ƒpƒXj
+é¢ç™½ãã†ãªï¼¡ï¼°ï¼©
+ï¼ˆã‚³ãƒ³ãƒ‘ã‚¹ï¼‰
 https://connpass.com/about/api/
-i“®•¨j
+ï¼ˆå‹•ç‰©ï¼‰
 https://dog.ceo/dog-api/
 https://aws.random.cat/meow
-iƒ|ƒPƒ‚ƒ“j
+ï¼ˆãƒã‚±ãƒ¢ãƒ³ï¼‰
 https://pokeapi.co/
-iƒGƒ‰[j
+ï¼ˆã‚¨ãƒ©ãƒ¼æ™‚ï¼‰
 https://http.cat/
-i‚v‚‰‚‹‚‰j
+ï¼ˆï¼·ï½‰ï½‹ï½‰ï¼‰
 https://ja.wikipedia.org/w/api.php
-iƒtƒŠ[‰æ‘œj
+ï¼ˆãƒ•ãƒªãƒ¼ç”»åƒï¼‰
 https://www.whizz-tech.co.jp/5449/
 
-i‚`‚hŒnj
+ï¼ˆï¼¡ï¼©ç³»ï¼‰
 http://gagbot.net/machine-learning/api1
 
 Amazon CodeGuru
 https://aws.amazon.com/jp/codeguru/
 
-–â‘è‚Ì•¶š—ñ‚ÍLongText‚ÅŠi”[‚·‚éi‚©‚È‚è’·‚¢•¶š‚às‚¯‚éj
+å•é¡Œã®æ–‡å­—åˆ—ã¯LongTextã§æ ¼ç´ã™ã‚‹ï¼ˆã‹ãªã‚Šé•·ã„æ–‡å­—ã‚‚è¡Œã‘ã‚‹ï¼‰
 
 
 https://kikki.hatenablog.com/entry/2017/01/18/080000
+
+SpringBatch
+https://qiita.com/kakasak/items/81a2a91ac22a8a05ee2a

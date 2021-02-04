@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jp.ac.asojuku.azcafe.dto.AssignmentTestCaseDto;
+import jp.ac.asojuku.azcafe.dto.AssignmentDetailDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentElementDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentPublicDto;
+import jp.ac.asojuku.azcafe.entity.AnswerDetailTblEntity;
 import jp.ac.asojuku.azcafe.entity.AssignmentTblEntity;
 import jp.ac.asojuku.azcafe.entity.GroupTblEntity;
 import jp.ac.asojuku.azcafe.entity.PublicAssignmentTblEntity;
@@ -39,6 +41,19 @@ public class AssignmentService {
 	@Autowired
 	TestCaseRepository testCaseRepository;
 	
+	/**
+	 * 課題の詳細情報を取得する
+	 * @param id
+	 * @return
+	 */
+	public AssignmentDetailDto getDetail(Integer id) {
+		if( id == null ) {
+			return null;
+		}
+		AssignmentTblEntity entity = assignmentRepository.getOne(id);
+		
+		return getDetailFrom(entity);
+	}
 	/**
 	 * 課題リストを取得する
 	 * @return
@@ -171,6 +186,12 @@ public class AssignmentService {
 	private AssignmentElementDto getFrom(AssignmentTblEntity assignmentTblEntity) {
 		AssignmentElementDto dto = new AssignmentElementDto();
 		
+		setElementData(assignmentTblEntity,dto);
+		
+		return dto;
+	}
+	private void setElementData(AssignmentTblEntity assignmentTblEntity,AssignmentElementDto dto) {
+
 		dto.setGroupName(assignmentTblEntity.getGroupTbl().getName());
 		dto.setTitle(assignmentTblEntity.getTitle());
 		dto.setAssignmentId(assignmentTblEntity.getAssignmentId());
@@ -180,8 +201,30 @@ public class AssignmentService {
 		}else {
 			dto.setScore(null);
 		}
+	}
+	
+	/**
+	 * 課題の詳細情報を取得する
+	 * 
+	 * @param assignmentTblEntity
+	 * @return
+	 */
+	private AssignmentDetailDto getDetailFrom(AssignmentTblEntity assignmentTblEntity) {
+		AssignmentDetailDto detail = new AssignmentDetailDto();
 		
+		setElementData(assignmentTblEntity,detail);
+		detail.setContent(assignmentTblEntity.getContents());
+		if( assignmentTblEntity.getAnswerTbl() != null ) {
+			//直接入力された答え（ファイル名がNULL）のものを抜き出す
+			for( AnswerDetailTblEntity entity : assignmentTblEntity.getAnswerTbl().getAnswerDetailTblSet()) {
+				if( entity.getFilename() == null ) {
+					detail.setAnswer(entity.getAnswer());
+					break;
+				}
+			}
+			
+		}
 		
-		return dto;
+		return detail;
 	}
 }

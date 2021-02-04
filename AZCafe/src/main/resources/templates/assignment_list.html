@@ -81,7 +81,7 @@
                     <tr th:each="element,status:${assignmentList}">
                       <td th:text="${element.groupName}"></td>
                       <td>
-                        <a th:href="|@{/assignment/detail}?id=${element.assignmentId}|" class="ranking-user-name" th:text="${element.title}" ></a>
+                        <a th:href="|@{/assignment/detail}?id=${element.assignmentId}|" class="ranking-user-name" th:text="${element.title}" target="_blank" rel="noopener noreferrer"></a>
                       </td> 
                       <td th:text="${element.difficulty}"></td>
                       <td th:text="${element.score}"></td>

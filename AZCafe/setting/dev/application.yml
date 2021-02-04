@@ -23,3 +23,7 @@ azcafe:
   tokenlimit: 1
   passwordpolicy: 
   csvuploaddir: C:/upload
+  batchdir: c:/batch
+  batchfileext: bat 
+  codedir: c:/code
+  srcPrefix: src_
