@@ -18,6 +18,8 @@ public abstract class GradingProcess {
 	public GradingProcess(Language lang) {
 		this.lang = lang;
 	}
+	
+	public abstract ProcessBuilder execBatch(String batchFName,String workDir,String code) throws AZCafeException;
 
 	/**
 	 * テキスト入力による採点処理実行
@@ -37,12 +39,8 @@ public abstract class GradingProcess {
 			//作業ディレクトリを取得
 			workDir = getWorkDir(userId);
 			
-			//プログラムをファイルに出力する
-			String srcFileName = getCodeFileName(code);
-			srcFile = FileUtils.outputFile(workDir, srcFileName, code);
-			
 			//バッチを実行する
-			ProcessBuilder pb = new ProcessBuilder(batchFName,workDir,workDir);
+			ProcessBuilder pb = execBatch(batchFName,workDir,code);
 			
 			Process process;
 			process = pb.start();
@@ -61,7 +59,7 @@ public abstract class GradingProcess {
 		}finally {
 			//一時ファイルの削除
 			if( srcFile != null ) {
-				FileUtils.delete(workDir);
+				//FileUtils.delete(workDir);
 			}
 		}
 	}

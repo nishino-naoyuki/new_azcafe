@@ -19,16 +19,32 @@ public class GradingJava extends GradingProcess {
 		// TODO 自動生成されたコンストラクター・スタブ
 	}
 
+	public ProcessBuilder execBatch(String batchFName,String workDir,String code) throws AZCafeException {
+
+		//プログラムをファイルに出力する
+		String className = getClassName(code);
+		String srcFileName = getCodeFileName(className);
+		FileUtils.outputFile(workDir, srcFileName, code);
+		
+		makeDir(workDir);
+		//バッチを実行する
+		ProcessBuilder pb = new ProcessBuilder(batchFName,workDir,workDir,className);
+		
+		return pb;
+	}
+	
+	public void makeDir(String workDir) {
+		FileUtils.makeDir(workDir+"/classes");
+	}
 	/**
 	 * ソースコードのファイルを名を取得する
 	 * @param lang
 	 * @param code
 	 * @return
 	 */
-	public String getCodeFileName(String code) {
+	public String getCodeFileName(String className) {
 		
 		String fileName = "";
-		String className = getClassName(code);
 		fileName = className+ ".java";
 		
 		return fileName;
