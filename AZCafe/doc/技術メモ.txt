@@ -1,7 +1,10 @@
 
 ※ソース解析はチェックスタイルで行う！
 checkStyleのコマンドライン実行方法
-java -jar checkstyle-7.0-all.jar -c /sun_checks.xml -o out.txt src\main\java
+java -jar checkstyle-8.40-all.jar -c /sun_checks.xml -o out.txt src\main\java
+java -jar checkstyle-8.40-all.jar -c /sun_checks.xml -o out.txt C:\code\1\Test.java
+java -jar checkstyle-8.40-all.jar -c /google_checks.xml -o out.txt C:\code\1\Test.java
+https://checkstyle.sourceforge.io/config_sizes.html#FileLength
 
 参考）
 https://qiita.com/opengl-8080/items/cb4122a19269e8e683a4

@@ -36,11 +36,13 @@ public class AnswerTblEntity implements Serializable {
 	private Integer answerId;
 
 	/** 問題テーブル. */
+	private Integer assignmentId;
 	@OneToOne
     @JoinColumn(name="assignmentId",insertable=false ,updatable=false)
 	private AssignmentTblEntity questionTbl;
 
 	/** ユーザー. */
+	private Integer userId;
 	@OneToOne
     @JoinColumn(name="userId",insertable=false ,updatable=false)
 	private UserTblEntity userTbl;
@@ -66,6 +68,10 @@ public class AnswerTblEntity implements Serializable {
 	@JoinColumn(name="answerId",insertable=true ,updatable=true)
 	private Set<CommentTblEntity> commentTblSet;
 
+	/** テストケースごとの答えテーブル 一覧. */
+	@OneToMany
+	@JoinColumn(name="answerId",insertable=true ,updatable=true)
+	private Set<TestCaseAnswerTblEntity> testCaseAnswerTblSet;
 	/**
 	 * コンストラクタ.
 	 */

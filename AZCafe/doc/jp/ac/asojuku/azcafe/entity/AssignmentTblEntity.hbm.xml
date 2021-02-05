@@ -23,6 +23,9 @@
 		<property name="contents" type="java.lang.String"
 			column="contents" not-null="true" />
 
+		<property name="difficulty" type="java.lang.Integer"
+			column="difficulty" not-null="true" />
+
 		<property name="good" type="java.lang.Integer"
 			column="good" not-null="true" />
 

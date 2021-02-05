@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="jp.ac.asojuku.azcafe.entity">
+
+	<class name="TestCaseAnswerTblEntity" table="TEST_CASE_ANSWER_TBL">
+
+		<id name="testcaseAnswerId" type="java.lang.Integer" column="testcase_answer_id">
+			<generator class="assigned" />
+		</id>
+
+		<property name="testcaseId" type="java.lang.Integer"
+			column="testcase_id" not-null="true" />
+
+		<property name="answerId" type="java.lang.Integer"
+			column="answer_id" not-null="true" />
+
+		<property name="correctly" type="java.lang.Integer"
+			column="correctly" not-null="true" />
+
+		<property name="userOutput" type="java.lang.String"
+			column="user_output" not-null="true" />
+
+	</class>
+</hibernate-mapping>

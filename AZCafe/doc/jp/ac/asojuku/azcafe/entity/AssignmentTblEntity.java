@@ -31,6 +31,9 @@ public class AssignmentTblEntity implements Serializable {
 	/** 内容. */
 	private String contents;
 
+	/** 難易度. */
+	private Integer difficulty;
+
 	/** イイネの数. */
 	private Integer good;
 
@@ -161,6 +164,25 @@ public class AssignmentTblEntity implements Serializable {
 	 */
 	public String getContents() {
 		return this.contents;
+	}
+
+	/**
+	 * 難易度 を設定します.
+	 * 
+	 * @param difficulty
+	 *            難易度
+	 */
+	public void setDifficulty(Integer difficulty) {
+		this.difficulty = difficulty;
+	}
+
+	/**
+	 * 難易度 を取得します.
+	 * 
+	 * @return 難易度
+	 */
+	public Integer getDifficulty() {
+		return this.difficulty;
 	}
 
 	/**

@@ -15,7 +15,7 @@
 			column="answer_id" not-null="true" />
 
 		<property name="filename" type="java.lang.String"
-			column="filename" not-null="true" />
+			column="filename" not-null="false" />
 
 		<property name="answer" type="java.lang.String"
 			column="answer" not-null="true" />

@@ -18,11 +18,11 @@ public class AnswerTblEntity implements Serializable {
 	/** answer_id. */
 	private Integer answerId;
 
-	/** 問題テーブル. */
-	private AssignmentTblEntity assignmentTbl;
-
 	/** ユーザー. */
 	private UserTblEntity userTbl;
+
+	/** 問題テーブル. */
+	private AssignmentTblEntity assignmentTbl;
 
 	/** 点数. */
 	private Integer score;
@@ -39,6 +39,9 @@ public class AnswerTblEntity implements Serializable {
 	/** コメント 一覧. */
 	private Set<CommentTblEntity> commentTblSet;
 
+	/** テストケースごとの答えテーブル 一覧. */
+	private Set<TestCaseAnswerTblEntity> testCaseAnswerTblSet;
+
 	/**
 	 * コンストラクタ.
 	 */
@@ -46,6 +49,7 @@ public class AnswerTblEntity implements Serializable {
 		this.answerDetailTblSet = new HashSet<AnswerDetailTblEntity>();
 		this.answerGoodTblSet = new HashSet<AnswerGoodTblEntity>();
 		this.commentTblSet = new HashSet<CommentTblEntity>();
+		this.testCaseAnswerTblSet = new HashSet<TestCaseAnswerTblEntity>();
 	}
 
 	/**
@@ -68,25 +72,6 @@ public class AnswerTblEntity implements Serializable {
 	}
 
 	/**
-	 * 問題テーブル を設定します.
-	 * 
-	 * @param assignmentTbl
-	 *            問題テーブル
-	 */
-	public void setAssignmentTbl(AssignmentTblEntity assignmentTbl) {
-		this.assignmentTbl = assignmentTbl;
-	}
-
-	/**
-	 * 問題テーブル を取得します.
-	 * 
-	 * @return 問題テーブル
-	 */
-	public AssignmentTblEntity getAssignmentTbl() {
-		return this.assignmentTbl;
-	}
-
-	/**
 	 * ユーザー を設定します.
 	 * 
 	 * @param userTbl
@@ -103,6 +88,25 @@ public class AnswerTblEntity implements Serializable {
 	 */
 	public UserTblEntity getUserTbl() {
 		return this.userTbl;
+	}
+
+	/**
+	 * 問題テーブル を設定します.
+	 * 
+	 * @param assignmentTbl
+	 *            問題テーブル
+	 */
+	public void setAssignmentTbl(AssignmentTblEntity assignmentTbl) {
+		this.assignmentTbl = assignmentTbl;
+	}
+
+	/**
+	 * 問題テーブル を取得します.
+	 * 
+	 * @return 問題テーブル
+	 */
+	public AssignmentTblEntity getAssignmentTbl() {
+		return this.assignmentTbl;
 	}
 
 	/**
@@ -228,6 +232,35 @@ public class AnswerTblEntity implements Serializable {
 	 */
 	public Set<CommentTblEntity> getCommentTblSet() {
 		return this.commentTblSet;
+	}
+
+	/**
+	 * テストケースごとの答えテーブル 一覧を設定します.
+	 * 
+	 * @param testCaseAnswerTblSet
+	 *            テストケースごとの答えテーブル 一覧
+	 */
+	public void setTestCaseAnswerTblSet(Set<TestCaseAnswerTblEntity> testCaseAnswerTblSet) {
+		this.testCaseAnswerTblSet = testCaseAnswerTblSet;
+	}
+
+	/**
+	 * テストケースごとの答えテーブル を追加します.
+	 * 
+	 * @param testCaseAnswerTbl
+	 *            テストケースごとの答えテーブル
+	 */
+	public void addTestCaseAnswerTbl(TestCaseAnswerTblEntity testCaseAnswerTbl) {
+		this.testCaseAnswerTblSet.add(testCaseAnswerTbl);
+	}
+
+	/**
+	 * テストケースごとの答えテーブル 一覧を取得します.
+	 * 
+	 * @return テストケースごとの答えテーブル 一覧
+	 */
+	public Set<TestCaseAnswerTblEntity> getTestCaseAnswerTblSet() {
+		return this.testCaseAnswerTblSet;
 	}
 
 	/**

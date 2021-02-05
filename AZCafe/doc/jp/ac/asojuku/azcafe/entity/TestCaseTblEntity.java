@@ -1,6 +1,8 @@
 package jp.ac.asojuku.azcafe.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * テストケース モデルクラス.
@@ -28,10 +30,14 @@ public class TestCaseTblEntity implements Serializable {
 	/** 出力値. */
 	private String outputTxt;
 
+	/** テストケースごとの答えテーブル 一覧. */
+	private Set<TestCaseAnswerTblEntity> testCaseAnswerTblSet;
+
 	/**
 	 * コンストラクタ.
 	 */
 	public TestCaseTblEntity() {
+		this.testCaseAnswerTblSet = new HashSet<TestCaseAnswerTblEntity>();
 	}
 
 	/**
@@ -127,6 +133,35 @@ public class TestCaseTblEntity implements Serializable {
 	 */
 	public String getOutputTxt() {
 		return this.outputTxt;
+	}
+
+	/**
+	 * テストケースごとの答えテーブル 一覧を設定します.
+	 * 
+	 * @param testCaseAnswerTblSet
+	 *            テストケースごとの答えテーブル 一覧
+	 */
+	public void setTestCaseAnswerTblSet(Set<TestCaseAnswerTblEntity> testCaseAnswerTblSet) {
+		this.testCaseAnswerTblSet = testCaseAnswerTblSet;
+	}
+
+	/**
+	 * テストケースごとの答えテーブル を追加します.
+	 * 
+	 * @param testCaseAnswerTbl
+	 *            テストケースごとの答えテーブル
+	 */
+	public void addTestCaseAnswerTbl(TestCaseAnswerTblEntity testCaseAnswerTbl) {
+		this.testCaseAnswerTblSet.add(testCaseAnswerTbl);
+	}
+
+	/**
+	 * テストケースごとの答えテーブル 一覧を取得します.
+	 * 
+	 * @return テストケースごとの答えテーブル 一覧
+	 */
+	public Set<TestCaseAnswerTblEntity> getTestCaseAnswerTblSet() {
+		return this.testCaseAnswerTblSet;
 	}
 
 	/**

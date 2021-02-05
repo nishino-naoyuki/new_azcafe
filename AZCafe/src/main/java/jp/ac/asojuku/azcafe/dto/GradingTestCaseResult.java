@@ -9,5 +9,8 @@ import lombok.Data;
  */
 @Data
 public class GradingTestCaseResult {
-
+	boolean correct;	//正解フラグ
+	Integer testcaseId;
+	String userOutput;	//ユーザーの出力
+	String correctOutput;	//正解出力
 }

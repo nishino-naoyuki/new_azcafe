@@ -11,11 +11,11 @@
 			<generator class="assigned" />
 		</id>
 
-		<property name="assignmentId" type="java.lang.Integer"
-			column="assignment_id" not-null="true" />
-
 		<property name="userId" type="java.lang.Integer"
 			column="user_id" not-null="true" />
+
+		<property name="assignmentId" type="java.lang.Integer"
+			column="assignment_id" not-null="true" />
 
 		<property name="score" type="java.lang.Integer"
 			column="score" not-null="true" />
