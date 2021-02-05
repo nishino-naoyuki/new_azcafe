@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import jp.ac.asojuku.azcafe.config.AZCafeConfig;
+import jp.ac.asojuku.azcafe.entity.AssignmentTblEntity;
+import jp.ac.asojuku.azcafe.entity.TestCaseTblEntity;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
 import jp.ac.asojuku.azcafe.param.Language;
 import jp.ac.asojuku.azcafe.util.FileUtils;
@@ -13,6 +15,7 @@ import jp.ac.asojuku.azcafe.util.FileUtils;
 public abstract class GradingProcess {
 
 	protected final String BATCH_FILE_NAME_PREFIX = "grading_";
+	private final String INPUT_TEXT = "input.txt";
 	protected Language lang;
 	
 	public GradingProcess(Language lang) {
@@ -27,7 +30,7 @@ public abstract class GradingProcess {
 	 * @param code
 	 * @throws AZCafeException
 	 */
-	public void execByText(Integer userId,String code) throws AZCafeException {
+	public void execByText(AssignmentTblEntity entity,Integer userId,String code) throws AZCafeException {
 
 		Path srcFile = null;
 		String workDir = null;
@@ -39,17 +42,15 @@ public abstract class GradingProcess {
 			//作業ディレクトリを取得
 			workDir = getWorkDir(userId);
 			
-			//バッチを実行する
-			ProcessBuilder pb = execBatch(batchFName,workDir,code);
-			
-			Process process;
-			process = pb.start();
-
-			//バッチ実行タイムアウトは１０秒
-			int ret = process.waitFor();
-
-			if( ret != 0){
+			//テストケース分ループする
+			for( TestCaseTblEntity testCase : entity.getTestCaseTblSet()) {
+				if( execProcess(testCase,batchFName,workDir,code) ) {
+					//実行成功したので結果を比較する
+					boolean isSame = compereOutput(testCase,workDir) ;
+					//結果をDTOに登録する
+				}
 			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new AZCafeException(e);
@@ -62,6 +63,42 @@ public abstract class GradingProcess {
 				//FileUtils.delete(workDir);
 			}
 		}
+	}
+	
+	protected abstract boolean compereOutput(TestCaseTblEntity testCase,String workDir) throws AZCafeException;
+	
+	private boolean execProcess(
+			TestCaseTblEntity testCase,
+			String batchFName,
+			String workDir,
+			String code) throws AZCafeException, IOException, InterruptedException {
+		
+		Path inputPath = null;
+		boolean result = false;
+		try {
+			//入力情報をファイルに出力する
+			inputPath = FileUtils.outputFile(workDir, INPUT_TEXT, testCase.getInputText());
+			//バッチを実行する
+			ProcessBuilder pb = execBatch(batchFName,workDir,code);
+			//標準入力をファイルにする
+			pb.redirectInput(inputPath.toFile());
+			//実行する
+			Process process = pb.start();
+	
+			//バッチ実行タイムアウトは１０秒
+			int ret = process.waitFor();
+	
+			if( ret == 0){
+				//実行成功
+				result = true;
+			}
+		}finally {
+			if( inputPath != null ) {
+				FileUtils.delete(inputPath.toFile());
+			}
+		}
+		
+		return result;
 	}
 	
 	/**

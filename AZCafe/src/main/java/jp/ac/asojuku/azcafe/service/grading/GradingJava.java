@@ -7,12 +7,15 @@ import java.nio.file.Path;
 import org.springframework.stereotype.Service;
 
 import jp.ac.asojuku.azcafe.config.AZCafeConfig;
+import jp.ac.asojuku.azcafe.entity.TestCaseTblEntity;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
 import jp.ac.asojuku.azcafe.param.Language;
 import jp.ac.asojuku.azcafe.util.FileUtils;
 
 
 public class GradingJava extends GradingProcess {
+	private final String CORRECT_TEXT = "correct.txt";
+	private final String OUTPUT_TEXT = "output.txt";
 
 	public GradingJava(Language lang) {
 		super(lang);
@@ -28,7 +31,7 @@ public class GradingJava extends GradingProcess {
 		
 		makeDir(workDir);
 		//バッチを実行する
-		ProcessBuilder pb = new ProcessBuilder(batchFName,workDir,workDir,className);
+		ProcessBuilder pb = new ProcessBuilder(batchFName,workDir,workDir,className,OUTPUT_TEXT);
 		
 		return pb;
 	}
@@ -82,5 +85,17 @@ public class GradingJava extends GradingProcess {
 		}
 		
 		return ClassName;
+	}
+	
+	protected boolean compereOutput(TestCaseTblEntity testCase,String workDir) throws AZCafeException {
+		//正解ファイルを出力する
+		Path correctPath = FileUtils.outputFile(workDir, CORRECT_TEXT, testCase.getOutputTxt());
+		
+		//出力ファイルと正解ファイルを比較する
+		boolean isSame = 
+				FileUtils.fileCompare(correctPath.toString(), workDir+"/"+OUTPUT_TEXT);
+		
+		return isSame;
+		
 	}
 }

@@ -33,9 +33,6 @@ public class TestCaseTblEntity implements Serializable {
 
 	/** 問題テーブル. */
 	private Integer assignmentId;
-	@OneToOne
-    @JoinColumn(name="assignmentId",insertable=false ,updatable=false)
-	private AssignmentTblEntity assignmentTbl;
 
 	/** テスト番号. */
 	private Integer no;

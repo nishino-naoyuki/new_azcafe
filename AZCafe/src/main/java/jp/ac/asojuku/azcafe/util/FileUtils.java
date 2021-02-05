@@ -146,6 +146,16 @@ public class FileUtils {
 
         List<String> listA = readLine(fileA);
         List<String> listB = readLine(fileB);
+        
+        //最後の改行を削除
+        String tailA = listA.get(listA.size()-1);
+        if( tailA.equals("\n")) {
+        	listA.remove(listA.size()-1);
+        }
+        String tailB = listB.get(listB.size()-1);
+        if( tailB.equals("\n")) {
+        	listB.remove(listB.size()-1);
+        }
         String[] arrayA = listA.toArray(new String[0]);
         String[] arrayB = listB.toArray(new String[0]);
 

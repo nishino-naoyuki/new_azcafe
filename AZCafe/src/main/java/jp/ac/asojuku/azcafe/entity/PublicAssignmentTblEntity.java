@@ -35,11 +35,6 @@ public class PublicAssignmentTblEntity implements Serializable {
 	private Integer assignmentId;	//挿入・更新用
 	private Integer homeroomId;	//挿入・更新用
 	
-	/** 問題テーブル. */
-	@OneToOne
-    @JoinColumn(name="assignmentId",insertable=false ,updatable=false)
-	private AssignmentTblEntity assignmentTbl;
-
 	/** 新規テーブル. */
 	@OneToOne
     @JoinColumn(name="homeroomId",insertable=false ,updatable=false)

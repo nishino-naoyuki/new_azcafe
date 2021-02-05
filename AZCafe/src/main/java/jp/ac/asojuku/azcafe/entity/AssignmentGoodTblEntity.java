@@ -36,11 +36,6 @@ public class AssignmentGoodTblEntity implements Serializable {
 	private Integer assignmentId;	//挿入・更新用
 	private Integer userId;	//挿入・更新用
 	
-	/** 問題テーブル. */
-	@OneToOne
-    @JoinColumn(name="assignmentId",insertable=false ,updatable=false)
-	private AssignmentTblEntity assignmentTbl;
-
 	/** ユーザー. */
 	@OneToOne
     @JoinColumn(name="userId",insertable=false ,updatable=false)
@@ -53,63 +48,6 @@ public class AssignmentGoodTblEntity implements Serializable {
 	 * コンストラクタ.
 	 */
 	public AssignmentGoodTblEntity() {
-	}
-
-	/**
-	 * 問題テーブル を設定します.
-	 * 
-	 * @param assignmentTbl
-	 *            問題テーブル
-	 */
-	public void setAssignmentTbl(AssignmentTblEntity assignmentTbl) {
-		this.assignmentTbl = assignmentTbl;
-	}
-
-	/**
-	 * 問題テーブル を取得します.
-	 * 
-	 * @return 問題テーブル
-	 */
-	public AssignmentTblEntity getAssignmentTbl() {
-		return this.assignmentTbl;
-	}
-
-	/**
-	 * ユーザー を設定します.
-	 * 
-	 * @param userTbl
-	 *            ユーザー
-	 */
-	public void setUserTbl(UserTblEntity userTbl) {
-		this.userTbl = userTbl;
-	}
-
-	/**
-	 * ユーザー を取得します.
-	 * 
-	 * @return ユーザー
-	 */
-	public UserTblEntity getUserTbl() {
-		return this.userTbl;
-	}
-
-	/**
-	 * イイネをした日時 を設定します.
-	 * 
-	 * @param goodDate
-	 *            イイネをした日時
-	 */
-	public void setGoodDate(Date goodDate) {
-		this.goodDate = goodDate;
-	}
-
-	/**
-	 * イイネをした日時 を取得します.
-	 * 
-	 * @return イイネをした日時
-	 */
-	public Date getGoodDate() {
-		return this.goodDate;
 	}
 
 

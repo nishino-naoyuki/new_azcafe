@@ -114,6 +114,7 @@
 	                        <!--1ページ目-->
 	                        <div class="tab-pane active" id="tab_1">
                     		  <form id="answer_text_form">
+                    		      <input type="hidden" name="assignmentId" th:value="${assignmentdetailDto.assignmentId}">
 		                          <div class="editor_container">
 		                            <div class="answer_wrap">
 		                              <div class="title_wrap mb15">
@@ -159,6 +160,7 @@
 	                        <!--2ページ目-->
 	                        <div class="tab-pane" id="tab_2">
 	                          <form id="answer_file_form">
+	                              <input type="hidden" name="assignmentId" th:value="${assignmentdetailDto.assignmentId}">
 		                          <div class="answer_wrap">
 		                            <div class="form-group input-file-group d-flex">
 		                              <div class="input-group col-md-8">
@@ -340,7 +342,7 @@ $(function () {
     const ansText = editor.getValue();
     $("#answer_text").val(ansText);
     const formdata = new FormData($('#answer_text_form').get(0));
-    const ajaxUrl = /*[[@{/grading/file}]]*/ "/grading/file";
+    const ajaxUrl = /*[[@{/grading/text}]]*/ "/grading/text";
     $.ajax({
         url  : ajaxUrl,
         type : "POST",

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jp.ac.asojuku.azcafe.dto.LoginInfoDto;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
-import jp.ac.asojuku.azcafe.form.GradingByFileForm;
+import jp.ac.asojuku.azcafe.form.GradingByTextForm;
 import jp.ac.asojuku.azcafe.param.Language;
 import jp.ac.asojuku.azcafe.param.SessionConst;
 import jp.ac.asojuku.azcafe.service.GradingService;
@@ -30,9 +30,9 @@ public class GradingController {
 	@Autowired
 	HttpSession session;
 
-	@RequestMapping(value= {"/file"}, method=RequestMethod.POST)
+	@RequestMapping(value= {"/text"}, method=RequestMethod.POST)
 	public Object gradingByFile(
-			@Valid GradingByFileForm form) throws AZCafeException {
+			@Valid GradingByTextForm form) throws AZCafeException {
 		
 		//セッションからログイン情報を取得
 		LoginInfoDto loginInfo = (LoginInfoDto)session.getAttribute(SessionConst.LOGININFO);
@@ -44,6 +44,7 @@ public class GradingController {
 		//採点実行
 		gradingService.execByText(
 				loginInfo.getUserId(), 
+				form.getAssignmentId(),
 				Language.getBy(form.getLanguage()), 
 				form.getAnswerText());
 		
