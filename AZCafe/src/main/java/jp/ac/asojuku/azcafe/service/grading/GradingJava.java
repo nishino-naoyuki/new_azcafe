@@ -1,14 +1,17 @@
 package jp.ac.asojuku.azcafe.service.grading;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.thymeleaf.util.StringUtils;
 
 import jp.ac.asojuku.azcafe.config.AZCafeConfig;
-import jp.ac.asojuku.azcafe.dto.GradingResult;
-import jp.ac.asojuku.azcafe.dto.GradingTestCaseResult;
+import jp.ac.asojuku.azcafe.dto.GradingResultDto;
+import jp.ac.asojuku.azcafe.dto.GradingTestCaseResultDto;
 import jp.ac.asojuku.azcafe.entity.AssignmentTblEntity;
 import jp.ac.asojuku.azcafe.entity.TestCaseTblEntity;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
@@ -17,6 +20,18 @@ import jp.ac.asojuku.azcafe.util.FileUtils;
 
 
 public class GradingJava extends GradingProcess {
+	//クラス情報保持用の内部クラス
+	private class ClassInfo{
+		private boolean isMainClass;
+		private String className;
+		private String packageName;
+		
+		public ClassInfo(boolean isMainClass,String packageName,String className) 
+		{this.isMainClass = isMainClass; this.className=className; this.packageName=packageName;}
+		public boolean isMainClass() {return isMainClass;}
+		public String getClassName() { return className; }
+		public String getPackageName() { return packageName; }
+	}
 	private final String COMPLE_SHELL = "comple_java.bat";
 	private final String EXEC_SHELL = "exec_java.bat";
 	private final String CHECKSTYLE_SHELL = "checkstyle_java.bat";
@@ -33,13 +48,61 @@ public class GradingJava extends GradingProcess {
 		// TODO 自動生成されたコンストラクター・スタブ
 	}
 
+	public GradingResultDto execBatch(AssignmentTblEntity entity,String batchDir,String workDir,List<File> srcFileList) throws AZCafeException {
+		GradingResultDto result = new GradingResultDto();
+
+		try {
+			//////////////////////////////////////////
+			// 1.ソースファイルに細工をする
+			//////////////////////////////////////////
+			List<ClassInfo> classInfoList = new ArrayList<>();
+			for(File srcFile : srcFileList) {
+				classInfoList.add( editSrcFile(workDir,srcFile) );
+			}
+			
+			//////////////////////////////////////////
+			// 2.コンパイル
+			//////////////////////////////////////////
+			if( comple(batchDir,workDir,result) != true ) {
+				//コンパイル失敗
+				return result;
+			}
+			//////////////////////////////////////////
+			// 3.実行
+			//////////////////////////////////////////
+			//メインクラスを探す
+			String className = getMainFullClassName(classInfoList);
+			//テストケース分ループする
+			for( TestCaseTblEntity testCase : entity.getTestCaseTblSet()) {
+				if( execProgram(batchDir,workDir,className,testCase) ) {
+					//実行成功したので結果を比較する
+					GradingTestCaseResultDto testcaseResult = compereOutput(testCase,workDir) ;
+					//結果をDTOに登録する
+					result.addGradingTestCaseResult(testcaseResult);
+				}
+			}
+			//点数チェック
+			checkOutputScore(result);
+
+			//////////////////////////////////////////
+			// 3.ソース検査
+			//////////////////////////////////////////
+			checkStyle(batchDir,workDir,result);
+			
+		}catch(IOException e) {
+			
+		}catch(InterruptedException e) {
+		}
+		
+		return result;
+	}
 	/**
 	 *バッチ処理を開始する
 	 *Javaの場合
 	 *　コンパイル→実行（テストケースごと）→チェックスタイル
 	 */
-	public GradingResult execBatch(AssignmentTblEntity entity,String batchDir,String workDir,String code) throws AZCafeException {
-		GradingResult result = new GradingResult();
+	public GradingResultDto execBatch(AssignmentTblEntity entity,String batchDir,String workDir,String code) throws AZCafeException {
+		GradingResultDto result = new GradingResultDto();
 		
 		try {
 			//ソースファイル出力
@@ -59,14 +122,13 @@ public class GradingJava extends GradingProcess {
 			for( TestCaseTblEntity testCase : entity.getTestCaseTblSet()) {
 				if( execProgram(batchDir,workDir,className,testCase) ) {
 					//実行成功したので結果を比較する
-					GradingTestCaseResult testcaseResult = compereOutput(testCase,workDir) ;
+					GradingTestCaseResultDto testcaseResult = compereOutput(testCase,workDir) ;
 					//結果をDTOに登録する
 					result.addGradingTestCaseResult(testcaseResult);
 				}
 			}
 			//点数チェック
 			checkOutputScore(result);
-			
 
 			//////////////////////////////////////////
 			// 3.ソース検査
@@ -82,6 +144,81 @@ public class GradingJava extends GradingProcess {
 		return result;
 	}
 	
+	private ClassInfo editSrcFile(String workDir,File srcFile) throws AZCafeException, IOException {
+		//一旦ファイルを1行筒読み込む
+		List<String> codeList = FileUtils.readLine(srcFile.getAbsolutePath());
+		
+		StringBuilder sb = new StringBuilder();
+		boolean isMainClass = false;
+		String packagename = "";
+		String className = "";
+		//もし「package」があれば消す
+		for( String line : codeList ) {
+			if( isMainClass( line )) {
+				//メインクラス
+				isMainClass = true;
+			}
+			if( line.startsWith("package")) {
+				//パッケージ名を取得する
+				packagename = getPackageName(line);
+			}
+			sb.append(line);
+		}
+		
+		//クラス名を取得する
+		className = getClassName(sb.toString());
+		
+		//ファイルをコピーする
+		FileUtils.copy(srcFile.getAbsolutePath(), workDir+"/"+srcFile.getName());
+		
+		return new ClassInfo(isMainClass,packagename,className);
+	}
+	
+	private String getPackageName(String pgLine) {
+		String packageName = "";
+		
+		//空白を削除する
+		pgLine = pgLine.replace(" ", "");
+		pgLine = pgLine.replace("\t", "");
+		
+		//package宣言を見つける
+		int index = pgLine.indexOf("package");
+		if( index != -1 ) {
+			packageName = pgLine.substring(
+					index + "package".length(),
+					( packageName.endsWith(";") ? pgLine.length()-2 : pgLine.length()-1)
+					);
+		}
+		
+		return packageName;
+	}
+	
+	private boolean isMainClass(String line) {
+		
+		return  line.contains("public") && 
+				line.contains("static") && 
+				line.contains("void") &&
+				line.contains("main") &&
+				line.contains("String[]");
+		
+	}
+	
+	private String getMainFullClassName(List<ClassInfo> classInfoList) {
+		String fullClassName = "";
+		for(ClassInfo classInfo : classInfoList) {
+			if( classInfo.isMainClass() ) {
+				if( StringUtils.isEmpty( classInfo.getPackageName()) ) {
+					fullClassName = classInfo.getClassName();
+				}else {
+					fullClassName = classInfo.getPackageName() +"."+ classInfo.getClassName();
+				}
+				
+				break;
+			}
+		}
+		return fullClassName;
+	}
+	
 	/**
 	 * コンパイルの実行
 	 * 
@@ -92,7 +229,7 @@ public class GradingJava extends GradingProcess {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private boolean comple(String batchDir,String workDir,GradingResult result) throws IOException, InterruptedException {
+	private boolean comple(String batchDir,String workDir,GradingResultDto result) throws IOException, InterruptedException {
 		boolean bCompleOK = false;
 
 		//コンパイルに必要なフォルダ作成
@@ -124,7 +261,7 @@ public class GradingJava extends GradingProcess {
 	 * @param workDir
 	 * @param result
 	 */
-	private void getGradingResultWhenCompleError(String workDir,GradingResult result) {
+	private void getGradingResultWhenCompleError(String workDir,GradingResultDto result) {
 		result.setCorrect(false);
 		//コンパイルエラーメッセージを取得する
 		List<String> compleRsult = FileUtils.readLine(workDir+"/"+COMPLE_RESULT);
@@ -182,10 +319,10 @@ public class GradingJava extends GradingProcess {
 	 * 
 	 * @param result
 	 */
-	private void checkOutputScore(GradingResult result) {
+	private void checkOutputScore(GradingResultDto result) {
 		boolean isAllOK = true;	//全ての出力結果がOK
 		
-		for( GradingTestCaseResult testcase : result.getTestCaseResultList() ) {
+		for( GradingTestCaseResultDto testcase : result.getTestCaseResultList() ) {
 			if( testcase.isCorrect() != true ) {
 				isAllOK = false;
 				break;
@@ -205,7 +342,7 @@ public class GradingJava extends GradingProcess {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private void checkStyle(String batchDir,String workDir,GradingResult result) throws IOException, InterruptedException {
+	private void checkStyle(String batchDir,String workDir,GradingResultDto result) throws IOException, InterruptedException {
 		
 		ProcessBuilder pb = new ProcessBuilder(
 				batchDir + "/" + CHECKSTYLE_SHELL,workDir,batchDir,CHECKSTYLE_RESULT);
@@ -237,12 +374,16 @@ public class GradingJava extends GradingProcess {
 	 * @param checkStyleResultFile
 	 * @return
 	 */
-	private void getCheckStyleMsg(String checkStyleResultFile,GradingResult result){
+	private void getCheckStyleMsg(String checkStyleResultFile,GradingResultDto result){
 		List<String> list = FileUtils.readLine(checkStyleResultFile);
 		int score = CHECKSTYLE_FULLSCORE;
 		
+		StringBuilder sb = new StringBuilder();
 		for( int i = 1; i < list.size()-1; i++ ) {
-			result.addCheckStyleMsgList( list.get(i) );
+			if( sb.length() > 0 ) {
+				sb.append("\n");
+			}
+			sb.append(list.get(i));	
 			score -= 5;	//一つの指摘当たり5点減点
 		}
 		
@@ -250,6 +391,7 @@ public class GradingJava extends GradingProcess {
 			score = 0;
 		}
 		result.setScoreForSource(score);
+		result.setCheckStyleMsg(sb.toString());
 	}
 	
 	/**
@@ -322,9 +464,9 @@ public class GradingJava extends GradingProcess {
 	/**
 	 * 結果を比較する
 	 */
-	protected GradingTestCaseResult compereOutput(TestCaseTblEntity testCase,String workDir) throws AZCafeException {
+	protected GradingTestCaseResultDto compereOutput(TestCaseTblEntity testCase,String workDir) throws AZCafeException {
 
-		GradingTestCaseResult testcaseResult = new GradingTestCaseResult();
+		GradingTestCaseResultDto testcaseResult = new GradingTestCaseResultDto();
 		
 		//正解ファイルを出力する
 		Path correctPath = FileUtils.outputFile(workDir, CORRECT_TEXT, testCase.getOutputTxt());
@@ -346,6 +488,7 @@ public class GradingJava extends GradingProcess {
 		//DTO作成
 		testcaseResult.setTestcaseId(testCase.getTestcaseId());
 		testcaseResult.setCorrect(isSame);
+		testcaseResult.setInput(testCase.getInputText());
 		testcaseResult.setCorrectOutput(testCase.getOutputTxt());
 		testcaseResult.setUserOutput(sb.toString());
 		

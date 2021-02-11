@@ -9,4 +9,5 @@ public class AssignmentDetailDto extends AssignmentElementDto {
 
 	private String content;
 	private String answer;
+	private GradingResultDto gradingResultDto;
 }

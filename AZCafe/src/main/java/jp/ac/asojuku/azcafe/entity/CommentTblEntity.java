@@ -35,10 +35,6 @@ public class CommentTblEntity implements Serializable {
 	private Integer comment_id;
 
 	private Integer answerId;	//挿入・更新用
-	/** 解答テーブル. */
-	@OneToOne
-    @JoinColumn(name="answerId",insertable=false ,updatable=false)
-	private AnswerTblEntity answerTbl;
 
 	/** ユーザー. */
 	private Integer userId;	//挿入・更新用

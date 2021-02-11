@@ -19,8 +19,7 @@
           </div>
           <div th:if="${session['LoginInfo'].avater}">
             <img th:src="@{'/getImage/'+${session['LoginInfo'].avater}}" class="img-circle elevation-2" alt="User Image">
-          </div>
-          
+          </div>          
         </div>
         <div class="info">
           <a href="user-info.html" class="d-block" th:text="${session['LoginInfo'].nickName}"></a>

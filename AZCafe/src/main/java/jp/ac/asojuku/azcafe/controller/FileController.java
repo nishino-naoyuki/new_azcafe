@@ -89,11 +89,11 @@ public class FileController {
 	    //アップロードファイルを取得
 	    byte[] bytes = userInputCSVForm.getUploadFile().getBytes();
 	    //出力ストリームを取得
-	    BufferedOutputStream uploadFileStream =
-                new BufferedOutputStream(new FileOutputStream(uploadFile));
-	    //ストリームに書き込んでクローズ
-	    uploadFileStream.write(bytes);
-        uploadFileStream.close();
+	    try(BufferedOutputStream uploadFileStream =
+                new BufferedOutputStream(new FileOutputStream(uploadFile))){
+		    //ストリームに書き込んでクローズ
+		    uploadFileStream.write(bytes);
+	    }
         
         //エラーチェックを行う
         List<UserCSV> userList = userCSVService.checkForCSV(uploadFile.getAbsolutePath(),err,"");
@@ -123,7 +123,7 @@ public class FileController {
     private File mkCSVUploaddirs() throws AZCafeException{
     	
     	//アップロードディレクトリを取得する
-    	StringBuffer filePath = new StringBuffer(AZCafeConfig.getInstance().getCsvuploaddir());
+    	StringBuilder filePath = new StringBuilder(AZCafeConfig.getInstance().getCsvuploaddir());
     	
         Date now = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");

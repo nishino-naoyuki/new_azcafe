@@ -16,6 +16,7 @@ public class AssignmentElementDto {
 	private String title;
 	private Integer score;
 	private Difficulty difficulty;
+	private boolean correct;
 	
 	public void setDifficulty(Integer difficulty) {
 		this.difficulty = Difficulty.getBy(difficulty);

@@ -33,10 +33,7 @@ public class AnswerDetailTblEntity implements Serializable {
 	private Integer answerDetailId;
 
 	/** 解答テーブル. */
-	private Integer answerId;	//更新用
-    @OneToOne
-    @JoinColumn(name="answerId" ,insertable=false ,updatable=false)
-	private AnswerTblEntity answerTbl;
+	private Integer answerId;
 
 	/** ファイル名. */
 	private String filename;

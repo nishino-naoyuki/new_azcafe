@@ -9,16 +9,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jp.ac.asojuku.azcafe.dto.AssignmentTestCaseDto;
+import jp.ac.asojuku.azcafe.dto.GradingResultDto;
+import jp.ac.asojuku.azcafe.dto.GradingTestCaseResultDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentDetailDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentElementDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentPublicDto;
 import jp.ac.asojuku.azcafe.entity.AnswerDetailTblEntity;
+import jp.ac.asojuku.azcafe.entity.AnswerTblEntity;
 import jp.ac.asojuku.azcafe.entity.AssignmentTblEntity;
 import jp.ac.asojuku.azcafe.entity.GroupTblEntity;
 import jp.ac.asojuku.azcafe.entity.PublicAssignmentTblEntity;
+import jp.ac.asojuku.azcafe.entity.TestCaseAnswerTblEntity;
 import jp.ac.asojuku.azcafe.entity.TestCaseTblEntity;
 import jp.ac.asojuku.azcafe.param.Difficulty;
+import jp.ac.asojuku.azcafe.repository.AnswerRepository;
 import jp.ac.asojuku.azcafe.repository.AssignmentRepository;
 import jp.ac.asojuku.azcafe.repository.GroupRepository;
 import jp.ac.asojuku.azcafe.repository.PublicAssignmentRepository;
@@ -40,32 +45,34 @@ public class AssignmentService {
 	PublicAssignmentRepository publicAssignmentRepository;
 	@Autowired
 	TestCaseRepository testCaseRepository;
+	@Autowired
+	AnswerRepository answerRepository;
 	
 	/**
 	 * 課題の詳細情報を取得する
 	 * @param id
 	 * @return
 	 */
-	public AssignmentDetailDto getDetail(Integer id) {
+	public AssignmentDetailDto getDetail(Integer id,Integer userId) {
 		if( id == null ) {
 			return null;
 		}
 		AssignmentTblEntity entity = assignmentRepository.getOne(id);
 		
-		return getDetailFrom(entity);
+		return getDetailFrom(userId,entity);
 	}
 	/**
 	 * 課題リストを取得する
 	 * @return
 	 */
-	public List<AssignmentElementDto> getAll(){
+	public List<AssignmentElementDto> getAll(Integer userId){
 		List<AssignmentElementDto> list = new ArrayList<>();
 		
 		List<AssignmentTblEntity> entityList = 
 				assignmentRepository.findAll(Sort.by(Sort.Direction.ASC, "groupId","groupInNo"));
 		
 		for( AssignmentTblEntity entity : entityList ) {
-			AssignmentElementDto dto = getFrom(entity);
+			AssignmentElementDto dto = getFrom(userId,entity);
 			list.add(dto);
 		}
 		
@@ -183,22 +190,27 @@ public class AssignmentService {
 	 * @param assignmentTblEntity
 	 * @return
 	 */
-	private AssignmentElementDto getFrom(AssignmentTblEntity assignmentTblEntity) {
+	private AssignmentElementDto getFrom(Integer userId,AssignmentTblEntity assignmentTblEntity) {
 		AssignmentElementDto dto = new AssignmentElementDto();
 		
-		setElementData(assignmentTblEntity,dto);
+		setElementData(userId,assignmentTblEntity,dto);
 		
 		return dto;
 	}
-	private void setElementData(AssignmentTblEntity assignmentTblEntity,AssignmentElementDto dto) {
+	private void setElementData(Integer userId,AssignmentTblEntity assignmentTblEntity,AssignmentElementDto dto) {
 
 		dto.setGroupName(assignmentTblEntity.getGroupTbl().getName());
 		dto.setTitle(assignmentTblEntity.getTitle());
 		dto.setAssignmentId(assignmentTblEntity.getAssignmentId());
 		dto.setDifficulty(assignmentTblEntity.getDifficulty());
-		if( assignmentTblEntity.getAnswerTbl() != null ) {
-			dto.setScore(assignmentTblEntity.getAnswerTbl().getScore());
+		//解答を取得する
+		AnswerTblEntity answerEntity =
+				answerRepository.getOne(assignmentTblEntity.getAssignmentId(), userId);
+		if( answerEntity != null ) {
+			dto.setCorrect((answerEntity.getCorrectFlg()==1?true:false));
+			dto.setScore(answerEntity.getScore());
 		}else {
+			dto.setCorrect(false);
 			dto.setScore(null);
 		}
 	}
@@ -209,21 +221,42 @@ public class AssignmentService {
 	 * @param assignmentTblEntity
 	 * @return
 	 */
-	private AssignmentDetailDto getDetailFrom(AssignmentTblEntity assignmentTblEntity) {
+	private AssignmentDetailDto getDetailFrom(Integer userId,AssignmentTblEntity assignmentTblEntity) {
 		AssignmentDetailDto detail = new AssignmentDetailDto();
 		
-		setElementData(assignmentTblEntity,detail);
+		setElementData(userId,assignmentTblEntity,detail);
 		detail.setContent(assignmentTblEntity.getContents());
-		if( assignmentTblEntity.getAnswerTbl() != null ) {
-			//直接入力された答え（ファイル名がNULL）のものを抜き出す
-			for( AnswerDetailTblEntity entity : assignmentTblEntity.getAnswerTbl().getAnswerDetailTblSet()) {
-				if( entity.getFilename() == null ) {
+		//解答を取得する
+		AnswerTblEntity answerEntity =
+				answerRepository.getOne(assignmentTblEntity.getAssignmentId(), userId);
+		
+		GradingResultDto gradingResult = new GradingResultDto();
+		if( answerEntity!= null ) {
+			//直接入力された答え（ファイル名が空）のものを抜き出す
+			for( AnswerDetailTblEntity entity : answerEntity.getAnswerDetailTblSet()) {
+				String fileName = entity.getFilename();
+				if( fileName != null && fileName.isEmpty()) {
 					detail.setAnswer(entity.getAnswer());
 					break;
 				}
 			}
 			
+			for( TestCaseAnswerTblEntity testCaseAns :  answerEntity.getTestCaseAnswerTblSet() ) {
+				GradingTestCaseResultDto testCaseRet = new GradingTestCaseResultDto();
+				
+				testCaseRet.setCorrect(testCaseAns.getCorrectly()==1);
+				testCaseRet.setInput(testCaseAns.getTestCaseTbl().getInputText());
+				testCaseRet.setCorrectOutput(testCaseAns.getTestCaseTbl().getOutputTxt());
+				testCaseRet.setUserOutput(testCaseAns.getUserOutput());
+				
+				gradingResult.addGradingTestCaseResult(testCaseRet);
+			}
+			
+			gradingResult.setScoreForOutput(answerEntity.getOutputScore());
+			gradingResult.setScoreForSource(answerEntity.getSourceScore());
+			gradingResult.setCheckStyleMsg(answerEntity.getCheckStyleMsg());
 		}
+		detail.setGradingResultDto(gradingResult);
 		
 		return detail;
 	}

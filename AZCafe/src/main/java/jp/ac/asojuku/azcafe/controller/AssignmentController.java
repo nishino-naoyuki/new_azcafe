@@ -18,11 +18,17 @@ import org.springframework.web.servlet.ModelAndView;
 import jp.ac.asojuku.azcafe.dto.AssignmentDetailDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentElementDto;
+import jp.ac.asojuku.azcafe.dto.CommentInsertDto;
+import jp.ac.asojuku.azcafe.dto.GradingResultDetailDto;
 import jp.ac.asojuku.azcafe.dto.GroupDto;
 import jp.ac.asojuku.azcafe.dto.HomeroomDto;
+import jp.ac.asojuku.azcafe.dto.LoginInfoDto;
+import jp.ac.asojuku.azcafe.exception.AZCafeException;
 import jp.ac.asojuku.azcafe.form.AssignmentForm;
 import jp.ac.asojuku.azcafe.param.SessionConst;
+import jp.ac.asojuku.azcafe.service.AnswerService;
 import jp.ac.asojuku.azcafe.service.AssignmentService;
+import jp.ac.asojuku.azcafe.service.CommentServie;
 import jp.ac.asojuku.azcafe.service.GroupService;
 import jp.ac.asojuku.azcafe.service.HomeroomService;
 
@@ -40,15 +46,72 @@ public class AssignmentController {
 	@Autowired
 	AssignmentService assignmentService;
 	@Autowired
+	AnswerService answerService;
+	@Autowired
 	HttpSession session;
 	@Autowired
 	GroupService groupService;
+	@Autowired
+	CommentServie commentServie;
+
+	@RequestMapping(value= {"/sendMsg"}, method=RequestMethod.POST)
+	public ModelAndView sendMessage(
+			ModelAndView mv,
+			@RequestParam(required = false) String message,
+			@RequestParam(required=false) Integer answerId,
+			@RequestParam(required = false) Integer assignmentId) throws AZCafeException {
+
+		CommentInsertDto commentInsertDto = new CommentInsertDto();
+
+		//セッションからログイン情報を取得
+		LoginInfoDto loginInfo = (LoginInfoDto)session.getAttribute(SessionConst.LOGININFO);
+		if( loginInfo == null ) {
+			//ログイン情報が無いことはないはずだが、直リンされた場合を一応考慮
+			throw new AZCafeException("ログイン情報がありません。ログインしなおしてください");
+		}
+		commentInsertDto.setUserId(loginInfo.getUserId());
+		commentInsertDto.setAnswerId(answerId);
+		commentInsertDto.setAssignmentId(assignmentId);
+		commentInsertDto.setMessage(message);
+		
+		GradingResultDetailDto gradingResultDetailDto =
+				commentServie.insert(commentInsertDto);
+		
+		mv.addObject("gradingResultDetailDto", gradingResultDetailDto);
+        mv.setViewName("assignment_result");
+        return mv;
+	}
+
+	@RequestMapping(value= {"/result"}, method=RequestMethod.GET)
+	public ModelAndView result(ModelAndView mv,@RequestParam(required = false) Integer assignmentId) throws AZCafeException {
+
+		//セッションからログイン情報を取得
+		LoginInfoDto loginInfo = (LoginInfoDto)session.getAttribute(SessionConst.LOGININFO);
+		if( loginInfo == null ) {
+			//ログイン情報が無いことはないはずだが、直リンされた場合を一応考慮
+			throw new AZCafeException("ログイン情報がありません。ログインしなおしてください");
+		}
+		
+		//詳細情報を取得する
+		GradingResultDetailDto gradingResultDetailDto = 
+				answerService.getBy(loginInfo.getUserId(), assignmentId);
+		
+		mv.addObject("gradingResultDetailDto", gradingResultDetailDto);
+        mv.setViewName("assignment_result");
+        return mv;
+	}
 
 	@RequestMapping(value= {"/list"}, method=RequestMethod.GET)
-	public ModelAndView list(ModelAndView mv) {
+	public ModelAndView list(ModelAndView mv) throws AZCafeException {
 
+		//セッションからログイン情報を取得
+		LoginInfoDto loginInfo = (LoginInfoDto)session.getAttribute(SessionConst.LOGININFO);
+		if( loginInfo == null ) {
+			//ログイン情報が無いことはないはずだが、直リンされた場合を一応考慮
+			throw new AZCafeException("ログイン情報がありません。ログインしなおしてください");
+		}
 		//一覧取得
-		List<AssignmentElementDto> assignmentList = assignmentService.getAll();
+		List<AssignmentElementDto> assignmentList = assignmentService.getAll(loginInfo.getUserId());
 		
 		mv.addObject("assignmentList",assignmentList);
 		
@@ -61,14 +124,23 @@ public class AssignmentController {
 	 * @param mv
 	 * @param id
 	 * @return
+	 * @throws AZCafeException 
 	 */
 	@RequestMapping(value= {"/detail"}, method=RequestMethod.GET)
 	public ModelAndView detail(
-			ModelAndView mv,@RequestParam(required = false) Integer id) {
+			ModelAndView mv,@RequestParam(required = false) Integer id) throws AZCafeException {
 
-		AssignmentDetailDto assignmentdetailDto = assignmentService.getDetail(id);
+		//セッションからログイン情報を取得
+		LoginInfoDto loginInfo = (LoginInfoDto)session.getAttribute(SessionConst.LOGININFO);
+		if( loginInfo == null ) {
+			//ログイン情報が無いことはないはずだが、直リンされた場合を一応考慮
+			throw new AZCafeException("ログイン情報がありません。ログインしなおしてください");
+		}
+		
+		AssignmentDetailDto assignmentdetailDto = assignmentService.getDetail(id,loginInfo.getUserId());
 		
 		mv.addObject("assignmentdetailDto",assignmentdetailDto);
+		mv.addObject("assignmentId",id);
 		
         mv.setViewName("assignment_detail");
         return mv;

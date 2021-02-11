@@ -1,13 +1,15 @@
 package jp.ac.asojuku.azcafe.service.grading;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import jp.ac.asojuku.azcafe.config.AZCafeConfig;
-import jp.ac.asojuku.azcafe.dto.GradingResult;
-import jp.ac.asojuku.azcafe.dto.GradingTestCaseResult;
+import jp.ac.asojuku.azcafe.dto.GradingResultDto;
+import jp.ac.asojuku.azcafe.dto.GradingTestCaseResultDto;
 import jp.ac.asojuku.azcafe.entity.AssignmentTblEntity;
 import jp.ac.asojuku.azcafe.entity.TestCaseTblEntity;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
@@ -22,8 +24,9 @@ public abstract class GradingProcess {
 		this.lang = lang;
 	}
 	
-	public abstract GradingResult execBatch(AssignmentTblEntity entity,String batchDir,String workDir,String code) throws AZCafeException;
-	protected abstract GradingTestCaseResult compereOutput(TestCaseTblEntity testCase,String workDir) throws AZCafeException;
+	public abstract GradingResultDto execBatch(AssignmentTblEntity entity,String batchDir,String workDir,List<File> srcFileList) throws AZCafeException;
+	public abstract GradingResultDto execBatch(AssignmentTblEntity entity,String batchDir,String workDir,String code) throws AZCafeException;
+	protected abstract GradingTestCaseResultDto compereOutput(TestCaseTblEntity testCase,String workDir) throws AZCafeException;
 
 	/**
 	 * テキスト入力による採点処理実行
@@ -31,9 +34,9 @@ public abstract class GradingProcess {
 	 * @param code
 	 * @throws AZCafeException
 	 */
-	public GradingResult execByText(AssignmentTblEntity entity,Integer userId,String code) throws AZCafeException {
+	public GradingResultDto execByText(AssignmentTblEntity entity,Integer userId,String code) throws AZCafeException {
 
-		GradingResult gradingResult = new GradingResult();
+		GradingResultDto gradingResult = new GradingResultDto();
 		String workDir = null;
 		try {
 			//バッチディレクトリを取得
@@ -52,6 +55,27 @@ public abstract class GradingProcess {
 		return gradingResult;
 	}
 	
+
+	public GradingResultDto execByFile(AssignmentTblEntity entity,Integer userId,List<File> fileList) throws AZCafeException {
+
+		GradingResultDto gradingResult = new GradingResultDto();
+		String workDir = null;
+		try {
+			//バッチディレクトリを取得
+			String batchDir = AZCafeConfig.getInstance().getBatchdir();
+			//作業ディレクトリを取得
+			workDir = getWorkDir(userId);
+			
+			gradingResult = execBatch(entity,batchDir,workDir,fileList);
+			
+		}finally {
+			//一時ファイルの削除
+			if( workDir != null ) {
+				FileUtils.delete(workDir);
+			}
+		}
+		return gradingResult;
+	}
 	
 	/**
 	 * 個人用の作業ディレクトリを作成する

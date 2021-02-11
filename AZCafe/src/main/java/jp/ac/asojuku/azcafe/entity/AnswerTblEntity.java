@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -39,7 +40,7 @@ public class AnswerTblEntity implements Serializable {
 	private Integer assignmentId;
 	@OneToOne
     @JoinColumn(name="assignmentId",insertable=false ,updatable=false)
-	private AssignmentTblEntity questionTbl;
+	private AssignmentTblEntity assignmentTbl;
 
 	/** ユーザー. */
 	private Integer userId;
@@ -52,6 +53,11 @@ public class AnswerTblEntity implements Serializable {
 
 	/** 正解フラグ. */
 	private Integer correctFlg;
+	
+	private String checkStyleMsg;
+	
+	private Integer sourceScore;
+	private Integer outputScore;
 
 	/** 解答詳細テーブル 一覧. */
 	@OneToMany
@@ -66,6 +72,7 @@ public class AnswerTblEntity implements Serializable {
 	/** コメント 一覧. */
 	@OneToMany
 	@JoinColumn(name="answerId",insertable=true ,updatable=true)
+	@OrderBy(value = "entryDate desc")
 	private Set<CommentTblEntity> commentTblSet;
 
 	/** テストケースごとの答えテーブル 一覧. */

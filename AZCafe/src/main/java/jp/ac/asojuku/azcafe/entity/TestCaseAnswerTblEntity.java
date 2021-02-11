@@ -40,9 +40,6 @@ public class TestCaseAnswerTblEntity implements Serializable {
 
 	/** 解答テーブル. */
 	private Integer answerId;	//更新用
-	@OneToOne
-    @JoinColumn(name="answerId",insertable=false ,updatable=false)
-	private AnswerTblEntity answerTbl;
 
 	/** 正解かどうか. */
 	private Integer correctly;

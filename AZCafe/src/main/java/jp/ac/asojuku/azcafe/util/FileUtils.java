@@ -28,6 +28,23 @@ public class FileUtils {
 	Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
 	/**
+	 * ファイルの中身をStringに読み込む
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public static String read(File file) {
+		List<String> lineList = readLine(file.getAbsolutePath());
+		
+		StringBuilder sb = new StringBuilder();
+		for(String line : lineList) {
+			if(sb.length() > 0 ) sb.append("\n");
+			sb.append(line);
+		}
+		
+		return sb.toString();
+	}
+	/**
 	 * ファイルから1行ごとのデータをリストとして読み込む
 	 * @param filePath
 	 * @return
@@ -306,4 +323,24 @@ public class FileUtils {
 		return path;
 	}
 
+	public static Path outputFile(String dir,String fname,List<String> content) throws AZCafeException {
+		Path path = Paths.get(dir,fname);
+		
+		if( !Files.isWritable(path.getParent()) ) {
+			makeDir(path.getParent().toString());
+		}
+		try (BufferedWriter bw = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+            // ファイルへの書き込み
+			for(String line : content) {
+				bw.write(line);
+				bw.newLine();
+			}
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new AZCafeException(e);
+        }
+		
+		return path;
+	}
 }

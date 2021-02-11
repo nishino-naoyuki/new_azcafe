@@ -71,9 +71,9 @@ public class AssignmentTblEntity implements Serializable {
 	private Date updateDate;
 
 	/** 解答テーブル 一覧. */
-	@OneToOne
-    @JoinColumn(name="assignmentId",insertable=false ,updatable=false)
-	private AnswerTblEntity answerTbl;
+	//@OneToOne
+    //@JoinColumn(name="assignmentId",insertable=false ,updatable=false)
+	//private AnswerTblEntity answerTbl;
 
 	/** 問題イイネテーブル 一覧. */
 	@OneToMany

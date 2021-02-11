@@ -3,6 +3,8 @@ package jp.ac.asojuku.azcafe.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import lombok.Data;
 
 /**
@@ -11,25 +13,25 @@ import lombok.Data;
  *
  */
 @Data
-public class GradingResult {
+public class GradingResultDto {
 	boolean correct;	//正解フラグ
 	String compleErrMsg;	//コンパイルエラー
 	int scoreForOutput;	//出力結果の点数
 	int scoreForSource;	//ソースコードの点数
-	List<GradingTestCaseResult> testCaseResultList = null;
-	List<String> checkStyleMsgList = null;
+	List<GradingTestCaseResultDto> testCaseResultList = null;
+	String checkStyleMsg;
 	
-	public void addGradingTestCaseResult(GradingTestCaseResult testCaseRet) {
+	public void addGradingTestCaseResult(GradingTestCaseResultDto testCaseRet) {
 		if( testCaseResultList == null ) {
 			testCaseResultList = new ArrayList<>();
 		}
 		testCaseResultList.add(testCaseRet);
 	}
-	
-	public void addCheckStyleMsgList(String checkStyleMsg) {
-		if( checkStyleMsgList == null ) {
-			checkStyleMsgList = new ArrayList<>();
+		
+	public String getCheckStyleMsg() {
+		if( StringUtils.isEmpty(checkStyleMsg) ) {
+			return "指摘事項無し";
 		}
-		checkStyleMsgList.add(checkStyleMsg);
+		return checkStyleMsg;
 	}
 }

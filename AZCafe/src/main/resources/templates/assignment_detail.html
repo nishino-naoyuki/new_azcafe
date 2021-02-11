@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
   <meta id="parent" th:replace="/header/include_css"></meta>
+  <!-- DataTables -->
+  <link rel="stylesheet" th:href="@{/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -80,7 +84,7 @@
         
                       <div class="info-box-content score_result" data-toggle="tooltip" title="提出済みの場合はクリックで詳細へ">
                         <span class="info-box-text">提出状況</span>
-                        <span class="info-box-number" th:text="${assignmentdetailDto.score}"></span>
+                        <span class="info-box-number totalScore" th:text="${assignmentdetailDto.correct} ? '提出済み':'未提出'"></span>
                       </div>
                       <!-- /.info-box-content -->
                     </div>
@@ -114,7 +118,7 @@
 	                        <!--1ページ目-->
 	                        <div class="tab-pane active" id="tab_1">
                     		  <form id="answer_text_form">
-                    		      <input type="hidden" name="assignmentId" th:value="${assignmentdetailDto.assignmentId}">
+                    		      <input type="hidden" name="assignmentId" id="assignmentId" th:value="${assignmentdetailDto.assignmentId}">
 		                          <div class="editor_container">
 		                            <div class="answer_wrap">
 		                              <div class="title_wrap mb15">
@@ -145,9 +149,9 @@
 		                                  <div class="info-box">
 		                                    <span class="info-box-icon bg-primary"><i class="fas fa-pen"></i></span>
 		                      
-		                                    <div class="info-box-content score_result"  data-toggle="tooltip" title="提出済みの場合はクリックで詳細へ">
+		                                    <div class="info-box-content score_result"   data-toggle="tooltip" title="提出済みの場合はクリックで詳細へ">
 		                                      <span class="info-box-text">採点結果</span>
-		                                      <span class="info-box-number" th:text="${assignmentdetailDto.score}"></span>
+		                                      <span class="info-box-number totalScore" th:text="${assignmentdetailDto.score}"></span>
 		                                    </div>
 		                                    <!-- /.info-box-content -->
 		                                  </div>
@@ -159,7 +163,7 @@
 	                        </div>
 	                        <!--2ページ目-->
 	                        <div class="tab-pane" id="tab_2">
-	                          <form id="answer_file_form">
+	                          <form id="answer_file_form" enctype="multipart/form-data" method="post">
 	                              <input type="hidden" name="assignmentId" th:value="${assignmentdetailDto.assignmentId}">
 		                          <div class="answer_wrap">
 		                            <div class="form-group input-file-group d-flex">
@@ -210,9 +214,9 @@
 		                                <div class="info-box">
 		                                  <span class="info-box-icon bg-primary"><i class="fas fa-pen"></i></span>
 		                    
-		                                  <div class="info-box-content score_result" data-toggle="tooltip" title="提出済みの場合はクリックで詳細へ">
+		                                  <div class="info-box-content score_result"  data-toggle="tooltip" title="提出済みの場合はクリックで詳細へ">
 		                                    <span class="info-box-text">採点結果</span>
-		                                    <span class="info-box-number" th:text="${assignmentdetailDto.score}"></span>
+		                                    <span class="info-box-number totalScore" th:text="${assignmentdetailDto.score}"></span>
 		                                  </div>
 		                                  <!-- /.info-box-content -->
 		                                </div>
@@ -230,6 +234,40 @@
                     </div>
                   </div>
                 </div>
+                
+                <!-- 採点結果 -->
+                <div class="col-md-12">
+                  <div class="card card-outline card-primary">
+                    <div class="card-header d-flex p-0">
+                      <h3 class="card-title p-3">採点結果</h3>
+                    </div>
+	                 <div class="card-body">
+		                  <div class="col-md-10">
+		                    <div class="info-box">
+		                      <span class="info-box-icon bg-success"><i class="far fa-window-maximize"></i></span>
+		        
+		                      <div class="info-box-content">
+		                        <span class="info-box-text">出力結果の得点</span>
+		                        <span class="info-box-number"  id="scoreForOutput" th:text="|${assignmentdetailDto.gradingResultDto.scoreForOutput}点|"></span>
+		                      </div>
+		                      <!-- /.info-box-content -->
+		                    </div>
+		                  </div>
+		                  
+		                  <div class="col-md-10">
+		                    <div class="info-box">
+		                      <span class="info-box-icon bg-success"><i class="far fa-file-code"></i></span>
+		        
+		                      <div class="info-box-content">
+		                        <span class="info-box-text">ソースコードの得点</span>
+		                        <span class="info-box-number" id="scoreForSource" th:text="|${assignmentdetailDto.gradingResultDto.scoreForSource}点|"></span>
+		                      </div>
+		                      <!-- /.info-box-content -->
+		                    </div>
+		                  </div>
+		                  
+	                    </div>
+	                </div>
               </div>
               <!-- /.card-body -->
             </div>
@@ -257,12 +295,34 @@
 
 <!-- bs-custom-file-input -->
 <script th:src="@{/plugins/bs-custom-file-input/bs-custom-file-input.min.js}"></script>
+<!-- DataTables  & Plugins -->
+<script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/jszip/jszip.min.js}"></script>
+<script th:src="@{/plugins/pdfmake/pdfmake.min.js}"></script>
+<script th:src="@{/plugins/pdfmake/vfs_fonts.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 <!-- ace -->
   <script th:src="@{/ace/src/ace.js}" type="text/javascript" charset="utf-8"></script>
   <script th:src="@{ace/src/ext-language_tools.js}" type="text/javascript" charset="utf-8"></script>
 <script>
 $(function () {
   bsCustomFileInput.init();
+    $('#example1').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
 });
 
   const editor = ace.edit("editor");
@@ -350,11 +410,20 @@ $(function () {
         cache       : false,
         contentType : false,
         processData : false,
-        dataType    : "html"
+        dataType    : "json"
     })
-    .done(function(data, textStatus, jqXHR){
-        alert(data);
+    .done(function(data){
+    	if( data.correct ){
+    		//正解！
+    		const totalScore = data.scoreForOutput + data.scoreForSource;
+    		$(".totalScore").text(totalScore);
+    		alert("正解:詳細は点数をクリック");
+    	}else{
+    		//エラー
+    		alert("不正解:詳細は点数をクリック");
+    	}        
         $("#waiting").hide();
+        location.reload();
     })
     .fail(function(jqXHR, textStatus, errorThrown){
         alert("fail");
@@ -372,14 +441,52 @@ $(function () {
       return;
     }
     alert(inputVal);
+    const formdata = new FormData($('#answer_file_form').get(0));
+    
     $("#waiting").show();
+    
+
+    const ajaxUrl = /*[[@{/grading/file}]]*/ "/grading/file";
+    $.ajax({
+        url  : ajaxUrl,
+        type : "POST",
+        data : formdata,
+        cache       : false,
+        contentType : false,
+        processData : false,
+        dataType    : "json"
+    })
+    .done(function(data){
+    	if( data.correct ){
+    		//正解！
+    		const totalScore = data.scoreForOutput + data.scoreForSource;
+    		$(".totalScore").text(totalScore);
+    		alert("正解:詳細は点数をクリック");
+    	}else{
+    		//エラー
+    		alert("不正解:詳細は点数をクリック");
+    	}        
+        $("#waiting").hide();
+        $("#scoreForOutput").text(data.scoreForOutput );
+        $("#scoreForSource").text(data.scoreForSource );
+    })
+    .fail(function(jqXHR, textStatus, errorThrown){
+        alert("fail");
+        $("#waiting").hide();
+    });
     //alert(langId+":"+ansText);
     //$("#waiting").hide();
   })
 
   //スコア詳細ボタン
   $(document).on('click','.score_result',function(){
-	  alert("!");
+	  
+	 if( $(this).find(".totalScore").text() == "未提出" ){
+		 alert("採点がされていません");
+		 return;
+	 }
+	  const resultUrl = /*[[@{/assignment/result}]]*/ "/assignment/result";
+	  window.location.href = resultUrl + "?assignmentId="+$("#assignmentId").val();
   });
 
 </script>

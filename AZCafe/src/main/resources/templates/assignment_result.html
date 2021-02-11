@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta id="parent" th:replace="/header/include_css"></meta>
+  <!-- DataTables -->
+  <link rel="stylesheet" th:href="@{/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}">
+</head>
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+<div class="wrapper">
+  <!-- Navbar -->
+  <!-- ヘッダー -->
+   <div id="parent" th:replace="/header/header"></div>   
+
+  <!-- サイドバー -->
+    <div id="parent" th:replace="/header/sidebar"></div>  
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-12">
+            <h1 class="m-0">問題結果詳細</h1>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">        
+        <!-- Main row -->
+        <div class="row">
+          <!-- Left col -->
+          <div class="col-md-12">
+            <div class="card card-primary shadow-none">
+              <div class="card-header">
+                <h1 class="card-title" th:text="|${gradingResultDetailDto.title}の採点結果|"></h1>
+                <!-- /.card-tools -->
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+	              <div class="col-md-10">
+	                <div class="info-box">
+	                  <span class="info-box-icon bg-success"><i class="far fa-window-maximize"></i></span>
+	    
+	                  <div class="info-box-content">
+	                    <span class="info-box-text">出力結果の得点</span>
+	                    <span class="info-box-number"  id="scoreForOutput" th:text="|${gradingResultDetailDto.gradingResultDto.scoreForOutput}点|"></span>
+	                  </div>
+	                  <!-- /.info-box-content -->
+	                </div>
+	              </div>
+	              <table id="example1" class="table table-bordered table-striped">
+	                <thead>
+	                <tr>
+	                  <th>No</th>
+	                  <th>入力値</th>
+	                  <th>正解の出力</th>
+	                  <th>あなたの出力</th>
+	                  <th>結果</th>
+	                </tr>
+	                </thead>
+	                <tbody>
+	                <tr th:each="testcaseAns ,status:${gradingResultDetailDto.gradingResultDto.testCaseResultList}">
+	                  <td th:text="${status.count}"></td>
+	                  <td th:text="${testcaseAns.input}"></td> 
+	                  <td th:text="${testcaseAns.correctOutput}"></td>
+	                  <td th:text="${testcaseAns.userOutput}"></td>
+	                  <td>
+	                  	　<img th:src="@{/img/seikai.gif}" th:if="${testcaseAns.correct}" height="33px"/><img th:src="@{/img/fuseikai.gif}" th:unless="${testcaseAns.correct}"  height="33px" />
+	                  </td>
+	                </tr>
+	                </tbody>
+	              </table>
+	              <div class="col-md-10">
+	                <div class="info-box">
+	                  <span class="info-box-icon bg-success"><i class="far fa-file-code"></i></span>
+	    
+	                  <div class="info-box-content">
+	                    <span class="info-box-text">ソースコードの得点</span>
+	                    <span class="info-box-number" id="scoreForSource" th:text="|${gradingResultDetailDto.gradingResultDto.scoreForSource}点|"></span>
+	                  </div>
+	                  <!-- /.info-box-content -->
+	                </div>
+	              </div>
+	              <div class="col-sm-10">
+	                 <textarea class="form-control" rows="4" cols="120" th:text="${gradingResultDetailDto.gradingResultDto.checkStyleMsg}" disabled></textarea> 
+	              </div>
+	              
+              <!-- /.card-body -->
+              </div>
+           </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- ソースコード -->
+       <div class="row">
+         <div class="col-md-12">
+           <div class="card card-primary shadow-none">
+              <div class="card-header">
+                <h1 class="card-title">ソースコード</h1>
+                <!-- /.card-tools -->
+              </div>
+              <div class="card-body">
+	              <div class="col-md-10">
+	                <div class="d-flex flex-row">
+	                  <i class="far fa-thumbs-up" id="good-for-answer"></i><div class="normal-text">0</div>
+	                </div>
+		            <div class="card">
+		              <div class="card-header p-2">
+		                <ul class="nav nav-pills">
+		                  <li class="nav-item" th:each="element,status:${gradingResultDetailDto.sourceCodeList}">
+		                  	<a  class="nav-link" th:href="|#src-${status.count}|" data-toggle="tab" th:text="${element.fileName}"></a>
+		                  </li>
+		                  
+		                </ul>
+		              </div><!-- /.card-header -->
+		              <div class="card-body">
+		                <div class="tab-content" th:each="element,status:${gradingResultDetailDto.sourceCodeList}">
+		                  <div class="active tab-pane" th:id="|#src-${status.count}|">                    
+				              <div class="col-sm-10" th:utext="${element.getCodeForHtml()}"></div>
+		                  </div>
+		                  <!-- /.tab-pane -->
+		                </div>
+		                <!-- /.tab-content -->
+		              </div><!-- /.card-body -->
+		            </div>
+		            <!-- /.card -->
+	              </div>
+	              <div class="row">
+	              	<div class="col-md-10">
+	              		<div class="card card-primary card-outline direct-chat direct-chat-primary"><div class="card-header">
+			                <h3 class="card-title">コメント</h3>
+			                </div>
+	              		</div>
+	              		<div class="card-body">
+	              			<div class="direct-chat-messages" >
+	              				<div class="direct-chat-msg" th:each="comment,status:${gradingResultDetailDto.commentList}">
+				                    <div class="direct-chat-infos clearfix">
+				                      <span class="direct-chat-name float-left" th:text="${comment.userName}"></span>
+				                      <span class="direct-chat-timestamp float-right" th:text="${comment.commentDate}"></span>
+				                    </div>
+				                    <!-- /.direct-chat-infos -->
+							          <div th:unless="${comment.avater}">
+							            <img class="direct-chat-img" th:src="@{/img/no_image.jpg}" alt="Message User Image">
+							          </div>
+							          <div th:if="${comment.avater}">
+							            <img class="direct-chat-img" th:src="@{'/getImage/'+${comment.avater}}" alt="Message User Image">
+							          </div>          
+				                    
+				                    <!-- /.direct-chat-img -->
+				                    <div class="direct-chat-text" th:utext="${comment.message}">
+				                    </div>
+	              				</div>
+	              			</div>
+	              		</div><!-- card body -->
+	              		<div class="card-footer">
+			                <form th:action="@{/assignment/sendMsg}" method="post">
+			                  <div class="input-group">
+			                    <input type="hidden" name="answerId" th:value="${gradingResultDetailDto.answerId}">
+			                    <input type="hidden" name="assignmentId" th:value="${gradingResultDetailDto.assignmentId}">
+			                    <input type="text" name="message" placeholder="Type Message ..." class="form-control">
+			                    <span class="input-group-append">
+			                      <button type="submit" class="btn btn-primary">Send</button>
+			                    </span>
+			                  </div>
+			                </form>
+			              </div>
+	              	</div>
+	              </div>
+	              </div>
+	           </div>
+           </div>
+         </div>
+       </div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+<meta id="parent" th:replace="/header/include_js"></meta>
+
+<!-- bs-custom-file-input -->
+<script th:src="@{/plugins/bs-custom-file-input/bs-custom-file-input.min.js}"></script>
+<!-- DataTables  & Plugins -->
+<script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/jszip/jszip.min.js}"></script>
+<script th:src="@{/plugins/pdfmake/pdfmake.min.js}"></script>
+<script th:src="@{/plugins/pdfmake/vfs_fonts.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
+<!-- ace -->
+  <script th:src="@{/ace/src/ace.js}" type="text/javascript" charset="utf-8"></script>
+  <script th:src="@{ace/src/ext-language_tools.js}" type="text/javascript" charset="utf-8"></script>
+<script>
+$(function () {
+  bsCustomFileInput.init();
+    $('#example1').DataTable({
+      "paging": false,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": false,
+      "autoWidth": false,
+      "responsive": true,
+    });
+});
+
+
+  //スコア詳細ボタン
+  $(document).on('click','#good-for-answer',function(){
+	  alert("aaa");
+  });
+
+</script>
+
+</body>
+
+</html>
