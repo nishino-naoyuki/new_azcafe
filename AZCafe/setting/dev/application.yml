@@ -27,3 +27,7 @@ azcafe:
   batchfileext: bat 
   codedir: c:/code
   srcPrefix: src_
+  gradingjavac: comple_java.bat
+  gradingjava: exec_java.bat
+  checkstyle: checkstyle_java.bat
+  gradingjavascript: exec_javascript.bat

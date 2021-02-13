@@ -18,6 +18,11 @@ import jp.ac.asojuku.azcafe.util.FileUtils;
 
 public abstract class GradingProcess {
 
+	protected final String OUTPUT_TEXT = "output.txt";
+	protected final String INPUT_TEXT = "input.txt";
+	private final String CORRECT_TEXT = "correct.txt";
+	private final int OUTPUT_FULLSCORE = 50;	//出力結果の満点（50 or 0）
+	
 	protected Language lang;
 	
 	public GradingProcess(Language lang) {
@@ -26,7 +31,6 @@ public abstract class GradingProcess {
 	
 	public abstract GradingResultDto execBatch(AssignmentTblEntity entity,String batchDir,String workDir,List<File> srcFileList) throws AZCafeException;
 	public abstract GradingResultDto execBatch(AssignmentTblEntity entity,String batchDir,String workDir,String code) throws AZCafeException;
-	protected abstract GradingTestCaseResultDto compereOutput(TestCaseTblEntity testCase,String workDir) throws AZCafeException;
 
 	/**
 	 * テキスト入力による採点処理実行
@@ -49,7 +53,7 @@ public abstract class GradingProcess {
 		}finally {
 			//一時ファイルの削除
 			if( workDir != null ) {
-				FileUtils.delete(workDir);
+//				FileUtils.delete(workDir);
 			}
 		}
 		return gradingResult;
@@ -86,6 +90,58 @@ public abstract class GradingProcess {
 	public String getWorkDir(Integer userId) {		
 		return AZCafeConfig.getInstance().getCodedir() + "/" + userId;
 	}
-	
-	
+
+	/**
+	 * 結果を比較する
+	 */
+	protected GradingTestCaseResultDto compereOutput(TestCaseTblEntity testCase,String workDir) throws AZCafeException {
+
+		GradingTestCaseResultDto testcaseResult = new GradingTestCaseResultDto();
+		
+		//正解ファイルを出力する
+		Path correctPath = FileUtils.outputFile(workDir, CORRECT_TEXT, testCase.getOutputTxt());
+		
+		//出力ファイルと正解ファイルを比較する
+		boolean isSame = 
+				FileUtils.fileCompare(correctPath.toString(), workDir+"/"+OUTPUT_TEXT);
+		
+		//ユーザーの出力ファイルの文字列を取得する
+		List<String> userOutputList = FileUtils.readLine(workDir+"/"+OUTPUT_TEXT);
+		StringBuilder sb = new StringBuilder();;
+		for(String line : userOutputList) {
+			if( sb.length() > 0 ) {
+				sb.append("\n");
+			}
+			sb.append(line);	
+		}
+
+		//DTO作成
+		testcaseResult.setTestcaseId(testCase.getTestcaseId());
+		testcaseResult.setCorrect(isSame);
+		testcaseResult.setInput(testCase.getInputText());
+		testcaseResult.setCorrectOutput(testCase.getOutputTxt());
+		testcaseResult.setUserOutput(sb.toString());
+		
+		return testcaseResult;
+		
+	}
+
+	/**
+	 * 出力結果の点数
+	 * 
+	 * @param result
+	 */
+	protected void checkOutputScore(GradingResultDto result) {
+		boolean isAllOK = true;	//全ての出力結果がOK
+		
+		for( GradingTestCaseResultDto testcase : result.getTestCaseResultList() ) {
+			if( testcase.isCorrect() != true ) {
+				isAllOK = false;
+				break;
+			}
+		}
+		
+		result.setCorrect(isAllOK);
+		result.setScoreForOutput((isAllOK ? OUTPUT_FULLSCORE:0));
+	}
 }

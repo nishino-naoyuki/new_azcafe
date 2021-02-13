@@ -1,43 +1,25 @@
 package jp.ac.asojuku.azcafe.controller;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import jp.ac.asojuku.azcafe.config.AZCafeConfig;
-import jp.ac.asojuku.azcafe.csv.UserCSV;
-import jp.ac.asojuku.azcafe.dto.CSVProgressDto;
 import jp.ac.asojuku.azcafe.dto.CreateUserDto;
 import jp.ac.asojuku.azcafe.dto.HomeroomDto;
-import jp.ac.asojuku.azcafe.dto.LoginInfoDto;
 import jp.ac.asojuku.azcafe.err.ErrorCode;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
-import jp.ac.asojuku.azcafe.form.UserInputCSVForm;
 import jp.ac.asojuku.azcafe.form.UserInputForm;
 import jp.ac.asojuku.azcafe.param.RoleId;
 import jp.ac.asojuku.azcafe.param.SessionConst;
 import jp.ac.asojuku.azcafe.service.HomeroomService;
-import jp.ac.asojuku.azcafe.service.UserCSVService;
 import jp.ac.asojuku.azcafe.service.UserService;
 import jp.ac.asojuku.azcafe.util.FileUtils;
 import jp.ac.asojuku.validator.UserValidator;
@@ -116,6 +98,13 @@ public class ManagementController {
 		return mv;
 	}
 	
+	/**
+	 * ユーザーの登録
+	 * 
+	 * @param mv
+	 * @return
+	 * @throws AZCafeException
+	 */
 	@RequestMapping(value= {"/user_register"}, method=RequestMethod.GET)
 	public ModelAndView user_register(ModelAndView mv) throws AZCafeException {
 		

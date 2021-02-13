@@ -38,6 +38,10 @@ import jp.ac.asojuku.azcafe.util.FileUtils;
  * @author nishino
  *
  */
+/**
+ * @author nishino
+ *
+ */
 @RestController
 @RequestMapping(value= {"/grading"})
 public class GradingController {
@@ -75,6 +79,15 @@ public class GradingController {
 		return jsonString;
 	}
 
+	/**
+	 * ファイルによる採点
+	 * 
+	 * @param form
+	 * @return
+	 * @throws AZCafeException
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	@RequestMapping(value= {"/file"}, method=RequestMethod.POST)
 	public Object gradingByFile(
 			@Valid GradingByFileForm form) throws AZCafeException, FileNotFoundException, IOException {

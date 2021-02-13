@@ -1,24 +1,30 @@
 package jp.ac.asojuku.azcafe.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import jp.ac.asojuku.azcafe.config.AZCafeConfig;
 import jp.ac.asojuku.azcafe.dto.CreateUserDto;
 import jp.ac.asojuku.azcafe.dto.LoginInfoDto;
+import jp.ac.asojuku.azcafe.dto.UserSearchElementDto;
 import jp.ac.asojuku.azcafe.entity.AutologinTblEntity;
 import jp.ac.asojuku.azcafe.entity.HomeroomTblEntity;
 import jp.ac.asojuku.azcafe.entity.LevelTblEntity;
 import jp.ac.asojuku.azcafe.entity.UserTblEntity;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
+import jp.ac.asojuku.azcafe.form.UserSearchConditionForm;
 import jp.ac.asojuku.azcafe.param.RoleId;
 import jp.ac.asojuku.azcafe.repository.AutoLoginRepository;
 import jp.ac.asojuku.azcafe.repository.UserRepository;
 import jp.ac.asojuku.azcafe.util.Digest;
 import jp.ac.asojuku.azcafe.util.Token;
+import static jp.ac.asojuku.azcafe.repository.UserSpecifications.*;
 
 @Service
 public class UserService {
@@ -30,6 +36,38 @@ public class UserService {
 	@Autowired
 	AZCafeConfig config;
 	
+	public List<UserSearchElementDto> getList(UserSearchConditionForm cond){
+		List<UserSearchElementDto> list = new ArrayList<>();
+		
+
+		List<UserTblEntity> entityList = userRepository.findAll(
+				Specification.
+						where(mailContains(cond.getMail())).
+						and(homeroomEquals(cond.getHomeroomId())).
+						and(nicknameContains(cond.getNickname())).
+						and(roleEquals(cond.getRoleId())).
+						and(levelEquals(cond.getLevel())),
+						Sort.by(Sort.Direction.ASC, "mail")
+				);
+		
+		//entity -> dto
+		for(UserTblEntity entity : entityList ) {
+			UserSearchElementDto dto = new UserSearchElementDto();
+			
+			dto.setUserId(entity.getUserId());
+			dto.setNickName(entity.getNickName());
+			dto.setOrgNo(entity.getOrgNo());
+			dto.setHomeroomeName(entity.getHomeroomTbl().getName());
+			dto.setLevel(entity.getLevelTbl().getName());
+			dto.setAvater(entity.getAvater());
+			dto.setFollowNum(entity.getFollowNum());
+			dto.setFollowerNum(entity.getFollowerNum());
+			
+			list.add(dto);
+		}
+		
+		return list;
+	}
 	/**
 	 * ユーザーIDを指定してユーザー情報を取得する
 	 * ユーザー情報の再取得の時に使用する

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta id="parent" th:replace="/header/include_css"></meta>
+  <!-- DataTables -->
+  <link rel="stylesheet" th:href="@{/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}">
+</head>
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+<div class="wrapper">
+  <!-- Navbar -->
+  <!-- Navbar -->
+  <!-- ヘッダー -->
+   <div id="parent" th:replace="/header/header"></div>   
+
+  <!-- サイドバー -->
+    <div id="parent" th:replace="/header/sidebar"></div>  
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-12">
+            <h1 class="m-0">問題検索</h1>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">        
+        <!-- Main row -->
+        <div class="row">
+          <div class="col-md-12">
+            <form action=""  id="user-search-cond">
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title">検索条件</h3>
+                </div>
+                <div class="card-body">
+                  <div class="form-group row">
+                    <div class="col-sm-6">
+                      <label for="q-group">ニックネーム</label>
+                      <input type="text" name="nickname" class="form-control" id="q-group" placeholder="ニックネーム">
+                    </div>
+                    <div class="col-sm-6">
+                      <label for="q-name">メールアドレス</label>
+                      <input type="text" name="mail"  class="form-control" id="q-name" placeholder="メールアドレス">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-sm-6">
+                      <label for="exampleSelectBorder">クラス</label>
+                        <select class="form-control" id="classSelect" name="homeroomId" >
+                            <option value="-1">指定なし</option>
+                        	<option th:each="dto:${homeroomList}" th:value="${dto.homeroomId}" th:text="${dto.homeroomName}" ></option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                      <label for="role">ロール</label>
+                        <select class="form-control" id="role" name="roleId" >
+                          <option value="-1">指定なし</option>
+                          <option value="0">学生</option>
+                          <option value="1">教員</option>
+                        </select>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-sm-6">
+                      <label for="level">称号</label>
+                      <select class="form-control" id="level" name="level">
+                        <option value="-1">指定なし</option>
+                        <option th:each="dto:${levelList}" th:value="${dto.levelId}" th:text="${dto.name}" ></option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <button type="button" id="user-search" class="btn btn-primary">検索</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <p>
+              <button type="button" id="user-register" class="btn btn-primary">ユーザー新規登録</button>
+              <button type="button" id="csv-output" class="btn btn-primary">CSV出力</button>
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <!-- Left col -->
+          <div class="col-md-12">
+            <!-- TABLE: LATEST ORDERS -->
+            <div class="card">
+              <!-- /.card-header -->
+              <div class="card-body">
+                  <table id="userTable" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                      <th>学籍番号</th>
+                      <th>クラス</th>
+                      <th>ニックネーム</th>
+                      <th>称号</th>
+                      <th>フォロワ数</th>
+                      <th>イイネ数</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div><!--/. container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+<!-- PAGE PLUGINS -->
+<meta id="parent" th:replace="/header/include_js"></meta>
+
+<!-- DataTables  & Plugins -->
+<script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/plugins/jszip/jszip.min.js}"></script>
+<script th:src="@{/plugins/pdfmake/pdfmake.min.js}"></script>
+<script th:src="@{/plugins/pdfmake/vfs_fonts.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
+<script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
+</body>
+
+<!-- Page specific script -->
+<script>
+  let usertable;
+  $(function () {
+	  usertable = $('#userTable').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+  
+  $('#user-search').on('click', function() {
+
+      var ajaxUrl = /*[[@{/user/csvinput}]]*/ "/user/search";
+      //alert(ajaxUrl)
+		//Ajax！
+   	var formData = new FormData($('#user-search-cond').get()[0]);
+   	$.ajax({
+           type : "POST",                  // HTTP通信の種類
+           url  : ajaxUrl,                 // リクエストを送信する先のURL
+           dataType : "json",              // サーバーから返されるデータの型
+           data : formData,                // サーバーに送信するデータ
+           processData : false,
+           contentType: false        
+       }).done(function(data) {        // Ajax通信が成功した時の処理
+    	 
+       		//テーブルをいったんクリア
+    	   usertable.clear();
+    	   usertable.destroy();
+
+   		  usertable = $('#userTable').DataTable({
+	   	      "paging": true,
+	   	      "lengthChange": false,
+	   	      "searching": true,
+	   	      "ordering": true,
+	   	      "info": true,
+	   	      "autoWidth": false,
+	   	      "responsive": true,
+				"data":data,
+				"language": {
+	                "url": /*[[@{/DataTables-1.10.16/Japanese.json}]]*/ 'Japanese.json'
+	            },
+	            "columns": [
+	            	{ data:"orgNo"},
+	            	{ data:"homeroomeName"},
+	            	{
+	            		data:"nickName" ,
+	            		type:"userId",
+	                	render: function ( data, type, row ) {
+	                		const url = /*[[@{/bbs/detail}]]*/ "/user/info";
+	                		let img = "";
+	                		if( row.avater == null ){
+	                			img = '<img src="/img/no_image.jpg" class="ranking-user-img elevation-2" alt="User Image">';
+	                		}else{
+	                			img = '<img src="/getImage/'+row.avater+'" class="ranking-user-img elevation-2" alt="User Image">';
+	                		}
+	                		
+	                		return img+'<a href="'+url+'?id='+row.userId+'">'+data+'</a>';
+	                	}
+	            	},
+	                { data: "level" },
+	                { data: "followNum" },
+	                { data: "followerNum" }
+	            ]
+	   	    });
+   			usertable.draw();
+           
+       }).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
+           alert("検索が失敗しました。"+textStatus+" errorThrown:"+errorThrown);
+       });
+  });
+</script>
+</html>

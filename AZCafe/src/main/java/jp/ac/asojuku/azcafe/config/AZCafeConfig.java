@@ -33,4 +33,8 @@ public class AZCafeConfig {
 	private String codedir;	//ソースコードのベースディレクトリ
 	private String srcPrefix;	//ソースファイルのプレフィクス
 	private String batchfileext;	//バッチファイルの拡張子
+	private String gradingjavac;	//javac実行のシェル（バッチ）名
+	private String gradingjava;	//java実行のシェル（バッチ）名
+	private String checkstyle;	//checkstyle実行のシェル（バッチ）名
+	private String gradingjavascript;	//javascript実行のシェル（バッチ）名
 }

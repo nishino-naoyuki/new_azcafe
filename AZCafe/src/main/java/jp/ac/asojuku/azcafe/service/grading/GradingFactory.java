@@ -15,6 +15,8 @@ public class GradingFactory {
 		
 		if( lang == Language.JAVA ) {
 			inst = new GradingJava(lang);
+		}else if( lang == Language.JAVASCRIPT ) {
+			inst = new GradingJavaScript(lang);
 		}else {
 			inst = new GradingJava(lang);	//TODO
 		}

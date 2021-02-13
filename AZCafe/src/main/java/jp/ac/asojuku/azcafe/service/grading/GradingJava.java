@@ -32,22 +32,21 @@ public class GradingJava extends GradingProcess {
 		public String getClassName() { return className; }
 		public String getPackageName() { return packageName; }
 	}
-	private final String COMPLE_SHELL = "comple_java.bat";
-	private final String EXEC_SHELL = "exec_java.bat";
-	private final String CHECKSTYLE_SHELL = "checkstyle_java.bat";
+	private final String COMPLE_SHELL = AZCafeConfig.getInstance().getGradingjavac();
+	private final String EXEC_SHELL = AZCafeConfig.getInstance().getGradingjava();
+	private final String CHECKSTYLE_SHELL = AZCafeConfig.getInstance().getCheckstyle();
 	private final String COMPLE_RESULT = "comple_result.txt";
-	private final String CORRECT_TEXT = "correct.txt";
-	private final String OUTPUT_TEXT = "output.txt";
-	private final String INPUT_TEXT = "input.txt";
 	private final String CHECKSTYLE_RESULT = "checkstyle_result.txt";
 	private final int CHECKSTYLE_FULLSCORE = 50;	//チェックスタイルの満点（原点方式）
-	private final int OUTPUT_FULLSCORE = 50;	//出力結果の満点（50 or 0）
 
 	public GradingJava(Language lang) {
 		super(lang);
 		// TODO 自動生成されたコンストラクター・スタブ
 	}
 
+	/**
+	 * ファイルリストの実行
+	 */
 	public GradingResultDto execBatch(AssignmentTblEntity entity,String batchDir,String workDir,List<File> srcFileList) throws AZCafeException {
 		GradingResultDto result = new GradingResultDto();
 
@@ -144,6 +143,15 @@ public class GradingJava extends GradingProcess {
 		return result;
 	}
 	
+	/**
+	 * ソースファイルを解析してパッケージ名やクラス名の情報を保持する
+	 * 
+	 * @param workDir
+	 * @param srcFile
+	 * @return
+	 * @throws AZCafeException
+	 * @throws IOException
+	 */
 	private ClassInfo editSrcFile(String workDir,File srcFile) throws AZCafeException, IOException {
 		//一旦ファイルを1行筒読み込む
 		List<String> codeList = FileUtils.readLine(srcFile.getAbsolutePath());
@@ -174,6 +182,12 @@ public class GradingJava extends GradingProcess {
 		return new ClassInfo(isMainClass,packagename,className);
 	}
 	
+	/**
+	 * パッケージ名を取得する
+	 * 
+	 * @param pgLine
+	 * @return
+	 */
 	private String getPackageName(String pgLine) {
 		String packageName = "";
 		
@@ -193,6 +207,12 @@ public class GradingJava extends GradingProcess {
 		return packageName;
 	}
 	
+	/**
+	 * Mainメソッドを持つクラスかどうかを判定する
+	 * 
+	 * @param line
+	 * @return
+	 */
 	private boolean isMainClass(String line) {
 		
 		return  line.contains("public") && 
@@ -203,6 +223,11 @@ public class GradingJava extends GradingProcess {
 		
 	}
 	
+	/**
+	 * メソッドを持つクラスの名前をパッケージ名付きで返す
+	 * @param classInfoList
+	 * @return
+	 */
 	private String getMainFullClassName(List<ClassInfo> classInfoList) {
 		String fullClassName = "";
 		for(ClassInfo classInfo : classInfoList) {
@@ -314,24 +339,6 @@ public class GradingJava extends GradingProcess {
 		return result;
 	}
 	
-	/**
-	 * 出力結果の点数
-	 * 
-	 * @param result
-	 */
-	private void checkOutputScore(GradingResultDto result) {
-		boolean isAllOK = true;	//全ての出力結果がOK
-		
-		for( GradingTestCaseResultDto testcase : result.getTestCaseResultList() ) {
-			if( testcase.isCorrect() != true ) {
-				isAllOK = false;
-				break;
-			}
-		}
-		
-		result.setCorrect(isAllOK);
-		result.setScoreForOutput((isAllOK ? OUTPUT_FULLSCORE:0));
-	}
 	
 	/**
 	 * チェックスタイル
@@ -461,38 +468,4 @@ public class GradingJava extends GradingProcess {
 		return ClassName;
 	}
 	
-	/**
-	 * 結果を比較する
-	 */
-	protected GradingTestCaseResultDto compereOutput(TestCaseTblEntity testCase,String workDir) throws AZCafeException {
-
-		GradingTestCaseResultDto testcaseResult = new GradingTestCaseResultDto();
-		
-		//正解ファイルを出力する
-		Path correctPath = FileUtils.outputFile(workDir, CORRECT_TEXT, testCase.getOutputTxt());
-		
-		//出力ファイルと正解ファイルを比較する
-		boolean isSame = 
-				FileUtils.fileCompare(correctPath.toString(), workDir+"/"+OUTPUT_TEXT);
-		
-		//ユーザーの出力ファイルの文字列を取得する
-		List<String> userOutputList = FileUtils.readLine(workDir+"/"+OUTPUT_TEXT);
-		StringBuilder sb = new StringBuilder();;
-		for(String line : userOutputList) {
-			if( sb.length() > 0 ) {
-				sb.append("\n");
-			}
-			sb.append(line);	
-		}
-
-		//DTO作成
-		testcaseResult.setTestcaseId(testCase.getTestcaseId());
-		testcaseResult.setCorrect(isSame);
-		testcaseResult.setInput(testCase.getInputText());
-		testcaseResult.setCorrectOutput(testCase.getOutputTxt());
-		testcaseResult.setUserOutput(sb.toString());
-		
-		return testcaseResult;
-		
-	}
 }
