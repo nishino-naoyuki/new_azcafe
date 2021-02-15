@@ -248,5 +248,9 @@
 
 #input_file:focus {
   opacity: 1;
-}    
+}
+
+.products-list .product-description .product-button {
+    float: right;
+}
     

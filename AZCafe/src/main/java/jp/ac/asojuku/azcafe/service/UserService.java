@@ -8,19 +8,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import jp.ac.asojuku.azcafe.config.AZCafeConfig;
 import jp.ac.asojuku.azcafe.dto.CreateUserDto;
 import jp.ac.asojuku.azcafe.dto.LoginInfoDto;
+import jp.ac.asojuku.azcafe.dto.UserInfoDto;
 import jp.ac.asojuku.azcafe.dto.UserSearchElementDto;
+import jp.ac.asojuku.azcafe.dto.subclass.AssignmentResultDto;
+import jp.ac.asojuku.azcafe.dto.subclass.FollowElementDto;
+import jp.ac.asojuku.azcafe.entity.AnswerTblEntity;
 import jp.ac.asojuku.azcafe.entity.AutologinTblEntity;
+import jp.ac.asojuku.azcafe.entity.FollowTblEntity;
+import jp.ac.asojuku.azcafe.entity.FollowTblId;
 import jp.ac.asojuku.azcafe.entity.HomeroomTblEntity;
 import jp.ac.asojuku.azcafe.entity.LevelTblEntity;
 import jp.ac.asojuku.azcafe.entity.UserTblEntity;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
 import jp.ac.asojuku.azcafe.form.UserSearchConditionForm;
 import jp.ac.asojuku.azcafe.param.RoleId;
+import jp.ac.asojuku.azcafe.repository.AnswerRepository;
 import jp.ac.asojuku.azcafe.repository.AutoLoginRepository;
+import jp.ac.asojuku.azcafe.repository.FollowRepository;
 import jp.ac.asojuku.azcafe.repository.UserRepository;
 import jp.ac.asojuku.azcafe.util.Digest;
 import jp.ac.asojuku.azcafe.util.Token;
@@ -34,8 +43,144 @@ public class UserService {
 	@Autowired
 	AutoLoginRepository autoLoginRepository;
 	@Autowired
+	FollowRepository followRepository;
+	@Autowired
+	AnswerRepository answerRepository;
+	@Autowired
 	AZCafeConfig config;
+
+	/**
+	 * フォロー情報を登録する
+	 * @param userId			フォローする人のID
+	 * @param targetUserId　フォローされる人のID
+	 * @return　
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public boolean insertFollow(Integer userId,Integer targetUserId) {
+		FollowTblEntity entity = new FollowTblEntity();
+		
+		entity.setUserId(userId);
+		entity.setFollewUserId(targetUserId);
+		
+		followRepository.save(entity);
+		
+		//フォロー数を更新
+		Integer followNum = followRepository.getFollowCount(userId);
+		UserTblEntity userEntity = userRepository.getOne(userId);
+		userEntity.setFollowNum(followNum);
+		userRepository.save(userEntity);
+		
+		//フォローしたユーザーのフォロワー数も更新
+		Integer followerNum = followRepository.getFollowerCount(targetUserId);
+		UserTblEntity fUerEntity = userRepository.getOne(targetUserId);
+		fUerEntity.setFollowerNum(followerNum);
+		userRepository.save(fUerEntity);
+		
+		return true;
+	}
+	/**
+	 * ユーザー情報を取得する
+	 * @param userId
+	 * @return
+	 */
+	public UserInfoDto getInfo(Integer loginUserId,Integer userId) {
+		UserInfoDto userInfo = new UserInfoDto();
+		
+		UserTblEntity entity = userRepository.getOne(userId);
+		
+		userInfo = getUserInfoDtoFrom(loginUserId,entity);
+		
+		return userInfo;
+	}
 	
+	private UserInfoDto getUserInfoDtoFrom(Integer loginUserId,UserTblEntity entity) {
+		UserInfoDto userInfo = new UserInfoDto();
+		
+		//基本情報をセット
+		userInfo.setUserId(entity.getUserId());
+		userInfo.setOrgNo(entity.getOrgNo());
+		userInfo.setNickName(entity.getNickName());
+		userInfo.setAvater(entity.getAvater());
+		userInfo.setFollowNum(entity.getFollowNum());
+		userInfo.setFollowerNum(entity.getFollowerNum());
+		userInfo.setLevel(entity.getLevelTbl().getName());
+		userInfo.setHomeroomeName( entity.getHomeroomTbl().getName() );
+		userInfo.setRole( RoleId.search(entity.getRole()) );
+		if(loginUserId != entity.getUserId() ) {
+			//ログインユーザーと違うユーザーを表示するときはそのユーザーをフォローしているかどうかを取得する
+			FollowTblEntity fEntity = followRepository.findById(new FollowTblId(loginUserId,entity.getUserId())).orElse(null);
+			userInfo.setIsFollowUser((fEntity!=null));
+		}else {
+			userInfo.setIsFollowUser(true);
+		}
+		//フォローリスト
+		List<FollowTblEntity> followList = followRepository.getFollowUser(entity.getUserId());
+		for( FollowTblEntity followEnity : followList) {
+			FollowElementDto dto = new FollowElementDto();
+			UserTblEntity userEntity = followEnity.getFollewUserTbl();
+			dto.setUserId( userEntity.getUserId() );
+			dto.setNickName( userEntity.getNickName() );
+			dto.setAvater( userEntity.getAvater() );
+			dto.setHoomroomName( userEntity.getHomeroomTbl().getName() );
+			
+			userInfo.addFollowElementDto(dto);
+		}
+		//フォロワーリスト　自分を「フォローしている」を検索
+		List<FollowTblEntity> followerList = followRepository.getFollowerUser(entity.getUserId());
+		for( FollowTblEntity followEnity : followerList) {
+			FollowElementDto dto = new FollowElementDto();
+			UserTblEntity userEntity = followEnity.getUserTbl();	//「誰が」を取得
+			dto.setUserId( userEntity.getUserId() );
+			dto.setNickName( userEntity.getNickName() );
+			dto.setAvater( userEntity.getAvater() );
+			dto.setHoomroomName( userEntity.getHomeroomTbl().getName() );			
+			FollowTblEntity fEntity = followRepository.findById(new FollowTblId(entity.getUserId(),followEnity.getUserId())).orElse(null);
+			dto.setIsEach((fEntity != null));
+			
+			userInfo.addFollowerElementDto(dto);
+		}
+		//解いた問題取得
+		List<AnswerTblEntity> answerList = answerRepository.getList(entity.getUserId());
+		for( AnswerTblEntity answerEntity : answerList) {
+			AssignmentResultDto dto = new AssignmentResultDto();
+			
+			dto.setAssigmentId(answerEntity.getAssignmentId());
+			dto.setTitle(answerEntity.getAssignmentTbl().getTitle());
+			dto.setGroup(answerEntity.getAssignmentTbl().getGroupTbl().getName());
+			dto.setScore(answerEntity.getScore());
+			dto.setCommentNum(answerEntity.getCommentTblSet().size());
+			dto.setGoodNum(answerEntity.getAnswerGoodTblSet().size());
+			if(loginUserId != entity.getUserId() ) {
+				//ログインユーザーと違う時は、どの問題を提出済みかを取得する
+				dto.setIsCorrect(isCorrect(loginUserId,answerEntity.getAssignmentId()));
+			}else {
+				dto.setIsCorrect(true);
+			}
+			//dto.setUpdateDate(answerEntity.get);
+			
+			userInfo.addAssignmentResultDto(dto);
+		}
+		
+		return userInfo;
+	}
+	
+	private boolean isCorrect(Integer userId,Integer assigmentId) {
+		AnswerTblEntity answerEntity = answerRepository.getOne(assigmentId, userId);
+		
+		if(answerEntity == null || answerEntity.getAssignmentId() == null) {
+			return false;
+		}else {
+			return true;
+		}
+		
+	}
+	
+	/**
+	 * 指定された条件でユーザーを検索する
+	 * 
+	 * @param cond
+	 * @return
+	 */
 	public List<UserSearchElementDto> getList(UserSearchConditionForm cond){
 		List<UserSearchElementDto> list = new ArrayList<>();
 		

@@ -93,7 +93,7 @@ public class UserTblEntity implements Serializable {
 
 	/** 更新日. */
 	private Date updateDate;
-
+	
 	/** 解答いいね 一覧. */
 	//private Set<AnswerGoodTblEntity> answerGoodTblSet;
 

@@ -10,7 +10,6 @@
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
   <!-- Navbar -->
-  <!-- Navbar -->
   <!-- ヘッダー -->
    <div id="parent" th:replace="/header/header"></div>   
 
@@ -218,7 +217,7 @@
 	                			img = '<img src="/getImage/'+row.avater+'" class="ranking-user-img elevation-2" alt="User Image">';
 	                		}
 	                		
-	                		return img+'<a href="'+url+'?id='+row.userId+'">'+data+'</a>';
+	                		return img+'<a href="'+url+'?userId='+row.userId+'">'+data+'</a>';
 	                	}
 	            	},
 	                { data: "level" },

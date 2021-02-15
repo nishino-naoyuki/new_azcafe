@@ -5,8 +5,11 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 
@@ -21,6 +24,7 @@ import lombok.Data;
 @Data
 @Entity 
 @Table(name="FOLLOW_TBL")
+@IdClass(FollowTblId.class)
 public class FollowTblEntity implements Serializable {
 
 	/** serialVersionUID. */
@@ -44,68 +48,13 @@ public class FollowTblEntity implements Serializable {
 	/** フォローした日. */
 	private Date followDate;
 
-	/**
-	 * コンストラクタ.
-	 */
-	public FollowTblEntity() {
-	}
+	@PrePersist
+    public void onPrePersist() {
+		setFollowDate(new Date());
+    }
 
-	/**
-	 * ユーザー を設定します.
-	 * 
-	 * @param userTbl
-	 *            ユーザー
-	 */
-	public void setUserTbl(UserTblEntity userTbl) {
-		this.userTbl = userTbl;
-	}
-
-	/**
-	 * ユーザー を取得します.
-	 * 
-	 * @return ユーザー
-	 */
-	public UserTblEntity getUserTbl() {
-		return this.userTbl;
-	}
-
-	/**
-	 * ユーザー を設定します.
-	 * 
-	 * @param follewUserTbl
-	 *            ユーザー
-	 */
-	public void setFollewUserTbl(UserTblEntity follewUserTbl) {
-		this.follewUserTbl = follewUserTbl;
-	}
-
-	/**
-	 * ユーザー を取得します.
-	 * 
-	 * @return ユーザー
-	 */
-	public UserTblEntity getFollewUserTbl() {
-		return this.follewUserTbl;
-	}
-
-	/**
-	 * フォローした日 を設定します.
-	 * 
-	 * @param followDate
-	 *            フォローした日
-	 */
-	public void setFollowDate(Date followDate) {
-		this.followDate = followDate;
-	}
-
-	/**
-	 * フォローした日 を取得します.
-	 * 
-	 * @return フォローした日
-	 */
-	public Date getFollowDate() {
-		return this.followDate;
-	}
-
-
+    @PreUpdate
+    public void onPreUpdate() {
+    	setFollowDate(new Date());
+    }
 }

@@ -54,6 +54,15 @@ public class AssignmentController {
 	@Autowired
 	CommentServie commentServie;
 
+	/**
+	 * メッセージ送信する
+	 * @param mv
+	 * @param message
+	 * @param answerId
+	 * @param assignmentId
+	 * @return
+	 * @throws AZCafeException
+	 */
 	@RequestMapping(value= {"/sendMsg"}, method=RequestMethod.POST)
 	public ModelAndView sendMessage(
 			ModelAndView mv,
@@ -82,6 +91,14 @@ public class AssignmentController {
         return mv;
 	}
 
+	/**
+	 * 採点結果の取得
+	 * 
+	 * @param mv
+	 * @param assignmentId
+	 * @return
+	 * @throws AZCafeException
+	 */
 	@RequestMapping(value= {"/result"}, method=RequestMethod.GET)
 	public ModelAndView result(ModelAndView mv,@RequestParam(required = false) Integer assignmentId) throws AZCafeException {
 
@@ -101,6 +118,13 @@ public class AssignmentController {
         return mv;
 	}
 
+	/**
+	 * 課題一覧
+	 * 
+	 * @param mv
+	 * @return
+	 * @throws AZCafeException
+	 */
 	@RequestMapping(value= {"/list"}, method=RequestMethod.GET)
 	public ModelAndView list(ModelAndView mv) throws AZCafeException {
 

@@ -22,7 +22,7 @@
           </div>          
         </div>
         <div class="info">
-          <a href="user-info.html" class="d-block" th:text="${session['LoginInfo'].nickName}"></a>
+          <a th:href="@{'/user/info?userId='+${session['LoginInfo'].userId}}" class="d-block" th:text="${session['LoginInfo'].nickName}"></a>
         </div>
       </div>
 
