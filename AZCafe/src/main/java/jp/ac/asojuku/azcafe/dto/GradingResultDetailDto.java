@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class GradingResultDetailDto {
 	private String title;
+	private Integer ansUserId;
 	private Integer answerId;
 	private Integer assignmentId;
 	private GradingResultDto gradingResultDto;

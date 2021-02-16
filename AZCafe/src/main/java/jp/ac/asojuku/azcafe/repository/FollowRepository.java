@@ -17,6 +17,9 @@ extends JpaRepository<FollowTblEntity,FollowTblId>{
 
 	@Query("select f from FollowTblEntity f where follewUserId = :userId")
 	public List<FollowTblEntity> getFollowerUser(@Param("userId")Integer userId);
+
+	@Query("select f from FollowTblEntity f where follewUserId = :userId and DATEDIFF(now() ,followDate) <= 5")
+	public List<FollowTblEntity> getRecentlyFollowerUser(@Param("userId")Integer userId);
 	
 	@Query("select count(*) from FollowTblEntity f where userId = :userId")
 	public Integer getFollowCount(@Param("userId")Integer userId);

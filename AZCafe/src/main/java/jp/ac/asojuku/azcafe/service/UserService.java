@@ -32,6 +32,7 @@ import jp.ac.asojuku.azcafe.repository.AutoLoginRepository;
 import jp.ac.asojuku.azcafe.repository.FollowRepository;
 import jp.ac.asojuku.azcafe.repository.UserRepository;
 import jp.ac.asojuku.azcafe.util.Digest;
+import jp.ac.asojuku.azcafe.util.FileUtils;
 import jp.ac.asojuku.azcafe.util.Token;
 import static jp.ac.asojuku.azcafe.repository.UserSpecifications.*;
 
@@ -49,10 +50,79 @@ public class UserService {
 	@Autowired
 	AZCafeConfig config;
 
+	public void updateIcon(Integer userId,String iconPath) {
+
+		UserTblEntity userEntity = userRepository.getOne(userId);
+		
+		String oldIconPath = userEntity.getAvater();
+		
+		userEntity.setAvater(iconPath);
+		userRepository.save(userEntity);
+
+		//旧ファイルを削除する
+		FileUtils.deleteIconFile(oldIconPath);
+	}
+	/**
+	 * パスワードの更新
+	 * 
+	 * @param userId
+	 * @param password
+	 * @throws AZCafeException
+	 */
+	public void updatePassword(Integer userId,String password) throws AZCafeException {
+
+		UserTblEntity userEntity = userRepository.getOne(userId);
+		
+		//ハッシュ計算する
+		String hashedPwd  = Digest.createPassword(userEntity.getMail(), password);
+		userEntity.setPassword(hashedPwd);
+
+		userRepository.save(userEntity);
+	}
+	/**
+	 * ニックネームの更新
+	 * 
+	 * @param userId
+	 * @param nickName
+	 */
+	public void updateNickName(Integer userId,String nickName) {
+		UserTblEntity userEntity = userRepository.getOne(userId);
+		
+		userEntity.setNickName(nickName);
+		
+		userRepository.save(userEntity);
+	}
+	/**
+	 * フォローの解除
+	 * 
+	 * @param userId　フォロー解除する人（誰が）
+	 * @param targetUserId　フォロー解除される人（誰を）
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public boolean removeFollow(Integer userId,Integer targetUserId) {
+		
+		//削除
+		followRepository.deleteById( new FollowTblId(userId,targetUserId) );
+
+		//フォロー数を更新
+		Integer followNum = followRepository.getFollowCount(userId);
+		UserTblEntity userEntity = userRepository.getOne(userId);
+		userEntity.setFollowNum(followNum);
+		userRepository.save(userEntity);
+		
+		//フォロー解除ユーザーのフォロワー数も更新
+		Integer followerNum = followRepository.getFollowerCount(targetUserId);
+		UserTblEntity fUerEntity = userRepository.getOne(targetUserId);
+		fUerEntity.setFollowerNum(followerNum);
+		userRepository.save(fUerEntity);
+		
+		return true;
+	}
 	/**
 	 * フォロー情報を登録する
-	 * @param userId			フォローする人のID
-	 * @param targetUserId　フォローされる人のID
+	 * @param userId			フォローする人のID（誰が）
+	 * @param targetUserId　フォローされる人のID（誰を）
 	 * @return　
 	 */
 	@Transactional(rollbackFor = Exception.class)
@@ -79,7 +149,7 @@ public class UserService {
 		return true;
 	}
 	/**
-	 * ユーザー情報を取得する
+	 * userIdでしていたユーザー情報を取得する
 	 * @param userId
 	 * @return
 	 */
@@ -93,6 +163,13 @@ public class UserService {
 		return userInfo;
 	}
 	
+	/**
+	 * ユーザー情報DTOをEnityから取得する
+	 * 
+	 * @param loginUserId
+	 * @param entity
+	 * @return
+	 */
 	private UserInfoDto getUserInfoDtoFrom(Integer loginUserId,UserTblEntity entity) {
 		UserInfoDto userInfo = new UserInfoDto();
 		
@@ -117,11 +194,13 @@ public class UserService {
 		List<FollowTblEntity> followList = followRepository.getFollowUser(entity.getUserId());
 		for( FollowTblEntity followEnity : followList) {
 			FollowElementDto dto = new FollowElementDto();
-			UserTblEntity userEntity = followEnity.getFollewUserTbl();
+			UserTblEntity userEntity =userRepository.getOne( followEnity.getFollewUserId() );
 			dto.setUserId( userEntity.getUserId() );
 			dto.setNickName( userEntity.getNickName() );
 			dto.setAvater( userEntity.getAvater() );
 			dto.setHoomroomName( userEntity.getHomeroomTbl().getName() );
+			FollowTblEntity fEntity = followRepository.findById(new FollowTblId(loginUserId,followEnity.getFollewUserId())).orElse(null);
+			dto.setIsEach((fEntity != null));
 			
 			userInfo.addFollowElementDto(dto);
 		}
@@ -129,12 +208,18 @@ public class UserService {
 		List<FollowTblEntity> followerList = followRepository.getFollowerUser(entity.getUserId());
 		for( FollowTblEntity followEnity : followerList) {
 			FollowElementDto dto = new FollowElementDto();
-			UserTblEntity userEntity = followEnity.getUserTbl();	//「誰が」を取得
+			//「誰が」を取得
+			UserTblEntity userEntity =userRepository.getOne( followEnity.getUserId() );
 			dto.setUserId( userEntity.getUserId() );
 			dto.setNickName( userEntity.getNickName() );
 			dto.setAvater( userEntity.getAvater() );
-			dto.setHoomroomName( userEntity.getHomeroomTbl().getName() );			
-			FollowTblEntity fEntity = followRepository.findById(new FollowTblId(entity.getUserId(),followEnity.getUserId())).orElse(null);
+			dto.setHoomroomName( userEntity.getHomeroomTbl().getName() );	
+			FollowTblEntity fEntity;
+			if( loginUserId != entity.getUserId() ) {
+				fEntity = followRepository.findById(new FollowTblId(loginUserId,followEnity.getUserId())).orElse(null);
+			}else {
+				fEntity = followRepository.findById(new FollowTblId(loginUserId,followEnity.getUserId())).orElse(null);
+			}
 			dto.setIsEach((fEntity != null));
 			
 			userInfo.addFollowerElementDto(dto);
@@ -150,6 +235,7 @@ public class UserService {
 			dto.setScore(answerEntity.getScore());
 			dto.setCommentNum(answerEntity.getCommentTblSet().size());
 			dto.setGoodNum(answerEntity.getAnswerGoodTblSet().size());
+			dto.setAnswerDate(answerEntity.getAnswerDate());
 			if(loginUserId != entity.getUserId() ) {
 				//ログインユーザーと違う時は、どの問題を提出済みかを取得する
 				dto.setIsCorrect(isCorrect(loginUserId,answerEntity.getAssignmentId()));
@@ -164,13 +250,20 @@ public class UserService {
 		return userInfo;
 	}
 	
+	/**
+	 * 提出済みかどうかを取得する
+	 * 
+	 * @param userId
+	 * @param assigmentId
+	 * @return
+	 */
 	private boolean isCorrect(Integer userId,Integer assigmentId) {
 		AnswerTblEntity answerEntity = answerRepository.getOne(assigmentId, userId);
 		
 		if(answerEntity == null || answerEntity.getAssignmentId() == null) {
 			return false;
 		}else {
-			return true;
+			return (answerEntity.getCorrectFlg() == 1);
 		}
 		
 	}

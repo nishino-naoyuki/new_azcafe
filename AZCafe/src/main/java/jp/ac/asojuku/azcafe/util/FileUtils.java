@@ -82,6 +82,18 @@ public class FileUtils {
 
 	    return lineList;
 	}
+	
+	/**
+	 * 指定されたファイル名をアイコンフォルダから削除する
+	 * 
+	 * @param fname
+	 */
+	public static void deleteIconFile(String fname) {
+
+		String imgdir = AZCafeConfig.getInstance().getAvaterbasedir() ;
+		
+		delete(new File(imgdir,fname));
+	}
 	/**
 	 * アイコンファイルのアップロード
 	 * アップロードディレクトリは　ベースDIR/ユーザーID/ファイル名

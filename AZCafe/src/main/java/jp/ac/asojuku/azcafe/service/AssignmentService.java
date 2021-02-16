@@ -18,6 +18,8 @@ import jp.ac.asojuku.azcafe.dto.AssignmentPublicDto;
 import jp.ac.asojuku.azcafe.entity.AnswerDetailTblEntity;
 import jp.ac.asojuku.azcafe.entity.AnswerTblEntity;
 import jp.ac.asojuku.azcafe.entity.AssignmentTblEntity;
+import jp.ac.asojuku.azcafe.entity.FollowTblEntity;
+import jp.ac.asojuku.azcafe.entity.FollowTblId;
 import jp.ac.asojuku.azcafe.entity.GroupTblEntity;
 import jp.ac.asojuku.azcafe.entity.PublicAssignmentTblEntity;
 import jp.ac.asojuku.azcafe.entity.TestCaseAnswerTblEntity;
@@ -25,6 +27,7 @@ import jp.ac.asojuku.azcafe.entity.TestCaseTblEntity;
 import jp.ac.asojuku.azcafe.param.Difficulty;
 import jp.ac.asojuku.azcafe.repository.AnswerRepository;
 import jp.ac.asojuku.azcafe.repository.AssignmentRepository;
+import jp.ac.asojuku.azcafe.repository.FollowRepository;
 import jp.ac.asojuku.azcafe.repository.GroupRepository;
 import jp.ac.asojuku.azcafe.repository.PublicAssignmentRepository;
 import jp.ac.asojuku.azcafe.repository.TestCaseRepository;
@@ -53,11 +56,11 @@ public class AssignmentService {
 	 * @param id
 	 * @return
 	 */
-	public AssignmentDetailDto getDetail(Integer id,Integer userId) {
-		if( id == null ) {
+	public AssignmentDetailDto getDetail(Integer assignmentId,Integer userId) {
+		if( assignmentId == null ) {
 			return null;
 		}
-		AssignmentTblEntity entity = assignmentRepository.getOne(id);
+		AssignmentTblEntity entity = assignmentRepository.getOne(assignmentId);
 		
 		return getDetailFrom(userId,entity);
 	}

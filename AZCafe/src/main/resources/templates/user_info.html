@@ -44,18 +44,18 @@
 		          <div class="text-center" th:if="${userInfoDto.avater}">
 		            <img th:src="@{'/getImage/'+${userInfoDto.avater}}" class="profile-user-img img-fluid img-circle" alt="User Image">
 		          </div>
-                <i id="edit-myicon" class="far fa-edit small-icon" data-toggle="tooltip" title="アイコンの編集"></i>
-
+		           <i id="edit-myicon" class="far fa-edit small-icon" data-toggle="modal"   title="アイコンの編集" data-target="#modal-default"></i>
+		          
                 <h3 class="profile-username text-center" th:text="${userInfoDto.nickName}" ></h3>
 
                 <p class="text-muted text-center" th:text="${userInfoDto.homeroomeName}" ></p>
 
                 <ul class="list-group list-group-unbordered mb-3">
                   <li class="list-group-item">
-                    <b>フォロー数</b> <a class="float-right" th:text="${userInfoDto.followNum}"></a>
+                    <b>フォロー数</b> <a class="float-right" id="MyFollowNum" th:text="${userInfoDto.followNum}"></a>
                   </li>
                   <li class="list-group-item">
-                    <b>フォロワー数</b> <a class="float-right" th:text="${userInfoDto.followerNum}"></a>
+                    <b>フォロワー数</b> <a class="float-right" id="MyFollowerNum" th:text="${userInfoDto.followerNum}"></a>
                   </li>
                   <li class="list-group-item">
                     <b>称号</b> <a class="float-right" th:text="${userInfoDto.level}"></a>
@@ -85,18 +85,16 @@
                 <strong><i class="fas fa-signature mr-1"></i> ニックネーム</strong><i th:if="${userInfoDto.userId} eq ${session['LoginInfo'].userId}" id="edit-nickname" class="far fa-edit small-icon" data-toggle="tooltip" title="ニックネームの編集"></i>
                 <p class="text-muted" id="nickname-label" th:text="${userInfoDto.nickName}"></p>
                 <div th:if="${userInfoDto.userId} eq ${session['LoginInfo'].userId}" id="nickname-edit" class="d-none">
-                  <input type="text" class="form-control" th:value="${userInfoDto.nickName}" >
+                  <input type="text" class="form-control" id="nickname" th:value="${userInfoDto.nickName}" >
                   <button class="btn-sm btn-primary" id="btn-nickname-appy">適用</button>
                 </div>
                 <hr>
                 <div th:if="${userInfoDto.userId} eq ${session['LoginInfo'].userId}">
 	                <strong><i class="fas fa-user-lock"></i> パスワード変更</strong>
 	                <div id="nickname-edit" class="form-group d-flat">
-	                  <form>
-	                    <input type="password" class="form-control" value="">
-	                    <input type="password" class="form-control" value="">
+	                    <input type="password" id="password1" name="password1" class="form-control" value="">
+	                    <input type="password" id="password2" name="password2" class="form-control" value="">
 	                    <button class="btn-sm btn-primary" id="btn-password-change">変更</button>
-	                  </form>
 	                </div>
                 </div>
               </div>
@@ -131,14 +129,15 @@
 	                        <td th:text="${result.group}"></td>
 	                        <td>
 	                          <div class="d-flex flex-column">
-	                            <a th:href="@{'/assignment/result?assignmentId='}+${result.assigmentId}" class="answer-list-q" th:text="${result.title}"></a>
+	                            <a th:href="@{'/assignment/result?assignmentId='}+${result.assigmentId}+'&userId='+${userInfoDto.userId}" class="answer-list-q"  th:classappend="${result.isCorrect} and ${userInfoDto.isFollowUser} ? '' : d-none " th:text="${result.title}"></a>
+	                            <div th:classappend="${result.isCorrect} and ${userInfoDto.isFollowUser} ? d-none: ''  "  th:text="${result.title}"></div>
 	                            <div class="d-flex flex-row">
 	                              <i class="far fa-thumbs-up"></i><div class="normal-text" th:text="${result.goodNum}"></div>
 	                              <i class="far fa-comment"></i><div class="normal-text" th:text="${result.commentNum}"></div>
 	                            </div>
 	                          </div>
 	                        </td> 
-	                        <td>2020/12/27</td>
+	                        <td  th:text="${result.answerDate}">2020/12/27</td>
 	                        <td  th:text="${result.score}">100</td>
 	                      </tr>
                       </tbody>
@@ -151,15 +150,18 @@
                       <ul class="products-list product-list-in-card pl-2 pr-2">
                         <li class="item user-label" th:each="follow ,status:${userInfoDto.followList}" th:data-id="${follow.userId}" >
                           <div class="product-img">
-	                          <img th:unless="${follow.avater}" th:src="@{/img/no_image.jpg}" alt="Product Image" class="img-size-50">
-	                          <img th:if="${follow.avater}" th:src="@{'/getImage/'+${follow.avater}}" alt="Product Image" class="img-size-50">
+	                          <a th:href="|@{/user/info}?userId=${follow.userId}|" >
+	                            <img th:unless="${follow.avater}" th:src="@{/img/no_image.jpg}" alt="Product Image" class="img-size-50">
+	                            <img th:if="${follow.avater}" th:src="@{'/getImage/'+${follow.avater}}" alt="Product Image" class="img-size-50">
+	                          </a>
 	                        </div>
 	                        <div class="product-info">
 	                          <span class="product-title" th:text="${follow.hoomroomName}"></span>
 	                          <span class="product-description">
 	                            <th:block th:text="${follow.nickName}"></th:block>
 	                            <div class="product-button">
-	                              <button class="btn-sm btn-primary btn-follow-release" th:data-id="${follow.userId}">フォロー解除</button>     
+			                       <button class="btn-sm btn-default btn-follow-btn" th:classappend="${follow.isEach} ? d-none : '' " th:data-id="${follow.userId}">フォローする</button>
+			                       <button class="btn-sm btn-primary btn-follow-release" th:classappend="${follow.isEach} ? '' : d-none"  th:data-id="${follow.userId}">フォロー解除</button>
 	                            </div>
 	                          </span>
 	                        </div>
@@ -174,8 +176,10 @@
 	                      <ul class="products-list product-list-in-card pl-2 pr-2">
 	                        <li class="item user-label" th:each="follower ,status:${userInfoDto.followerList}" th:data-id="${follower.userId}" >
 	                          <div class="product-img">
-		                          <img th:unless="${follower.avater}" th:src="@{/img/no_image.jpg}" alt="Product Image" class="img-size-50">
-		                          <img th:if="${follower.avater}" th:src="@{'/getImage/'+${follower.avater}}" alt="Product Image" class="img-size-50">
+	                          	  <a th:href="|@{/user/info}?userId=${follower.userId}|" >
+		                            <img th:unless="${follower.avater}" th:src="@{/img/no_image.jpg}" alt="Product Image" class="img-size-50">
+		                            <img th:if="${follower.avater}" th:src="@{'/getImage/'+${follower.avater}}" alt="Product Image" class="img-size-50">
+		                          </a>
 		                        </div>
 		                        <div class="product-info">
 		                          <span class="product-title" th:text="${follower.hoomroomName}"></span>
@@ -215,6 +219,40 @@
 </div>
 <!-- ./wrapper -->
 
+<div class="modal fade" id="modal-default">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">画像の編集</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+		<form method="post" th:action="@{/user/update/icon}" enctype="multipart/form-data">
+	        <div class="modal-body">
+	        <p>画像をドラッグ＆ドロップしてください</p>
+			    <div class="form-group">
+	                <label for="icon" class="label-name">アイコン</label>
+	                <div class="user-icon-dnd-wrapper">
+	                  <input type="file" name="icon" id="input_file" accept="image/*">
+	                  <div id="preview_field"></div>
+	                  <div id="drop_area">drag and drop<br>or<br>click here.</div>
+	                  <div id="icon_clear_button"><i class="far fa-times-circle"></i></div>
+	                </div>
+	              </div>
+		      </div>
+		      <div class="modal-footer justify-content-between">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button type="submit" class="btn btn-primary" id="update_icon">Save changes</button>
+		      </div>
+		 </form>
+    </div>
+    <!-- /.modal-content -->
+</div>
+  <!-- /.modal-dialog -->
+</div>
+      <!-- /.modal -->
+      
 <!-- REQUIRED SCRIPTS -->
 <meta id="parent" th:replace="/header/include_js"></meta>
 
@@ -246,40 +284,93 @@
   });
 
   $(document).on('click','#btn-nickname-appy',function(){
-    alert("click! btn-nickname-appy")
-  })
 
-  $(document).on('click','#btn-password-change',function(){
-    alert("click! btn-password-change")
-  })
-  $(document).on('click',"#btn-follow-release",function(){
-    let id = $(this).data("id");
-    alert("btn-follow-release id="+id);
-  })
-
-  $(document).on('click',".btn-follow-btn",function(){
-    let userId = $(this).data("id");
-    let buttonObj = $(this);
-    alert("btn-follow id="+userId);
+    const userId = [[${userInfoDto.userId}]];
+    const nickname = $("#nickname").val();
 
 	$.ajax({
         type : "POST",                  // HTTP通信の種類
-        url  : /*[[@{/user/follow}]]*/ "/user/follow",                 // リクエストを送信する先のURL
+        url  : /*[[@{/user/update/nickname}]]*/ "/user/update/nickname",                 // リクエストを送信する先のURL
         dataType : "text",              // サーバーから返されるデータの型
-        data : {userId: userId}
+        data : {userId: userId,nickName: nickname}
 	}).done(function(data) {
-		//今のボタンを解除して、もう片方を表示する
-		buttonObj.parent().find(".d-none").removeClass("d-none");
-		buttonObj.addClass("d-none");	
-		if( data == "ok"){
-			alert("登録しました");
+		if( data == "ok" ){
+			alert("ニックネーム変更しました");
 		}else{
-			alert("登録に失敗しました");
+			alert(data);
 		}
 	}).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
         alert("登録に失敗しました");
     });
   })
+
+  $(document).on('click','#btn-password-change',function(){
+	    const userId = [[${userInfoDto.userId}]];
+	    const password1 = $("#password1").val();
+	    const password2 = $("#password2").val();
+
+		$.ajax({
+	        type : "POST",                  // HTTP通信の種類
+	        url  : /*[[@{/user/update/password}]]*/ "/user/update/password",                 // リクエストを送信する先のURL
+	        dataType : "text",              // サーバーから返されるデータの型
+	        data : {userId: userId,password1: password1, password2: password2}
+		}).done(function(data) {
+			if( data == "ok" ){
+				alert("パスワード変更しました");
+			}else{
+				alert(data);
+			}
+		}).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
+	        alert("登録に失敗しました");
+	    });
+  })
+  $(document).on('click',".btn-follow-release",function(){
+    let userId = $(this).data("id");
+    let buttonObj = $(this);
+    //alert("btn-follow-release id="+userId);
+
+	$.ajax({
+        type : "POST",                  // HTTP通信の種類
+        url  : /*[[@{/user/removeFollow}]]*/ "/user/removeFollow",                 // リクエストを送信する先のURL
+        dataType : "json",              // サーバーから返されるデータの型
+        data : {userId: userId}
+	}).done(function(data) {
+		updateDisplay(buttonObj,data);
+	}).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
+        alert("登録に失敗しました");
+    });
+  })
+
+  $(document).on('click',".btn-follow-btn",function(){
+    let userId = $(this).data("id");
+    let buttonObj = $(this);
+   // alert("btn-follow id="+userId);
+
+	$.ajax({
+        type : "POST",                  // HTTP通信の種類
+        url  : /*[[@{/user/follow}]]*/ "/user/follow",                 // リクエストを送信する先のURL
+        dataType : "json",              // サーバーから返されるデータの型
+        data : {userId: userId}
+	}).done(function(data) {
+		updateDisplay(buttonObj,data);
+	}).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
+        alert("登録に失敗しました");
+    });
+  })
+  
+  
+  const updateDisplay = (thisElement,result) => {
+	    const dispUserId = [[${userInfoDto.userId}]];
+		//今のボタンを解除して、もう片方を表示する
+		thisElement.parent().find(".d-none").removeClass("d-none");
+		thisElement.addClass("d-none");	
+		//alert("result.userId:"+result.userId + "dispUserId:"+dispUserId);
+		if( dispUserId == result.userId ){
+			//表示してるユーザー更新ユーザーが一致しているなら情報変更
+			$("#MyFollowNum").text(result.followNum);
+			$("#MyFollowerNum").text(result.followerNum);
+		}
+  }
   
   $(function () {
     $('#example1').DataTable({
@@ -291,7 +382,113 @@
       "autoWidth": false,
       "responsive": true,
     });
+
+    /////////////////////////////////////////////
+    //アイコン関連のスクリプト↓
+    // クリックで画像を選択する場合
+    $('#drop_area').on('click', function () {
+      $('#input_file').click();
+    });
+
+    $('#input_file').on('change', function () {
+      // 画像が複数選択されていた場合
+      if (this.files.length > 1) {
+        alert('アップロードできる画像は1つだけです');
+        $('#input_file').val('');
+        return;
+      }
+      handleFiles(this.files);
+    });
   });
+
+  // ドラッグしている要素がドロップ領域に入ったとき・領域にある間
+$('#drop_area').on('dragenter dragover', function (event) {
+  event.stopPropagation();
+  event.preventDefault();
+  $('#drop_area').css('border', '1px solid #333');  // 枠を実線にする
+});
+
+// ドラッグしている要素がドロップ領域から外れたとき
+$('#drop_area').on('dragleave', function (event) {
+  event.stopPropagation();
+  event.preventDefault();
+  $('#drop_area').css('border', '1px dashed #aaa');  // 枠を点線に戻す
+});
+
+// ドラッグしている要素がドロップされたとき
+$('#drop_area').on('drop', function (event) {
+  event.preventDefault();
+
+  $('#input_file')[0].files = event.originalEvent.dataTransfer.files;
+
+  // 画像が複数選択されていた場合
+  if ($('#input_file')[0].files.length > 1) {
+    alert('アップロードできる画像は1つだけです');
+    $('#input_file').val('');
+    return;
+  }
+  handleFiles($('#input_file')[0].files);
+});
+
+// 選択された画像ファイルの操作
+function handleFiles(files) {
+  var file = files[0];
+  var imageType = 'image.*';
+
+  // ファイルが画像が確認する
+  if (! file.type.match(imageType)) {
+    alert('画像を選択してください');
+    $('#input_file').val('');
+    $('#drop_area').css('border', '1px dashed #aaa');
+    return;
+  }
+  //画像が３M以上
+  if( file.size > 3145728 ){
+	    alert('ファイルは３MB以内にしてください');
+	    $('#input_file').val('');
+	    $('#drop_area').css('border', '1px dashed #aaa');
+	    return;
+  }
+
+  $('#drop_area').hide();  // いちばん上のdrop_areaを非表示にします
+  $('#icon_clear_button').show();  // icon_clear_buttonを表示させます
+
+  var img = document.createElement('img');  // <img>をつくります
+  var reader = new FileReader();
+  reader.onload = function () {  // 読み込みが完了したら
+    img.src = reader.result;  // readAsDataURLの読み込み結果がresult
+    img.classList.add("profile-user-img");
+    img.classList.add("img-fluid");
+    img.classList.add("img-circle");
+    $('#preview_field').append(img);  // preview_filedに画像を表示
+  }
+  reader.readAsDataURL(file); // ファイル読み込みを非同期でバックグラウンドで開始
+} 
+
+// アイコン画像を消去するボタン
+$('#icon_clear_button').on('click', function () {
+  $('#preview_field').empty();  // 表示していた画像を消去
+  $('#input_file').val('');  // inputの中身を消去
+  $('#drop_area').show();  // drop_areaをいちばん前面に表示
+  $('#icon_clear_button').hide();  // icon_clear_buttonを非表示
+  $('#drop_area').css('border', '1px dashed #aaa');  // 枠を点線に変更
+})
+
+// drop_area以外でファイルがドロップされた場合、ファイルが開いてしまうのを防ぐ
+$(document).on('dragenter', function (event) {
+  event.stopPropagation();
+  event.preventDefault();
+});
+$(document).on('dragover', function (event) {
+  event.stopPropagation();
+  event.preventDefault();
+});
+$(document).on('drop', function (event) {
+  event.stopPropagation();
+  event.preventDefault();
+});
+
+  
 </script>
 </body>
 

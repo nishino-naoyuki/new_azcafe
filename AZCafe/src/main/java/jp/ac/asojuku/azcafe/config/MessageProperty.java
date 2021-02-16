@@ -32,6 +32,8 @@ public class MessageProperty extends ConfigBase{
 	public static final String INFO_RECENT_END = "info.recent.end";
 	public static final String INFO_RECENT_COMMENT = "info.recent.comment";
 	public static final String INFO_RECENT_UNANSWER = "info.recent.unanswer";
+	public static final String INFO_RECENT_FOLLOWER= "info.recent.follower";
+	public static final String INFO_RECENT_GOOD= "info.recent.good";
 	public static final String LOGIN_LOCK = "login.err.lock";
 	public static final String GRADING_CHECKSTYLE_JS = "grading.checkstyle.javascript";
 

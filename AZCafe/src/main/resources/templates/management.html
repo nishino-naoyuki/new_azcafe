@@ -318,6 +318,14 @@ function handleFiles(files) {
     return;
   }
 
+  //画像が３M以上
+  if( file.size > 3145728 ){
+	    alert('ファイルは３MB以内にしてください');
+	    $('#input_file').val('');
+	    $('#drop_area').css('border', '1px dashed #aaa');
+	    return;
+  }
+  
   $('#drop_area').hide();  // いちばん上のdrop_areaを非表示にします
   $('#icon_clear_button').show();  // icon_clear_buttonを表示させます
 
@@ -326,6 +334,8 @@ function handleFiles(files) {
   reader.onload = function () {  // 読み込みが完了したら
     img.src = reader.result;  // readAsDataURLの読み込み結果がresult
     img.classList.add("img-circle");
+    img.classList.add("profile-user-img");
+    img.classList.add("img-fluid");
     $('#preview_field').append(img);  // preview_filedに画像を表示
   }
   reader.readAsDataURL(file); // ファイル読み込みを非同期でバックグラウンドで開始

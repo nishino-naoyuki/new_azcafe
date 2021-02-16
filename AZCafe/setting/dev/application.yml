@@ -1,4 +1,4 @@
-spring:
+spring:  servlet:    multipart:      max-file-size: 3MB
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost/azcafe?serverTimezone=JST

@@ -24,6 +24,7 @@ import jp.ac.asojuku.azcafe.dto.GroupDto;
 import jp.ac.asojuku.azcafe.dto.HomeroomDto;
 import jp.ac.asojuku.azcafe.dto.LoginInfoDto;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
+import jp.ac.asojuku.azcafe.exception.AZCafePermissonDeniedException;
 import jp.ac.asojuku.azcafe.form.AssignmentForm;
 import jp.ac.asojuku.azcafe.param.SessionConst;
 import jp.ac.asojuku.azcafe.service.AnswerService;
@@ -67,6 +68,7 @@ public class AssignmentController {
 	public ModelAndView sendMessage(
 			ModelAndView mv,
 			@RequestParam(required = false) String message,
+			@RequestParam(required=false) Integer answerUserId,
 			@RequestParam(required=false) Integer answerId,
 			@RequestParam(required = false) Integer assignmentId) throws AZCafeException {
 
@@ -78,6 +80,8 @@ public class AssignmentController {
 			//ログイン情報が無いことはないはずだが、直リンされた場合を一応考慮
 			throw new AZCafeException("ログイン情報がありません。ログインしなおしてください");
 		}
+		
+		commentInsertDto.setAnswerUserId(answerUserId);
 		commentInsertDto.setUserId(loginInfo.getUserId());
 		commentInsertDto.setAnswerId(answerId);
 		commentInsertDto.setAssignmentId(assignmentId);
@@ -98,9 +102,13 @@ public class AssignmentController {
 	 * @param assignmentId
 	 * @return
 	 * @throws AZCafeException
+	 * @throws AZCafePermissonDeniedException 
 	 */
 	@RequestMapping(value= {"/result"}, method=RequestMethod.GET)
-	public ModelAndView result(ModelAndView mv,@RequestParam(required = false) Integer assignmentId) throws AZCafeException {
+	public ModelAndView result(
+			ModelAndView mv,
+			@RequestParam(required = false) Integer assignmentId,
+			@RequestParam(required = false) Integer userId) throws AZCafeException, AZCafePermissonDeniedException {
 
 		//セッションからログイン情報を取得
 		LoginInfoDto loginInfo = (LoginInfoDto)session.getAttribute(SessionConst.LOGININFO);
@@ -109,9 +117,18 @@ public class AssignmentController {
 			throw new AZCafeException("ログイン情報がありません。ログインしなおしてください");
 		}
 		
+		if( userId == null ) {
+			userId = loginInfo.getUserId();
+		}else {
+			//ユーザーが情報を見れるかをチェックする
+			if( !answerService.isWatch(assignmentId, userId, loginInfo.getUserId()) ) {
+				throw new AZCafePermissonDeniedException("この画面を見る権限がありません");
+			}
+		}
+		
 		//詳細情報を取得する
 		GradingResultDetailDto gradingResultDetailDto = 
-				answerService.getBy(loginInfo.getUserId(), assignmentId);
+												answerService.getBy(userId, assignmentId);
 		
 		mv.addObject("gradingResultDetailDto", gradingResultDetailDto);
         mv.setViewName("assignment_result");

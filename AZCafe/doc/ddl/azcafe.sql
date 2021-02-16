@@ -54,6 +54,12 @@ CREATE TABLE ANSWER_TBL
 	-- 採点結果
 	score int NOT NULL COMMENT '採点結果',
 	correct_flg int DEFAULT 0 NOT NULL,
+	-- チェックスタイルができない場合は固定文字をプログラム側で入れる
+	checkStyle_msg varchar(2000) NOT NULL COMMENT 'チェックスタイルができない場合は固定文字をプログラム側で入れる',
+	-- 点数の内訳：ソース解析結果（50点満点）
+	source_score int NOT NULL COMMENT '点数の内訳：ソース解析結果（50点満点）',
+	output_score int NOT NULL,
+	answer_date timestamp NOT NULL,
 	PRIMARY KEY (answer_id)
 );
 
@@ -195,12 +201,12 @@ CREATE TABLE TEST_CASE_ANSWER_TBL
 (
 	testcase_answer_id int NOT NULL AUTO_INCREMENT,
 	testcase_id int NOT NULL,
+	answer_id int NOT NULL,
 	-- 0:不正解
 	-- 1:正解
 	correctly int NOT NULL COMMENT '0:不正解
 1:正解',
 	user_output varchar(2000) NOT NULL,
-	answer_id int NOT NULL,
 	PRIMARY KEY (testcase_answer_id)
 );
 
@@ -461,7 +467,7 @@ ALTER TABLE COMMENT_TBL
 
 
 ALTER TABLE FOLLOW_TBL
-	ADD FOREIGN KEY (follew_user_id)
+	ADD FOREIGN KEY (user_id)
 	REFERENCES USER_TBL (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -469,7 +475,7 @@ ALTER TABLE FOLLOW_TBL
 
 
 ALTER TABLE FOLLOW_TBL
-	ADD FOREIGN KEY (user_id)
+	ADD FOREIGN KEY (follew_user_id)
 	REFERENCES USER_TBL (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT

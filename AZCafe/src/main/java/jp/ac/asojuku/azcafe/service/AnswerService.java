@@ -11,9 +11,12 @@ import jp.ac.asojuku.azcafe.dto.SourceCodeDto;
 import jp.ac.asojuku.azcafe.entity.AnswerDetailTblEntity;
 import jp.ac.asojuku.azcafe.entity.AnswerTblEntity;
 import jp.ac.asojuku.azcafe.entity.CommentTblEntity;
+import jp.ac.asojuku.azcafe.entity.FollowTblEntity;
+import jp.ac.asojuku.azcafe.entity.FollowTblId;
 import jp.ac.asojuku.azcafe.entity.TestCaseAnswerTblEntity;
 import jp.ac.asojuku.azcafe.entity.UserTblEntity;
 import jp.ac.asojuku.azcafe.repository.AnswerRepository;
+import jp.ac.asojuku.azcafe.repository.FollowRepository;
 import jp.ac.asojuku.azcafe.repository.UserRepository;
 
 @Service
@@ -22,7 +25,38 @@ public class AnswerService {
 	AnswerRepository answerRepository;
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	FollowRepository followRepository;
 
+	/**
+	 * userIdで指定したユーザーのassignmentIdで指定した問題の解答を見れるかどうか
+	 * ログインユーザーが見れるかどうか
+	 * 
+	 * @param assignmentId
+	 * @param userId
+	 * @param loginUserId
+	 * @return
+	 */
+	public boolean isWatch(Integer assignmentId,Integer userId,Integer loginUserId) {
+		if( userId == loginUserId) {
+			//ログインユーザーが自分の情報を見るのはOK
+			return true;
+		}
+		//ログインユーザーがその問題を提出済みであること
+		AnswerTblEntity answerEntity = answerRepository.getOne(assignmentId, loginUserId);
+		if( answerEntity == null ) {
+			//ログインユーザーが提出済みでないなら見れない
+			return false;
+		}
+		//ログインユーザーがそのユーザーをフォローしていること
+		FollowTblEntity fEntity = followRepository.findById(new FollowTblId(loginUserId,userId)).orElse(null);
+		if( fEntity == null ) {
+			//フォローしていなければ見れない
+			return false;
+		}
+		
+		return true;
+	}
 	/**
 	 * 採点結果の詳細を取得する
 	 * 
@@ -45,6 +79,7 @@ public class AnswerService {
 	private GradingResultDetailDto getDto(AnswerTblEntity answerEntity) {
 		GradingResultDetailDto dto = new GradingResultDetailDto();
 		
+		dto.setAnsUserId(answerEntity.getUserTbl().getUserId());
 		dto.setAssignmentId(answerEntity.getAssignmentId());
 		dto.setAnswerId(answerEntity.getAnswerId());
 		dto.setTitle(answerEntity.getAssignmentTbl().getTitle()); 

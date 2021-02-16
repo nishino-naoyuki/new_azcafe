@@ -48,9 +48,9 @@
 
               <div class="info-box-content">
                 <span class="info-box-text">解いた問題の数</span>
-                <span class="info-box-number">
-                  10
-                  <small>/20</small>
+                <span class="info-box-number" th:text="${dashBoadDto.answerNum}">
+                  
+                  <small th:text="|/${dashBoadDto.assignmentNum}|">/</small>
                 </span>
               </div>
               <!-- /.info-box-content -->
@@ -64,7 +64,7 @@
 
               <div class="info-box-content">
                 <span class="info-box-text">イイネの数</span>
-                <span class="info-box-number" th:text="${session['LoginInfo'].goodNum}"></span>
+                <span class="info-box-number" th:text="${dashBoadDto.goodNum}"></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -81,7 +81,7 @@
 
               <div class="info-box-content">
                 <span class="info-box-text">フォロー数</span>
-                <span class="info-box-number"  th:text="${session['LoginInfo'].followNum}"></span>
+                <span class="info-box-number"  th:text="${dashBoadDto.followNum}"></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -93,7 +93,7 @@
               <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">フォロワー数</span>
-                <span class="info-box-number" th:text="${session['LoginInfo'].followerNum}"></span>
+                <span class="info-box-number" th:text="${dashBoadDto.followerNum}"></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -124,23 +124,10 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                      <td><a href="pages/examples/invoice.html"><span class="badge badge-success">コメント</span></a></td>
-                      <td>〇〇さんからあなたのソースにコメントしました</td>
-                    </tr>
-                    <tr>
-                      <td><a href="pages/examples/invoice.html"><span class="badge badge-warning">問題追加</span></a></td>
-                      <td>問題「〇〇」が追加されました</td>
-                    </tr>
-                    <tr>
-                      <td><a href="pages/examples/invoice.html"><span class="badge badge-danger">イイネ</span></a></td>
-                      <td>〇〇さんがあなたの解答にイイネしました</td>
-                    </tr>
-                    <tr>
-                      <td><a href="pages/examples/invoice.html"><span class="badge badge-info">未提出</span></a></td>
-                      <td>必須問題「」が提出されていません</td>
-                    </tr>
-                    
+                    <tr th:each="dto:${dashBoadDto.newInfoList}">
+                      <td><span class="badge badge-success" th:classappend="${dto.getInfoPanel()}" th:text="${dto.infoKind}"></span></td>
+                      <td th:utext="${dto.message}" ></td>
+                    </tr>                    
                     </tbody>
                   </table>
                 </div>

@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -79,6 +81,10 @@ public class AnswerTblEntity implements Serializable {
 	@OneToMany
 	@JoinColumn(name="answerId",insertable=true ,updatable=true)
 	private Set<TestCaseAnswerTblEntity> testCaseAnswerTblSet;
+
+	/** 更新日時. */
+	private Date answerDate;
+	
 	/**
 	 * コンストラクタ.
 	 */
@@ -87,4 +93,13 @@ public class AnswerTblEntity implements Serializable {
 		this.commentTblSet = new HashSet<CommentTblEntity>();
 	}
 
+	@PrePersist
+    public void onPrePersist() {
+		setAnswerDate(new Date());
+    }
+
+    @PreUpdate
+    public void onPreUpdate() {
+    	setAnswerDate(new Date());
+    }
 }

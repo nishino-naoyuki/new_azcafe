@@ -6,13 +6,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jp.ac.asojuku.azcafe.dto.CommentInsertDto;
 import jp.ac.asojuku.azcafe.dto.GradingResultDetailDto;
+import jp.ac.asojuku.azcafe.entity.AnswerTblEntity;
 import jp.ac.asojuku.azcafe.entity.CommentTblEntity;
+import jp.ac.asojuku.azcafe.repository.AnswerRepository;
 import jp.ac.asojuku.azcafe.repository.CommentRepository;
 
 @Service
 public class CommentServie {
 	@Autowired
 	CommentRepository commentRepository;
+	@Autowired
+	AnswerRepository answerRepository;
 
 	@Autowired
 	AnswerService answerService;
@@ -31,6 +35,6 @@ public class CommentServie {
 		//保存
 		commentRepository.saveAndFlush(entity);
 		
-		return answerService.getBy(commentInsertDto.getUserId(), commentInsertDto.getAssignmentId());
+		return answerService.getBy(commentInsertDto.getAnswerUserId(), commentInsertDto.getAssignmentId());
 	}
 }

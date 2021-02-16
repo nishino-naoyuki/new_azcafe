@@ -253,4 +253,28 @@
 .products-list .product-description .product-button {
     float: right;
 }
+
+#dragDropArea{
+  background-color: #f4f4f4;
+  margin: 10px;
+  padding: 10px;
+  border: #ddd dashed 5px;
+  min-height: 200px;
+  text-align: center;
+}
+#dragDropArea p{
+    color: #999;
+    font-weight: bold;
+    font-size: 14px;
+    font-size: 1.4em;
+}
+#dragDropArea .drag-drop-buttons{
+    margin-top: 20px;
+    font-size: 12px;
+    font-size: 1.2em;
+}
+.drag-drop-buttons input{
+    margin: auto;
+}
+
     

@@ -60,6 +60,23 @@ public class UserValidator extends Validator{
 		}
 	}
 	/**
+	 * ニックネームのチェック
+	 * 
+	 * @param nickname
+	 * @return
+	 */
+	public static boolean useNickName(String nickname) {
+		//必須
+		if( StringUtils.isEmpty(nickname) ){
+			return false;
+		}
+		//最大文字数
+		if( nickname != null && nickname.length() > 100){
+			return false;
+		}
+		return true;
+	}
+	/**
 	 * メールアドレスのチェック
 	 *
 	 * @param mailAddress
@@ -215,5 +232,21 @@ public class UserValidator extends Validator{
 			}
 
 		}
+	}
+	/**
+	 * パスワード
+	 * @param password
+	 * @param errors
+	 * @throws AZCafeException
+	 */
+	public static boolean password(String password) throws AZCafeException{
+		String policy = AZCafeConfig.getInstance().getPasswordpolicy();
+
+		if( !StringUtils.isEmpty(policy)){
+			if(!password.matches(policy)){
+				return false;
+			}
+		}
+		return true;
 	}
 }
