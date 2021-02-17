@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jp.ac.asojuku.azcafe.config.AZCafeConfig;
 import jp.ac.asojuku.azcafe.dto.CreateUserDto;
 import jp.ac.asojuku.azcafe.dto.LoginInfoDto;
+import jp.ac.asojuku.azcafe.dto.RankingDto;
 import jp.ac.asojuku.azcafe.dto.UserInfoDto;
 import jp.ac.asojuku.azcafe.dto.UserSearchElementDto;
 import jp.ac.asojuku.azcafe.dto.subclass.AssignmentResultDto;
@@ -50,6 +52,51 @@ public class UserService {
 	@Autowired
 	AZCafeConfig config;
 
+	/**
+	 * ランキングを取得する
+	 * @param homeroomId
+	 * @return
+	 */
+	public List<RankingDto> getRanking(Integer homeroomId) {
+		List<RankingDto> rankingList = new ArrayList<>();
+
+		List<UserTblEntity> entityList = userRepository.findAll(
+				Specification.
+						where(homeroomEquals(homeroomId)),
+						Sort.by(Sort.Direction.DESC, "point").
+						and(Sort.by(Sort.Direction.ASC,"homeroomTbl.homeroomId")).
+						and(Sort.by(Sort.Direction.ASC,"orgNo"))
+				);
+		
+		int rank = 1;
+		int count = 1;
+		int prePoint = -1;
+		//entity -> dto
+		for(UserTblEntity userEntity : entityList ) {
+			RankingDto dto = new RankingDto();
+			
+			dto.setUserId(userEntity.getUserId());
+			dto.setNickName(userEntity.getNickName());
+			dto.setHomeroomeName(userEntity.getHomeroomTbl().getName());
+			dto.setAvater(userEntity.getAvater());
+			dto.setPoint(userEntity.getPoint());
+			if( userEntity.getPoint() != prePoint) {
+				rank = count;
+			}
+			dto.setRank(rank);	
+			prePoint = userEntity.getPoint();
+			count++;
+			
+			rankingList.add(dto);
+		}
+		
+		return rankingList;
+	}
+	/**
+	 * アイコンを更新する
+	 * @param userId
+	 * @param iconPath
+	 */
 	public void updateIcon(Integer userId,String iconPath) {
 
 		UserTblEntity userEntity = userRepository.getOne(userId);
@@ -59,8 +106,10 @@ public class UserService {
 		userEntity.setAvater(iconPath);
 		userRepository.save(userEntity);
 
-		//旧ファイルを削除する
-		FileUtils.deleteIconFile(oldIconPath);
+		if( StringUtils.isNotEmpty(oldIconPath)) {
+			//旧ファイルを削除する
+			FileUtils.deleteIconFile(oldIconPath);
+		}
 	}
 	/**
 	 * パスワードの更新
@@ -72,6 +121,24 @@ public class UserService {
 	public void updatePassword(Integer userId,String password) throws AZCafeException {
 
 		UserTblEntity userEntity = userRepository.getOne(userId);
+		
+		//ハッシュ計算する
+		String hashedPwd  = Digest.createPassword(userEntity.getMail(), password);
+		userEntity.setPassword(hashedPwd);
+
+		userRepository.save(userEntity);
+	}
+
+	/**
+	 * パスワードの更新
+	 * 
+	 * @param userId
+	 * @param password
+	 * @throws AZCafeException
+	 */
+	public void updatePassword(String mail,String password) throws AZCafeException {
+
+		UserTblEntity userEntity = userRepository.getUserByMail(mail);
 		
 		//ハッシュ計算する
 		String hashedPwd  = Digest.createPassword(userEntity.getMail(), password);
@@ -461,6 +528,7 @@ public class UserService {
 		dto.setNickName(entity.getNickName());
 		dto.setRole( RoleId.search(entity.getRole()) );
 		dto.setRoleName(RoleId.search(entity.getRole()).getMsg());
+		dto.setHomeroomId(entity.getHomeroomTbl().getHomeroomId());
 		dto.setCourseName( entity.getHomeroomTbl().getName() );
 		dto.setGrade(entity.getGrade());
 		dto.setLevelName(entity.getLevelTbl().getName());

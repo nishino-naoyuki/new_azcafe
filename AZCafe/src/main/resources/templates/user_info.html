@@ -44,7 +44,7 @@
 		          <div class="text-center" th:if="${userInfoDto.avater}">
 		            <img th:src="@{'/getImage/'+${userInfoDto.avater}}" class="profile-user-img img-fluid img-circle" alt="User Image">
 		          </div>
-		           <i id="edit-myicon" class="far fa-edit small-icon" data-toggle="modal"   title="アイコンの編集" data-target="#modal-default"></i>
+		           <i th:if="${userInfoDto.userId} eq ${session['LoginInfo'].userId}"　id="edit-myicon" class="far fa-edit small-icon" data-toggle="modal"   title="アイコンの編集" data-target="#modal-default"></i>
 		          
                 <h3 class="profile-username text-center" th:text="${userInfoDto.nickName}" ></h3>
 
@@ -159,7 +159,7 @@
 	                          <span class="product-title" th:text="${follow.hoomroomName}"></span>
 	                          <span class="product-description">
 	                            <th:block th:text="${follow.nickName}"></th:block>
-	                            <div class="product-button">
+	                            <div class="product-button" th:unless="${follow.userId} eq ${session['LoginInfo'].userId}">
 			                       <button class="btn-sm btn-default btn-follow-btn" th:classappend="${follow.isEach} ? d-none : '' " th:data-id="${follow.userId}">フォローする</button>
 			                       <button class="btn-sm btn-primary btn-follow-release" th:classappend="${follow.isEach} ? '' : d-none"  th:data-id="${follow.userId}">フォロー解除</button>
 	                            </div>
@@ -185,7 +185,7 @@
 		                          <span class="product-title" th:text="${follower.hoomroomName}"></span>
 		                          <span class="product-description">
 		                            <th:block th:text="${follower.nickName}"></th:block>
-		                            <div class="product-button">
+		                            <div class="product-button" th:unless="${follower.userId} eq ${session['LoginInfo'].userId}">
 			                            <button class="btn-sm btn-default btn-follow-btn" th:classappend="${follower.isEach} ? d-none : '' " th:data-id="${follower.userId}">フォローする</button>
 			                            <button class="btn-sm btn-primary btn-follow-release" th:classappend="${follower.isEach} ? '' : d-none"  th:data-id="${follower.userId}">フォロー解除</button>
 		                            </div>

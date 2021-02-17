@@ -21,5 +21,10 @@ public interface AssignmentRepository
 			+ "left join a.publicQuestionTblSet p "
 			+ "where p.homeroomId = :homeroomId and p.publicState <> 0 and DATEDIFF(now() ,a.createDate) <= 5")
 	public List<AssignmentTblEntity> getRecentlyNewAssignment(@Param("homeroomId")Integer homeroomId);
+
+	@Query("select a from AssignmentTblEntity a "
+			+ ",AnswerTblEntity s "
+			+ "where a.assignmentId = s.assignmentId and s.answerId = :answerId")
+	public AssignmentTblEntity getAssignmentByAnsId(@Param("answerId")Integer answerId);
 	
 }

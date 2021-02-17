@@ -42,7 +42,7 @@
                 <h1 class="card-title" th:text="${assignmentdetailDto.title}"></h1>
 
                 <div class="card-tools">
-                  <button type="button" class="btn btn-tool" id="question-edit" data-toggle="tooltip" title="この問題を編集する">
+                  <button type="button" class="btn btn-tool" id="question-edit"   data-toggle="tooltip" title="この問題を編集する">
                     <i class="fas fa-edit"></i>
                   </button>
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -84,7 +84,7 @@
         
                       <div class="info-box-content score_result" data-toggle="tooltip" title="提出済みの場合はクリックで詳細へ">
                         <span class="info-box-text">提出状況</span>
-                        <span class="info-box-number totalScore" th:text="${assignmentdetailDto.correct} ? '提出済み':'未提出'"></span>
+                        <span class="info-box-number totalScore" th:text="${assignmentdetailDto.correct} ? '提出済':'未提出'"></span>
                       </div>
                       <!-- /.info-box-content -->
                     </div>
@@ -143,7 +143,8 @@
 		                              <textarea id="answer_text" name="answerText" style="display: none;" ></textarea>
 		                              <div class="footer d-flex justify-content-between">
 		                                <div class="col-md-3">
-		                                  <button type="button" class="btn btn-primary" id="answer_btn" data-toggle="tooltip" title="提出して採点します">提出</button>
+		                                  <button th:unless="${assignmentdetailDto.handNum} gt 0" type="button" class="btn btn-primary" id="answer_btn" data-toggle="tooltip" title="提出して採点します">提出</button>
+		                                  <button th:if="${assignmentdetailDto.handNum} gt 0" type="button" class="btn btn-primary" id="answer_btn" data-toggle="tooltip" title="提出して採点します。再提出はポイントが減点されます">再提出</button>
 		                                </div>
 		                                <div class="col-md-3">
 		                                  <div class="info-box">
@@ -208,7 +209,8 @@
 		                            </div>
 		                            <div class="footer d-flex justify-content-between">
 		                              <div class="col-md-3">
-		                                <button type="button" class="btn btn-primary" id="answer_file_btn" data-toggle="tooltip" title="提出して採点します">提出</button>
+		                                <button th:unless="${assignmentdetailDto.handNum} gt 0"  type="button" class="btn btn-primary" id="answer_file_btn" data-toggle="tooltip" title="提出して採点します">提出</button>
+		                                <button th:if="${assignmentdetailDto.handNum} gt 0" type="button" class="btn btn-primary" id="answer_file_btn" data-toggle="tooltip" title="提出して採点します。再提出はポイントが減点されます">再提出</button>
 		                              </div>
 		                              <div class="col-md-3">
 		                                <div class="info-box">
@@ -227,7 +229,6 @@
 	                        </div>
 	                      </div>
 	                    </div>
-                    
                     <div class="overlay dark" id="waiting">
                       採点中・・・
                       <i class="fas fa-2x fa-sync-alt fa-spin"></i>
@@ -242,6 +243,10 @@
                       <h3 class="card-title p-3">採点結果</h3>
                     </div>
 	                 <div class="card-body">
+		                  <div class="col-md-10" id="compile-err">
+		                    <p>コンパイルエラーの内容</p>
+		                  	<textarea id="compile-msg" rows="4" cols="120" disabled></textarea>
+		                  </div>
 		                  <div class="col-md-10">
 		                    <div class="info-box">
 		                      <span class="info-box-icon bg-success"><i class="far fa-window-maximize"></i></span>
@@ -261,6 +266,18 @@
 		                      <div class="info-box-content">
 		                        <span class="info-box-text">ソースコードの得点</span>
 		                        <span class="info-box-number" id="scoreForSource" th:text="|${assignmentdetailDto.gradingResultDto.scoreForSource}点|"></span>
+		                      </div>
+		                      <!-- /.info-box-content -->
+		                    </div>
+		                  </div>
+		                  
+		                  <div class="col-md-10">
+		                    <div class="info-box">
+		                      <span class="info-box-icon bg-success"><i class="far fa-file-code"></i></span>
+		        
+		                      <div class="info-box-content">
+		                        <span class="info-box-text">ポイント</span>
+		                        <span class="info-box-number" id="point" th:text="|${assignmentdetailDto.gradingResultDto.point}点|"></span>
 		                      </div>
 		                      <!-- /.info-box-content -->
 		                    </div>
@@ -344,6 +361,7 @@ $(function () {
   $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
     $("#waiting").hide();
+    $("#compile-err").hide();
   });
 
   //＋ボタンクリック
@@ -365,11 +383,14 @@ $(function () {
       localStorage.setItem("codeFont",fontsize);
     }
   })
-  //－ボタンクリック
+  //編集ボタンクリック
   $(document).on('click','#question-edit',function(){
-    alert("click edit");
-    window.location.href = 'question-create.html';
+    const url = /*[[@{/assignment/edit}]]*/ "/assignment/edit";
+
+    //alert(url);
+    window.location.href = url + "?assignmentId="+$("#assignmentId").val();
   })
+  
   const checkFontSize = () =>{
     let ret = true;
     if( fontsize <= MinFontSize ){
@@ -398,6 +419,7 @@ $(function () {
     }
     
     $("#waiting").show();
+    $("#compile-err").hide();
     
     const ansText = editor.getValue();
     $("#answer_text").val(ansText);
@@ -418,12 +440,18 @@ $(function () {
     		const totalScore = data.scoreForOutput + data.scoreForSource;
     		$(".totalScore").text(totalScore);
     		alert("正解:詳細は点数をクリック");
+            location.reload();
+    	}else if( data.compleErrMsg != null && data.compleErrMsg != "" ){
+    		alert("コンパイルエラーです");
+    		//コンパイルエラー
+    	    $("#compile-msg").text(data.compleErrMsg);
+    	    $("#compile-err").show();
     	}else{
     		//エラー
     		alert("不正解:詳細は点数をクリック");
+            location.reload();
     	}        
         $("#waiting").hide();
-        location.reload();
     })
     .fail(function(jqXHR, textStatus, errorThrown){
         alert("fail");
@@ -444,7 +472,7 @@ $(function () {
     const formdata = new FormData($('#answer_file_form').get(0));
     
     $("#waiting").show();
-    
+    $("#compile-err").hide();
 
     const ajaxUrl = /*[[@{/grading/file}]]*/ "/grading/file";
     $.ajax({
@@ -462,6 +490,10 @@ $(function () {
     		const totalScore = data.scoreForOutput + data.scoreForSource;
     		$(".totalScore").text(totalScore);
     		alert("正解:詳細は点数をクリック");
+    	}else if( data.compleErrMsg != null && data.compleErrMsg != "" ){
+    		//コンパイルエラー
+    	    $("#compile-msg").text(data.compleErrMsg);
+    	    $("#compile-err").show();
     	}else{
     		//エラー
     		alert("不正解:詳細は点数をクリック");

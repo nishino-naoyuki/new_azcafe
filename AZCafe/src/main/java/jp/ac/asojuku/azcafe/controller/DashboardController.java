@@ -22,6 +22,13 @@ public class DashboardController {
 	@Autowired
 	HttpSession session;
 	
+	/**
+	 * ダッシュボード表示
+	 * @param msg
+	 * @param mv
+	 * @return
+	 * @throws AZCafeException
+	 */
 	@RequestMapping(value= {"/dashboad"}, method=RequestMethod.GET)
     public ModelAndView index(@ModelAttribute("msg")String msg,ModelAndView mv) throws AZCafeException {
 

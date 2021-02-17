@@ -30,4 +30,4 @@ azcafe:
   gradingjavac: comple_java.bat
   gradingjava: exec_java.bat
   checkstyle: checkstyle_java.bat
-  gradingjavascript: exec_javascript.bat
+  gradingjavascript: exec_javascript.bat  handminus: 5  difficulty:    veasy: 0    easy: 2    normal: 5    diff: 7    vdiff: 10    

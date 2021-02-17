@@ -1,5 +1,7 @@
 package jp.ac.asojuku.azcafe.config;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -37,4 +39,6 @@ public class AZCafeConfig {
 	private String gradingjava;	//java実行のシェル（バッチ）名
 	private String checkstyle;	//checkstyle実行のシェル（バッチ）名
 	private String gradingjavascript;	//javascript実行のシェル（バッチ）名
+	private Integer handminus;
+	private Map<String, Integer> difficulty;
 }

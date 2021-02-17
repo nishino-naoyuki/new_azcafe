@@ -3,10 +3,12 @@ package jp.ac.asojuku.azcafe.util;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -55,11 +57,11 @@ public class FileUtils {
 		if( filePath == null || filePath.length() == 0){
 			return lineList;
 		}
-	    FileReader fr = null;
-	    BufferedReader br = null;
-	    try {
-	        fr = new FileReader(filePath);
-	        br = new BufferedReader(fr);
+	   // FileReader fr = null;
+	    //BufferedReader br = null;
+	    try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath),"UTF-8"))){
+	       // fr = new FileReader(filePath);
+	        ///br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath),"UTF-8"));
 
 	        String line;
 	        while ((line = br.readLine()) != null) {
@@ -70,14 +72,14 @@ public class FileUtils {
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    } finally {
-	        try {
-	            if(br != null )
-	            	br.close();
-	            if(fr != null)
-	            	fr.close();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
+	        //try {
+	       //     if(br != null )
+	       //     	br.close();
+	       //     if(fr != null)
+	        //    	fr.close();
+	        //} catch (IOException e) {
+	        //    e.printStackTrace();
+	        //}
 	    }
 
 	    return lineList;

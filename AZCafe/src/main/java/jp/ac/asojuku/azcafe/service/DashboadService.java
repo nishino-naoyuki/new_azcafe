@@ -54,7 +54,52 @@ public class DashboadService {
 		return dashBoadDto;
 	}
 	
-	private void setInfomation(UserTblEntity userEntity,DashBoadDto dashBoadDto) throws AZCafeException {
+	private void setInformationByFollowAction(UserTblEntity userEntity,DashBoadDto dashBoadDto) throws AZCafeException {
+		int userId = userEntity.getUserId();
+		//フォロー中の人の中でコメントを最近した人を取得する
+		List<CommentTblEntity> commentList = 
+				commentRepository.getCommentByFollowRecentry(userId);
+		//フォロー中の人の中でイイネを最近した人を取得する
+		List<AnswerGoodTblEntity> goodList =
+				answerGoodRepository.getGoodCountByFollowRecently(userId);
+
+		String msgFmt = MessageProperty.getInstance().getProperty(MessageProperty.INFO_RECENT_COMMENT_FOLLOW);
+		for(CommentTblEntity entity : commentList ) {
+			InfomationDto dto = new InfomationDto();
+			AnswerTblEntity answerEntity = answerRepository.getOne(entity.getAnswerId());
+			
+			dto.setInfoKind(InfoKind.COMMENT);
+			dto.setNew(true);
+			dto.setDate(entity.getEntryDate());
+			dto.setMessage(
+					String.format(msgFmt, 
+							entity.getUserId(),entity.getUserTbl().getNickName(),
+							answerEntity.getUserId(),answerEntity.getUserTbl().getNickName(),
+							answerEntity.getAssignmentId(),answerEntity.getAssignmentTbl().getTitle())
+					);
+			dashBoadDto.addInfomationDto(dto);
+		}
+
+		/////////////////////////////////
+		//いいね
+		msgFmt = MessageProperty.getInstance().getProperty(MessageProperty.INFO_RECENT_GOOD_FOLLOW);
+		for(AnswerGoodTblEntity entity : goodList ) {
+			InfomationDto dto = new InfomationDto();
+			AnswerTblEntity answerEntity = answerRepository.getOne(entity.getAnswerId());
+			dto.setInfoKind(InfoKind.GOOD);
+			dto.setNew(true);
+			dto.setDate(entity.getGoodDate());
+			dto.setMessage(
+					String.format(msgFmt, 
+							entity.getUserId(),entity.getUserTbl().getNickName(),
+							answerEntity.getUserId(),answerEntity.getUserTbl().getNickName(),
+							answerEntity.getAssignmentId(),answerEntity.getAssignmentTbl().getTitle())
+					);			
+			dashBoadDto.addInfomationDto(dto);
+		}
+	}
+	
+	private void setInformationToMyself(UserTblEntity userEntity,DashBoadDto dashBoadDto) throws AZCafeException{
 		int userId = userEntity.getUserId();
 
 		List<CommentTblEntity> commentList = 
@@ -62,7 +107,7 @@ public class DashboadService {
 		List<FollowTblEntity> followerList =
 				followRepository.getRecentlyFollowerUser(userId);
 		List<AnswerGoodTblEntity> goodList =
-				answerGoodRepository.getRecentlyGoodCount(userId);
+				answerGoodRepository.getGoodCountRecently(userId);
 		List<AssignmentTblEntity> newAssignmentList =
 				assignmentRepository.getRecentlyNewAssignment(userEntity.getHomeroomTbl().getHomeroomId());
 
@@ -102,7 +147,7 @@ public class DashboadService {
 		msgFmt = MessageProperty.getInstance().getProperty(MessageProperty.INFO_RECENT_GOOD);
 		for(AnswerGoodTblEntity entity : goodList ) {
 			InfomationDto dto = new InfomationDto();
-			AssignmentTblEntity assignmentEntity = entity.getAnswerTbl().getAssignmentTbl();
+			AssignmentTblEntity assignmentEntity = assignmentRepository.getAssignmentByAnsId(entity.getAnswerId());
 			dto.setInfoKind(InfoKind.GOOD);
 			dto.setNew(true);
 			dto.setDate(entity.getGoodDate());
@@ -124,6 +169,13 @@ public class DashboadService {
 					);			
 			dashBoadDto.addInfomationDto(dto);
 		}
+	}
+	private void setInfomation(UserTblEntity userEntity,DashBoadDto dashBoadDto) throws AZCafeException {
+		
+		//自分への行動のお知らせ情報
+		setInformationToMyself(userEntity,dashBoadDto);
+		//フォロワーが行った行動のお知らせ情報
+		setInformationByFollowAction(userEntity,dashBoadDto);
 		
 		dashBoadDto.sortInfomation();
 	}

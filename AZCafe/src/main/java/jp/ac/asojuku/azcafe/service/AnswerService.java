@@ -157,6 +157,7 @@ public class AnswerService {
 		gradingResultDto.setCheckStyleMsg(answerEntity.getCheckStyleMsg());
 		gradingResultDto.setScoreForOutput(answerEntity.getOutputScore());
 		gradingResultDto.setScoreForSource(answerEntity.getSourceScore());
+		gradingResultDto.setPoint(answerEntity.getPoint());
 		if( answerEntity.getTestCaseAnswerTblSet() != null ) {
 			//テストケース毎の結果をセットする
 			for( TestCaseAnswerTblEntity testCaseEntity: answerEntity.getTestCaseAnswerTblSet()) {

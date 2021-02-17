@@ -20,6 +20,7 @@ public class GradingResultDto {
 	int scoreForSource;	//ソースコードの点数
 	List<GradingTestCaseResultDto> testCaseResultList = null;
 	String checkStyleMsg;
+	int point;
 	
 	public void addGradingTestCaseResult(GradingTestCaseResultDto testCaseRet) {
 		if( testCaseResultList == null ) {

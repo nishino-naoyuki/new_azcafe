@@ -27,6 +27,7 @@ import jp.ac.asojuku.azcafe.exception.AZCafeException;
 import jp.ac.asojuku.azcafe.exception.AZCafePermissonDeniedException;
 import jp.ac.asojuku.azcafe.form.AssignmentForm;
 import jp.ac.asojuku.azcafe.param.SessionConst;
+import jp.ac.asojuku.azcafe.repository.AnswerGoodRepository;
 import jp.ac.asojuku.azcafe.service.AnswerService;
 import jp.ac.asojuku.azcafe.service.AssignmentService;
 import jp.ac.asojuku.azcafe.service.CommentServie;
@@ -55,6 +56,51 @@ public class AssignmentController {
 	@Autowired
 	CommentServie commentServie;
 
+	@RequestMapping(value= {"/edit"}, method=RequestMethod.GET)
+	public ModelAndView edit(
+			AssignmentForm assignmentForm,
+			@RequestParam(required = false) Integer assignmentId,
+			ModelAndView mv) {
+		
+		AssignmentDto assignmentDto =  assignmentService.get(assignmentId);
+
+		//課題グループを取得する
+		List<GroupDto> groupList = groupService.getAll();
+		mv.addObject("groupList",groupList);
+		//dto->form
+		getFormFromDto(assignmentForm,assignmentDto);
+		assignmentForm.setAssignmentId(assignmentId);
+		
+		List<HomeroomDto> list = homeroomService.getAll();			
+		mv.addObject("homeroomList", list);
+
+        mv.setViewName("assignment_create");
+        return mv;
+	}
+	/**
+	 * イイネを登録する
+	 * @param answerId
+	 * @return
+	 * @throws AZCafeException
+	 */
+	@ResponseBody
+	@RequestMapping(value= {"/good"}, method=RequestMethod.POST)
+	public Object good(@RequestParam(required = false) Integer answerId) throws AZCafeException {
+		if( answerId == null ) {
+			return "NG:パラメータが不正です。";
+		}
+
+		//セッションからログイン情報を取得
+		LoginInfoDto loginInfo = (LoginInfoDto)session.getAttribute(SessionConst.LOGININFO);
+		if( loginInfo == null ) {
+			//ログイン情報が無いことはないはずだが、直リンされた場合を一応考慮
+			throw new AZCafeException("ログイン情報がありません。ログインしなおしてください");
+		}
+		
+		int goodNum = assignmentService.insertGood(answerId, loginInfo.getUserId());
+		
+		return "OK:"+goodNum;
+	}
 	/**
 	 * メッセージ送信する
 	 * @param mv
@@ -250,14 +296,14 @@ public class AssignmentController {
 	
 	@RequestMapping(value= {"/insert"}, method=RequestMethod.POST)
 	@ResponseBody
-	public String insert() {
+	public String insertOrUpdate() {
 		//セッションから登録情報を取得する
 		AssignmentDto dto = (AssignmentDto)session.getAttribute(SessionConst.ASSIGNMENTINFO);
 		if( dto == null ) {
 			return "登録に失敗しました";
 		}
 		
-		assignmentService.insert(dto);
+		assignmentService.insertOrUpdate(dto);
 		
 		//セッション削除
 		session.removeAttribute(SessionConst.ASSIGNMENTINFO);
@@ -273,6 +319,7 @@ public class AssignmentController {
 	private AssignmentDto getDtoFrom(AssignmentForm assignmentForm) {
 		AssignmentDto dto = new AssignmentDto();
 		
+		dto.setAssignmentId(assignmentForm.getAssignmentId());
 		dto.setGroup(assignmentForm.getGroup());
 		dto.setTitle(assignmentForm.getTitle());
 		dto.setDifficulty(assignmentForm.getDifficulty());
@@ -288,18 +335,29 @@ public class AssignmentController {
 	 * @param from
 	 * @return
 	 */
-	private AssignmentForm getFormFromSession(AssignmentForm from) {
+	private AssignmentForm getFormFromSession(AssignmentForm form) {
 		
 		AssignmentDto dto = (AssignmentDto)session.getAttribute(SessionConst.ASSIGNMENTINFO);
 		if( dto != null ) {
-			from.setGroup(dto.getGroup());
-			from.setTitle(dto.getTitle());
-			from.setDifficulty(dto.getDifficultyAsInt());
-			from.setAnswerList(dto.getAnswerList());
-			from.setPublicStateList(dto.getPublicStateList());
-			from.setContent(dto.getContent());
+			getFormFromDto(form,dto);
 		}
 		
-		return from;
+		return form;
+	}
+	
+	private AssignmentForm getFormFromDto(AssignmentForm form,AssignmentDto dto) {
+		if(form == null ) {
+			form = new AssignmentForm();
+		}
+
+		form.setAssignmentId(dto.getAssignmentId());
+		form.setGroup(dto.getGroup());
+		form.setTitle(dto.getTitle());
+		form.setDifficulty(dto.getDifficultyAsInt());
+		form.setAnswerList(dto.getAnswerList());
+		form.setPublicStateList(dto.getPublicStateList());
+		form.setContent(dto.getContent());
+		
+		return form;
 	}
 }

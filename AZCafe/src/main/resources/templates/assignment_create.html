@@ -40,6 +40,7 @@
     <section class="content">
       <div class="container-fluid">
         <form th:action="@{/assignment/confirm}" id="question-form" method="POST" th:object="${assignmentForm}">
+        <input type="hidden" name="assignmentId" th:field="*{assignmentId}">
         <p id="error" th:each="error : ${#fields.detailedErrors()}" th:text="${error.message}"></p>
         <div class="row">
           <!-- /.col -->

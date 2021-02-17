@@ -27,6 +27,7 @@ import jp.ac.asojuku.azcafe.dto.UserInfoDto;
 import jp.ac.asojuku.azcafe.dto.UserSearchElementDto;
 import jp.ac.asojuku.azcafe.err.ErrorCode;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
+import jp.ac.asojuku.azcafe.exception.AZCafePermissonDeniedException;
 import jp.ac.asojuku.azcafe.form.UpdateIconForm;
 import jp.ac.asojuku.azcafe.form.UserSearchConditionForm;
 import jp.ac.asojuku.azcafe.param.SessionConst;
@@ -43,7 +44,7 @@ import jp.ac.asojuku.validator.UserValidator;
  *
  */
 @Controller
- @RequestMapping(value= {"/user"})
+@RequestMapping(value= {"/user"})
 public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 			
@@ -65,6 +66,7 @@ public class UserController {
 	 */
 	@RequestMapping(value= {"/update/icon"}, method=RequestMethod.POST)
 	public ModelAndView updateIcon(ModelAndView mv,@Valid UpdateIconForm updateIconForm) throws AZCafeException {
+				
 		//アイコンファイルをアップロード
 		String iconPath = FileUtils.uploadIconFile( updateIconForm.getIcon() );
 
@@ -89,55 +91,89 @@ public class UserController {
 		mv.setViewName("user_info");
 		return mv;
 	}
-	
+
 	/**
-	 * パスワード変更
+	 * パスワードリセット画面の表示
+	 * 
+	 * @param mv
+	 * @return
+	 */
+	@RequestMapping(value= {"/reset/password"}, method=RequestMethod.GET)
+	public ModelAndView passwordResetDisp(ModelAndView mv) {
+		mv.setViewName("password_reset");
+		return mv;
+	}
+	/**
+	 * パスワードのリセット
 	 * @param userId
 	 * @param password1
 	 * @param password2
 	 * @return
 	 * @throws AZCafeException
 	 */
+	@RequestMapping(value= {"/reset/password"}, method=RequestMethod.POST)
+	@ResponseBody
+	public Object passwordReset(
+			String mail,
+			String password1,
+			String password2 ) throws AZCafeException {
+		
+		//メアドの存在チェック
+		if( !userService.isExistMailadress(mail) ) {
+			return ValidationConfig.getInstance().getMsg(ErrorCode.ERR_PWD_CHG_MAIL_NOTEXIST);
+		}
+		
+		String errMsg =  validatePassword(password1,password2);
+	
+		userService.updatePassword(mail, password1);
+		
+		return errMsg;
+	}
+	/**
+	 * パスワード変更
+	 * @param userId
+	 * @param password1
+	 * @param password2
+	 * @return
+	 * @throws AZCafePermissonDeniedException 
+	 * @throws AZCafeException 
+	 */
 	@RequestMapping(value= {"/update/password"}, method=RequestMethod.POST)
 	@ResponseBody
 	public Object updatePassword(
 			Integer userId,
 			String password1,
-			String password2 ) throws AZCafeException {
+			String password2 ) throws AZCafePermissonDeniedException, AZCafeException {
 
-		//セッションからログイン情報を取得
-		LoginInfoDto loginInfo = (LoginInfoDto)session.getAttribute(SessionConst.LOGININFO);
-		if( loginInfo == null || loginInfo.getUserId() != userId) {
-			throw new AZCafeException("不正なアクセスです");
-		}
+		//IDが自分のものをかをチェックする
+		isIdMyself(userId);
 		
-		String errMsg ="ok";
-		//パスワード
-		if( password1.equals(password2) != true) {
-			//パスワード不一致
-			errMsg = ValidationConfig.getInstance().getMsg(ErrorCode.ERR_MEMBER_ENTRY_PASSWORD_NOTMATCH);
-		}
-		if( UserValidator.password(password1) != true) {
-			//パスワードポリシーエラー
-			errMsg = ValidationConfig.getInstance().getMsg(ErrorCode.ERR_MEMBER_ENTRY_PASSWORD_POLICY);
-		}
-		
+		String errMsg =  validatePassword(password1,password2);
+	
 		userService.updatePassword(userId, password1);
 		
 		return errMsg;
 	}
 	
+	/**
+	 * ニックネームの更新
+	 * 
+	 * @param userId
+	 * @param nickName
+	 * @return
+	 * @throws AZCafeException
+	 * @throws AZCafePermissonDeniedException 
+	 */
 	@RequestMapping(value= {"/update/nickname"}, method=RequestMethod.POST)
 	@ResponseBody
 	public Object updateNickname(
 			@RequestParam(required = false) Integer userId,
-			@RequestParam(required = false) String nickName) throws AZCafeException {
+			@RequestParam(required = false) String nickName) throws  AZCafePermissonDeniedException, AZCafeException {
 
+		//IDが自分のものをかをチェックする
+		isIdMyself(userId);
 		//セッションからログイン情報を取得
 		LoginInfoDto loginInfo = (LoginInfoDto)session.getAttribute(SessionConst.LOGININFO);
-		if( loginInfo == null || loginInfo.getUserId() != userId) {
-			throw new AZCafeException("不正なアクセスです");
-		}		
 		
 		String errMsg = "ok";
 		if( UserValidator.useNickName(nickName) != true ) {
@@ -293,5 +329,40 @@ public class UserController {
 		mv.addObject("userInfoDto",userInfoDto);
 		mv.setViewName("user_info");
 		return mv;
+	}
+
+	private void isIdMyself(Integer userId) throws AZCafePermissonDeniedException {
+		//セッションからログイン情報を取得
+		LoginInfoDto loginInfo = (LoginInfoDto)session.getAttribute(SessionConst.LOGININFO);
+		if( loginInfo == null || loginInfo.getUserId() != userId) {
+			throw new AZCafePermissonDeniedException("不正なアクセスです");
+		}
+	}
+	/**
+	 * パスワード変更変更処理
+	 * 
+	 * @param userId パスワードを変更する対象のID
+	 * @param password1
+	 * @param password2
+	 * @return
+	 * @throws AZCafeException
+	 */
+	private String validatePassword(
+			String password1,
+			String password2 ) throws AZCafeException {
+
+		String errMsg ="ok";
+		//パスワード
+		if( password1.equals(password2) != true) {
+			//パスワード不一致
+			errMsg = ValidationConfig.getInstance().getMsg(ErrorCode.ERR_MEMBER_ENTRY_PASSWORD_NOTMATCH);
+		}
+		if( UserValidator.password(password1) != true) {
+			//パスワードポリシーエラー
+			errMsg = ValidationConfig.getInstance().getMsg(ErrorCode.ERR_MEMBER_ENTRY_PASSWORD_POLICY);
+		}
+
+		
+		return errMsg;
 	}
 }

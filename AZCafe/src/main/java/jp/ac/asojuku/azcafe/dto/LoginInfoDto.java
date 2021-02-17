@@ -9,6 +9,7 @@ import lombok.Data;
 public class LoginInfoDto {
 
 	private int userId;
+	private int homeroomId;
 	private String mail;
 	private String nickName;
 	private RoleId role;

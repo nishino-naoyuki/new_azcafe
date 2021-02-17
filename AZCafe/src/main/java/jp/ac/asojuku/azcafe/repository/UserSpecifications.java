@@ -35,7 +35,7 @@ public class UserSpecifications {
      * @return
      */
     public static Specification<UserTblEntity> homeroomEquals(Integer homeroomId) {
-        return homeroomId == NO_SELECT ? null : new Specification<UserTblEntity>() {
+        return homeroomId == NO_SELECT || homeroomId == null ? null : new Specification<UserTblEntity>() {
 			@Override
 			public Predicate toPredicate(Root<UserTblEntity> root, CriteriaQuery<?> query,
 					CriteriaBuilder cb) {

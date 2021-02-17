@@ -61,6 +61,11 @@ public class AnswerTblEntity implements Serializable {
 	private Integer sourceScore;
 	private Integer outputScore;
 
+	/** ポイント. */
+	private Integer point;
+
+	/** 提出回数. */
+	private Integer handNum;
 	/** 解答詳細テーブル 一覧. */
 	@OneToMany
 	@JoinColumn(name="answerId",insertable=true ,updatable=true)

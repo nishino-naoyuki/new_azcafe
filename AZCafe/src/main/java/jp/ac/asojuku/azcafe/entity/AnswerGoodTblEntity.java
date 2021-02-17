@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 
@@ -36,9 +38,9 @@ public class AnswerGoodTblEntity implements Serializable {
 	private Integer userId;	//挿入・更新用
 	
 	/** 解答テーブル. */
-	@OneToOne
-    @JoinColumn(name="answerId",insertable=false ,updatable=false)
-	private AnswerTblEntity answerTbl;
+	//@OneToOne
+    //@JoinColumn(name="answerId",insertable=false ,updatable=false)
+	//private AnswerTblEntity answerTbl;
 
 	/** ユーザー. */
 	@OneToOne
@@ -54,5 +56,14 @@ public class AnswerGoodTblEntity implements Serializable {
 	public AnswerGoodTblEntity() {
 	}
 
+	@PrePersist
+    public void onPrePersist() {
+		setGoodDate(new Date());
+    }
+
+    @PreUpdate
+    public void onPreUpdate() {
+    	setGoodDate(new Date());
+    }
 
 }

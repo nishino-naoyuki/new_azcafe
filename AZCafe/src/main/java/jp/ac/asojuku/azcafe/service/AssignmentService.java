@@ -16,6 +16,7 @@ import jp.ac.asojuku.azcafe.dto.AssignmentDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentElementDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentPublicDto;
 import jp.ac.asojuku.azcafe.entity.AnswerDetailTblEntity;
+import jp.ac.asojuku.azcafe.entity.AnswerGoodTblEntity;
 import jp.ac.asojuku.azcafe.entity.AnswerTblEntity;
 import jp.ac.asojuku.azcafe.entity.AssignmentTblEntity;
 import jp.ac.asojuku.azcafe.entity.FollowTblEntity;
@@ -25,6 +26,7 @@ import jp.ac.asojuku.azcafe.entity.PublicAssignmentTblEntity;
 import jp.ac.asojuku.azcafe.entity.TestCaseAnswerTblEntity;
 import jp.ac.asojuku.azcafe.entity.TestCaseTblEntity;
 import jp.ac.asojuku.azcafe.param.Difficulty;
+import jp.ac.asojuku.azcafe.repository.AnswerGoodRepository;
 import jp.ac.asojuku.azcafe.repository.AnswerRepository;
 import jp.ac.asojuku.azcafe.repository.AssignmentRepository;
 import jp.ac.asojuku.azcafe.repository.FollowRepository;
@@ -41,6 +43,8 @@ import jp.ac.asojuku.azcafe.repository.TestCaseRepository;
 public class AssignmentService {
 
 	@Autowired
+	AnswerGoodRepository answerGoodRepository;
+	@Autowired
 	AssignmentRepository assignmentRepository;
 	@Autowired
 	GroupRepository groupRepository;
@@ -51,6 +55,31 @@ public class AssignmentService {
 	@Autowired
 	AnswerRepository answerRepository;
 	
+	/**
+	 * userIdで指定したユーザーがanswerIdで指定した解答にイイネを追加する
+	 * すでに追加されている場合は削除する
+	 * 
+	 * @param answerId
+	 * @param userId
+	 * @return
+	 */
+	public int insertGood(Integer answerId,Integer userId) {
+		//すでに登録しているかのチェック
+		AnswerGoodTblEntity goodEntity = answerGoodRepository.getGoodBy(answerId, userId);
+		if( goodEntity != null ) {
+			//すでにある場合は削除する
+			answerGoodRepository.delete(goodEntity);
+		}else {
+			//無い場合は登録
+			goodEntity = new AnswerGoodTblEntity();
+			goodEntity.setAnswerId(answerId);
+			goodEntity.setUserId(userId);
+			answerGoodRepository.save(goodEntity);
+		}
+		
+		//この問題に対するイイネの数を取得する
+		return answerGoodRepository.getGoodCountForAnswert(answerId);
+	}
 	/**
 	 * 課題の詳細情報を取得する
 	 * @param id
@@ -81,16 +110,54 @@ public class AssignmentService {
 		
 		return list;
 	}
+	
+	/**
+	 * @param assignmentId
+	 * @return
+	 */
+	public AssignmentDto get(Integer assignmentId) {
+		AssignmentTblEntity entity = assignmentRepository.getOne(assignmentId);
+		AssignmentDto dto = new AssignmentDto();
+		
+		dto.setAssignmentId(assignmentId);
+		dto.setGroup(entity.getGroupTbl().getName());
+		dto.setTitle(entity.getTitle());
+		dto.setContent(entity.getContents());
+		dto.setDifficulty(entity.getDifficulty());
+		for( PublicAssignmentTblEntity publicEntity :  entity.getPublicQuestionTblSet() ) {
+			AssignmentPublicDto publicDto = new AssignmentPublicDto();
+			
+			publicDto.setHomeroomId(publicEntity.getHomeroomId());
+			publicDto.setHomeroomName(publicEntity.getHomeroomTbl().getName());
+			publicDto.setPublicState(publicEntity.getPublicState());
+			
+			dto.addAssignmentPublicDto(publicDto);
+		}
+		for(TestCaseTblEntity testCaseEntity : entity.getTestCaseTblSet()) {
+			AssignmentTestCaseDto tetCaseDto = new AssignmentTestCaseDto();
+			
+			tetCaseDto.setInput(testCaseEntity.getInputText());
+			tetCaseDto.setOutput(testCaseEntity.getOutputTxt());
+			
+			dto.addAssignmentTestCaseDto(tetCaseDto);
+		}
+		
+		return dto;
+	}
 	/**
 	 * 課題を挿入する
 	 * @param dto
 	 */
 	@Transactional(rollbackFor = Exception.class)
-	public void insert(AssignmentDto dto) {
+	public void insertOrUpdate(AssignmentDto dto) {
+		AssignmentTblEntity assignmentTblEntity = null;
+		if( dto.getAssignmentId() != null ) {
+			assignmentTblEntity = assignmentRepository.getOne(dto.getAssignmentId());
+		}
 		//グループ登録
 		GroupTblEntity groupEntity = insertGroup(dto.getGroup());
 		//本体登録
-		AssignmentTblEntity assignmentTblEntity = insertAssignment(dto,groupEntity);
+		assignmentTblEntity = insertAssignment(assignmentTblEntity,dto,groupEntity);
 		//公開設定登録
 		insertPublicState(dto,assignmentTblEntity);
 		//テストケース登録
@@ -122,11 +189,13 @@ public class AssignmentService {
 	 * @param groupEntity
 	 * @return
 	 */
-	private AssignmentTblEntity insertAssignment(AssignmentDto dto,GroupTblEntity groupEntity) {
+	private AssignmentTblEntity insertAssignment(AssignmentTblEntity entity,AssignmentDto dto,GroupTblEntity groupEntity) {
 		if( dto == null ) {
 			return new AssignmentTblEntity();
 		}
-		AssignmentTblEntity entity = new AssignmentTblEntity();
+		if( entity == null ) {
+			entity = new AssignmentTblEntity();
+		}
 		
 		entity.setTitle(dto.getTitle());
 		entity.setContents(dto.getContent());	
@@ -212,9 +281,15 @@ public class AssignmentService {
 		if( answerEntity != null ) {
 			dto.setCorrect((answerEntity.getCorrectFlg()==1?true:false));
 			dto.setScore(answerEntity.getScore());
+			dto.setUpdateDate(answerEntity.getAnswerDate());
+			dto.setPoint(answerEntity.getPoint());
+			dto.setHandNum(answerEntity.getHandNum());
 		}else {
 			dto.setCorrect(false);
 			dto.setScore(null);
+			dto.setUpdateDate(null);
+			dto.setPoint(0);
+			dto.setHandNum(0);
 		}
 	}
 	
@@ -258,6 +333,7 @@ public class AssignmentService {
 			gradingResult.setScoreForOutput(answerEntity.getOutputScore());
 			gradingResult.setScoreForSource(answerEntity.getSourceScore());
 			gradingResult.setCheckStyleMsg(answerEntity.getCheckStyleMsg());
+			gradingResult.setPoint(answerEntity.getPoint());
 		}
 		detail.setGradingResultDto(gradingResult);
 		

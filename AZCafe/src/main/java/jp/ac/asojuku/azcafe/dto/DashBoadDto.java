@@ -44,7 +44,9 @@ public class DashBoadDto {
 	}
 	
 	public void sortInfomation() {
-		Collections.sort(newInfoList,new InfoComparator());
+		if( newInfoList != null ) {
+			Collections.sort(newInfoList,new InfoComparator());
+		}
 	}
 	
 }

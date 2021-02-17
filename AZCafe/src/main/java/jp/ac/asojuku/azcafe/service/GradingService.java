@@ -10,18 +10,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jp.ac.asojuku.azcafe.config.AZCafeConfig;
 import jp.ac.asojuku.azcafe.dto.GradingResultDto;
 import jp.ac.asojuku.azcafe.dto.GradingTestCaseResultDto;
 import jp.ac.asojuku.azcafe.entity.AnswerDetailTblEntity;
 import jp.ac.asojuku.azcafe.entity.AnswerTblEntity;
 import jp.ac.asojuku.azcafe.entity.AssignmentTblEntity;
 import jp.ac.asojuku.azcafe.entity.TestCaseAnswerTblEntity;
+import jp.ac.asojuku.azcafe.entity.UserTblEntity;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
+import jp.ac.asojuku.azcafe.param.Difficulty;
 import jp.ac.asojuku.azcafe.param.Language;
 import jp.ac.asojuku.azcafe.repository.AnswerDetailRepository;
 import jp.ac.asojuku.azcafe.repository.AnswerRepository;
 import jp.ac.asojuku.azcafe.repository.AssignmentRepository;
 import jp.ac.asojuku.azcafe.repository.TestCaseAnswerRepository;
+import jp.ac.asojuku.azcafe.repository.UserRepository;
 import jp.ac.asojuku.azcafe.service.grading.GradingFactory;
 import jp.ac.asojuku.azcafe.service.grading.GradingProcess;
 import jp.ac.asojuku.azcafe.util.FileUtils;
@@ -42,6 +46,8 @@ public class GradingService {
 	TestCaseAnswerRepository testCaseAnswerRepository;
 	@Autowired
 	AnswerDetailRepository answerDetailRepository;
+	@Autowired
+	UserRepository userRepository;
 
 	/**
 	 * @param userId
@@ -65,9 +71,9 @@ public class GradingService {
 		if( StringUtils.isEmpty(result.getCompleErrMsg()) ) {
 			//結果をDBに登録（コンパイル失敗は登録しない）
 			AnswerTblEntity answerEntity = insertAnswerInfo(userId,assignmentId,result);		
-			//いったん削除して登録しなおす
-			answerDetailRepository.delete(answerEntity.getAnswerId());
 			insertAnswerCode(answerEntity,"",code);
+			//ユーザーテーブルのポイント更新
+			updateUserTotalPoint(userId);
 		}
 		
 		return result;
@@ -89,9 +95,32 @@ public class GradingService {
 			//結果をDBに登録（コンパイル失敗は登録しない）
 			AnswerTblEntity answerEntity = insertAnswerInfo(userId,assignmentId,result);
 			insertAnswerCodes(answerEntity,srcFileList);
+			//ユーザーテーブルのポイント更新
+			updateUserTotalPoint(userId);
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * ポイントを更新する
+	 * @param userId
+	 */
+	private void updateUserTotalPoint(Integer userId) {
+		List<AnswerTblEntity> ansList = answerRepository.getList(userId);
+		UserTblEntity userEntity = userRepository.getOne(userId);
+		
+		if( userEntity == null ) {
+			return;	//念のため
+		}
+		
+		int point = 0;
+		for( AnswerTblEntity entity : ansList ) {
+			point += entity.getPoint();
+		}
+		userEntity.setPoint(point);
+		
+		userRepository.save(userEntity);
 	}
 
 	/**
@@ -113,12 +142,20 @@ public class GradingService {
 			answerEntity = new AnswerTblEntity();
 			answerEntity.setUserId(userId);
 			answerEntity.setAssignmentId(assignmentId);
-		}		
+			answerEntity.setHandNum(0);
+			answerEntity.setPoint(0); //ポイント初期化
+		}
 		answerEntity.setCorrectFlg((result.isCorrect() ? 1:0));
 		answerEntity.setScore(result.getScoreForOutput()+result.getScoreForSource());
 		answerEntity.setOutputScore(result.getScoreForOutput());
 		answerEntity.setSourceScore(result.getScoreForSource());
 		answerEntity.setCheckStyleMsg(result.getCheckStyleMsg());
+		if( result.isCorrect() ) {
+			//今回正解（再提出）の場合は提出回数を増やす
+			answerEntity.setHandNum(answerEntity.getHandNum()+1);
+		}
+		//ポイントを更新する
+		result.setPoint( calPoint(answerEntity,result.isCorrect()) );
 		
 		answerRepository.save(answerEntity);
 		
@@ -145,6 +182,39 @@ public class GradingService {
 		return answerEntity;
 	}
 	
+	/**
+	 * ポイントの計算をする
+	 * ※すでにAnswerEntityが作成済であることが前提
+	 * 
+	 * @param answerEntity
+	 * @return
+	 */
+	private int calPoint(AnswerTblEntity answerEntity,boolean correctFlg) {
+		AssignmentTblEntity assignmentEntity =answerEntity.getAssignmentTbl();
+		if( assignmentEntity == null ) {
+			assignmentEntity = assignmentRepository.getOne(answerEntity.getAssignmentId());
+		}
+
+		int point = answerEntity.getScore();		//基礎点
+		
+		if( correctFlg ) {
+			//難易度ボーナスは世界の時だけ
+			point += Difficulty.getBy(assignmentEntity.getDifficulty()).getPoint();
+		}
+		
+		//提出回数原点（2回名以降減点）
+		int handMinus = AZCafeConfig.getInstance().getHandminus();//1回提出当たりのマイナス
+		int handNum = answerEntity.getHandNum();
+		if( handNum > 1) {
+			handNum--;
+			point -= (handMinus*handNum);
+		}
+		
+		answerEntity.setPoint(point);
+		
+		return point;
+	}
+	
 	private void insertAnswerCodes(AnswerTblEntity answerEntity,List<File> codeList) {
 		//いったん削除して登録しなおす
 		answerDetailRepository.delete(answerEntity.getAnswerId());
@@ -156,6 +226,8 @@ public class GradingService {
 	}
 	
 	private void insertAnswerCode(AnswerTblEntity answerEntity,String fileName,String code) {
+		//いったん削除して登録しなおす
+		answerDetailRepository.delete(answerEntity.getAnswerId());
 
 		//ソースコード
 		AnswerDetailTblEntity answerDetailEntity = new AnswerDetailTblEntity();

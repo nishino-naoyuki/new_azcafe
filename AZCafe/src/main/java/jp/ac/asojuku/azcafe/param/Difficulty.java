@@ -1,20 +1,26 @@
 package jp.ac.asojuku.azcafe.param;
 
+import java.util.Map;
+
+import jp.ac.asojuku.azcafe.config.AZCafeConfig;
+
 public enum Difficulty {
 
-	VEASY(1,"簡単"),
-	EASY(2,"やや簡単"),
-	NORMAL(3,"普通"),
-	DIFF(4,"やや難"),
-	VDIFF(5,"難");
+	VEASY(1,"簡単","veasy"),
+	EASY(2,"やや簡単","easy"),
+	NORMAL(3,"普通","normal"),
+	DIFF(4,"やや難","diff"),
+	VDIFF(5,"難","vdiff");
 
 	//ステータス
 	private int id;
 	private String msg;
+	private String key;
 
-	private Difficulty(int id, String msg) {
+	private Difficulty(int id, String msg,String key) {
 		this.id = id;
 		this.msg = msg;
+		this.key = key;
 	}
 	/**
 	 * @return id
@@ -38,6 +44,11 @@ public enum Difficulty {
 		return (this.id == id);
 	}
 	
+	public int getPoint() {
+		Map<String, Integer> pointMap = AZCafeConfig.getInstance().getDifficulty();
+		
+		return pointMap.get(key);
+	}
 	/**
 	 * IDからDifficultyオブジェクトを取得する
 	 * @param id

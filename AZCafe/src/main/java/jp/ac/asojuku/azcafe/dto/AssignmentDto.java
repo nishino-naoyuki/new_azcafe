@@ -1,6 +1,7 @@
 package jp.ac.asojuku.azcafe.dto;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import jp.ac.asojuku.azcafe.form.AssignmentTestCaseForm;
@@ -10,6 +11,7 @@ import lombok.Data;
 
 @Data
 public class AssignmentDto {
+	private Integer assignmentId;//更新用。新規の時はnull
 
 	private String group;
 	
@@ -19,6 +21,8 @@ public class AssignmentDto {
 	
 	private String content;
 
+	private Date updateDate;
+	
 	private List<AssignmentPublicDto>  publicStateList;
 	
 	private List<AssignmentTestCaseDto> answerList;
@@ -31,6 +35,19 @@ public class AssignmentDto {
 	}
 	public Integer getDifficultyAsInt() {
 		return difficulty.getId();
+	}
+	
+	public void addAssignmentPublicDto(AssignmentPublicDto dto) {
+		if( publicStateList == null ) {
+			publicStateList = new ArrayList<>();
+		}
+		publicStateList.add(dto);
+	}
+	public void addAssignmentTestCaseDto(AssignmentTestCaseDto dto) {
+		if( answerList == null ) {
+			answerList = new ArrayList<>();
+		}
+		answerList.add(dto);
 	}
 	
 	//form->Dto for List

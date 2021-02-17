@@ -55,11 +55,16 @@ CREATE TABLE ANSWER_TBL
 	score int NOT NULL COMMENT '採点結果',
 	correct_flg int DEFAULT 0 NOT NULL,
 	-- チェックスタイルができない場合は固定文字をプログラム側で入れる
-	checkStyle_msg varchar(2000) NOT NULL COMMENT 'チェックスタイルができない場合は固定文字をプログラム側で入れる',
+	check_style_msg varchar(2000) NOT NULL COMMENT 'チェックスタイルができない場合は固定文字をプログラム側で入れる',
 	-- 点数の内訳：ソース解析結果（50点満点）
 	source_score int NOT NULL COMMENT '点数の内訳：ソース解析結果（50点満点）',
 	output_score int NOT NULL,
 	answer_date timestamp NOT NULL,
+	-- ポイントは点数、難易度、提出回数
+	-- で決まります
+	point int NOT NULL COMMENT 'ポイントは点数、難易度、提出回数
+で決まります',
+	hand_num int NOT NULL,
 	PRIMARY KEY (answer_id)
 );
 

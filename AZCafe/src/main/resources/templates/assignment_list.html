@@ -74,7 +74,9 @@
                       <th>グループ</th>
                       <th>問題名</th>
                       <th>難易度</th>
+                      <th>状態(提出回数)</th>
                       <th>提出日</th>
+                      <th>ポイント</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -84,7 +86,9 @@
                         <a th:href="|@{/assignment/detail}?id=${element.assignmentId}|" class="ranking-user-name" th:text="${element.title}" target="_blank" rel="noopener noreferrer"></a>
                       </td> 
                       <td th:text="${element.difficulty}"></td>
-                      <td th:text="${element.score}"></td>
+                      <td th:text="${element.getState()}"></td>
+                      <td th:text="${element.updateDate}"></td>
+                      <td th:text="${element.point}"></td>
                     </tr>
                     </tbody>
                   </table>
