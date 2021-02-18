@@ -20,6 +20,10 @@ public class UserInputForm {
 	@Size(max = 60, message="{errmsg0305}")
 	private String mail;
 
+	@NotEmpty(message = "{errmsg0126}")
+	@Size(max = 100, message="{errmsg0127}")
+	private String name;
+	
 	@NotEmpty(message = "{errmsg0112}")
 	@Size(max = 100, message="{errmsg0113}")
 	private String nickname;

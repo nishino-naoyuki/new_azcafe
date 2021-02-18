@@ -34,6 +34,7 @@ public class DashBoadDto {
 	private Integer goodNum;
 	private Integer followNum;
 	private Integer followerNum;
+	private Integer point;
 	private List<InfomationDto> newInfoList;
 	
 	public void addInfomationDto(InfomationDto info) {

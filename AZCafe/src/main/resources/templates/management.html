@@ -87,6 +87,10 @@
                         <input type="text" name="mail" id="mail" class="form-control" placeholder="メールアドレス" th:field="*{mail}">
                       </div>
                       <div class="form-group">
+                        <label for="name">名前<span class="float-right text-danger">（必須）</span></label>
+                        <input type="text"  name="name" id="name" class="form-control" placeholder="名前" th:field="*{nickname}">
+                      </div>
+                      <div class="form-group">
                         <label for="nickname">ニックネーム<span class="float-right text-danger">（必須）</span></label>
                         <input type="text"  name="nickname" id="nickname" class="form-control" placeholder="ニックネーム" th:field="*{nickname}">
                       </div>

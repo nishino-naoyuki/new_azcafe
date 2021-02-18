@@ -34,7 +34,7 @@
       <div class="container-fluid">        
         <!-- Main row -->
         <div class="row">
-          <div class="col-md-12">
+          <div th:unless="${session['LoginInfo'].isStudent()}" class="col-md-12">
             <p>
               <button type="button" id="rankig-csv-output" class="btn btn-primary" data-toggle="tooltip" title="今表示している情報をCSV出力します">CSV出力</button>
             </p>
@@ -64,6 +64,7 @@
                       <th>順位</th>
                       <th>クラス</th>
                       <th>ニックネーム</th>
+                      <th th:unless="${session['LoginInfo'].isStudent()}">名前</th>
                       <th>ポイント</th>
                     </tr>
                     </thead>
@@ -80,6 +81,7 @@
                           <div class="ranking-user-name" th:text="${element.nickName}"></div>
                         </div>
                       </td> 
+                      <td th:unless="${session['LoginInfo'].isStudent()}" th:text="${element.name}"></td>
                       <td th:text="${element.point}"></td>
                     </tr>
                     </tbody>
@@ -149,5 +151,17 @@
 	  //alert($(this).val());	  
 	  $("#hrChange").submit();
   });
+</script>
+<script th:unless="${session['LoginInfo'].isStudent()}">
+//学生の時はCSV出力のscriptを表示しない
+	$('#rankig-csv-output').on('click', function() {
+		
+		if( !confirm("CSV出力します。情報が多い時は時間がかかる場合もあります。\n出力してよろしいですか？")){
+			return;
+		}
+		
+        var url = /*[[@{/csv/ranking}]]*/ "/csv/ranking";
+        window.location.href = url + "?hoomeroomId="+$("#classSelect").val();
+	});
 </script>
 </html>

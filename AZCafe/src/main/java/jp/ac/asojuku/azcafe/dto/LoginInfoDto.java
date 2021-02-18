@@ -34,4 +34,8 @@ public class LoginInfoDto {
 	public String getFollowerNum() {
 		return NumberFormat.getNumberInstance().format(followerNum);
 	}
+	
+	public boolean isStudent() {
+		return role == RoleId.STUDENT;
+	}
 }

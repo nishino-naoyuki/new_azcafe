@@ -28,6 +28,19 @@ public class UserSpecifications {
         };
     }
 
+	/**
+     * 指定文字を名前に含むユーザーを検索する。
+     */
+    public static Specification<UserTblEntity> nameContains(String name) {
+        return StringUtils.isEmpty(name) ? null : new Specification<UserTblEntity>() {
+			@Override
+			public Predicate toPredicate(Root<UserTblEntity> root, CriteriaQuery<?> query,
+					CriteriaBuilder cb) {
+				// TODO 自動生成されたメソッド・スタブ
+				return cb.like(root.get("name"),  "%" + name + "%" );
+			}
+        };
+    }
     /**
      * 学科コードの検索
      * 

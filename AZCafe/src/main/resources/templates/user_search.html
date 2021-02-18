@@ -77,6 +77,10 @@
                         <option th:each="dto:${levelList}" th:value="${dto.levelId}" th:text="${dto.name}" ></option>
                       </select>
                     </div>
+                    <div th:unless="${session['LoginInfo'].isStudent()}" class="col-sm-6">
+                      <label for="q-name">名前</label>
+                      <input type="text" name="name"  class="form-control" id="q-name" placeholder="名前">
+                    </div>
                   </div>
                 </div>
                 <div class="card-footer">
@@ -87,7 +91,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-12">
+          <div th:unless="${session['LoginInfo'].isStudent()}" class="col-md-12">
             <p>
               <button type="button" id="user-register" class="btn btn-primary">ユーザー新規登録</button>
               <button type="button" id="csv-output" class="btn btn-primary">CSV出力</button>
@@ -107,6 +111,7 @@
                       <th>学籍番号</th>
                       <th>クラス</th>
                       <th>ニックネーム</th>
+                      <th th:unless="${session['LoginInfo'].isStudent()}">名前</th>
                       <th>称号</th>
                       <th>フォロワ数</th>
                       <th>イイネ数</th>
@@ -170,10 +175,12 @@
       "responsive": true,
     });
   });
-  
+</script>
+<script th:if="${session['LoginInfo'].isStudent()}">
+//ユーザーの場合のテーブル更新処理
   $('#user-search').on('click', function() {
 
-      var ajaxUrl = /*[[@{/user/csvinput}]]*/ "/user/search";
+      var ajaxUrl = /*[[@{/user/search}]]*/ "/user/search";
       //alert(ajaxUrl)
 		//Ajax！
    	var formData = new FormData($('#user-search-cond').get()[0]);
@@ -217,9 +224,86 @@
 	                			img = '<img src="/getImage/'+row.avater+'" class="ranking-user-img elevation-2" alt="User Image">';
 	                		}
 	                		
-	                		return img+'<a href="'+url+'?userId='+row.userId+'">'+data+'</a>';
+	                		return '<a href="'+url+'?userId='+row.userId+'">'+img+'</a>'+data;
 	                	}
 	            	},
+	                { data: "level" },
+	                { data: "followNum" },
+	                { data: "followerNum" }
+	            ]
+	   	    });
+   			usertable.draw();
+           
+       }).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
+           alert("検索が失敗しました。"+textStatus+" errorThrown:"+errorThrown);
+       });
+  });
+</script>
+<script th:unless="${session['LoginInfo'].isStudent()}">
+//学生の時はCSV出力のscriptを表示しない
+  $('#csv-output').on('click', function() {
+	alert("csv output!")
+      const url = /*[[@{/csv/user}]]*/ "/csv/user";
+      
+      $('#user-search-cond').attr('action', url);
+      $('#user-search-cond').submit();
+  });
+
+  $('#user-register').on('click', function() {
+      window.location.href = /*[[@{/manage/index}]]*/ "/manage/index";
+  });
+  
+
+  $('#user-search').on('click', function() {
+
+      var ajaxUrl = /*[[@{/user/search}]]*/ "/user/search";
+      //alert(ajaxUrl)
+		//Ajax！
+   	var formData = new FormData($('#user-search-cond').get()[0]);
+   	$.ajax({
+           type : "POST",                  // HTTP通信の種類
+           url  : ajaxUrl,                 // リクエストを送信する先のURL
+           dataType : "json",              // サーバーから返されるデータの型
+           data : formData,                // サーバーに送信するデータ
+           processData : false,
+           contentType: false        
+       }).done(function(data) {        // Ajax通信が成功した時の処理
+    	 
+       		//テーブルをいったんクリア
+    	   usertable.clear();
+    	   usertable.destroy();
+
+   		  usertable = $('#userTable').DataTable({
+	   	      "paging": true,
+	   	      "lengthChange": false,
+	   	      "searching": true,
+	   	      "ordering": true,
+	   	      "info": true,
+	   	      "autoWidth": false,
+	   	      "responsive": true,
+				"data":data,
+				"language": {
+	                "url": /*[[@{/DataTables-1.10.16/Japanese.json}]]*/ 'Japanese.json'
+	            },
+	            "columns": [
+	            	{ data:"orgNo"},
+	            	{ data:"homeroomeName"},
+	            	{
+	            		data:"nickName" ,
+	            		type:"userId",
+	                	render: function ( data, type, row ) {
+	                		const url = /*[[@{/bbs/detail}]]*/ "/user/info";
+	                		let img = "";
+	                		if( row.avater == null ){
+	                			img = '<img src="/img/no_image.jpg" class="ranking-user-img elevation-2" alt="User Image">';
+	                		}else{
+	                			img = '<img src="/getImage/'+row.avater+'" class="ranking-user-img elevation-2" alt="User Image">';
+	                		}
+
+	                		return '<a href="'+url+'?userId='+row.userId+'">'+img+'</a>'+data;
+	                	}
+	            	},
+	                { data: "name" },
 	                { data: "level" },
 	                { data: "followNum" },
 	                { data: "followerNum" }

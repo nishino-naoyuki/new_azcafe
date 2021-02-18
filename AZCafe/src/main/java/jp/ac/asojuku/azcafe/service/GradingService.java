@@ -106,7 +106,7 @@ public class GradingService {
 	 * ポイントを更新する
 	 * @param userId
 	 */
-	private void updateUserTotalPoint(Integer userId) {
+	public void updateUserTotalPoint(Integer userId) {
 		List<AnswerTblEntity> ansList = answerRepository.getList(userId);
 		UserTblEntity userEntity = userRepository.getOne(userId);
 		
@@ -189,7 +189,7 @@ public class GradingService {
 	 * @param answerEntity
 	 * @return
 	 */
-	private int calPoint(AnswerTblEntity answerEntity,boolean correctFlg) {
+	public int calPoint(AnswerTblEntity answerEntity,boolean correctFlg) {
 		AssignmentTblEntity assignmentEntity =answerEntity.getAssignmentTbl();
 		if( assignmentEntity == null ) {
 			assignmentEntity = assignmentRepository.getOne(answerEntity.getAssignmentId());

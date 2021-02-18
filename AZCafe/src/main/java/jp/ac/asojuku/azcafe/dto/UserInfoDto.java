@@ -14,6 +14,7 @@ public class UserInfoDto {
 	private String OrgNo;
 	private String homeroomeName;
 	private String nickName;
+	private String name;
 	private String level;
 	private Integer followNum;
 	private Integer followerNum;

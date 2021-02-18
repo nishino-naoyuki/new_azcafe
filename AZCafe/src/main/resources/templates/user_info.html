@@ -89,6 +89,11 @@
                   <button class="btn-sm btn-primary" id="btn-nickname-appy">適用</button>
                 </div>
                 <hr>
+                <div  th:unless="${session['LoginInfo'].isStudent()}">
+	                <strong><i class="far fa-heart"></i> 名前</strong>
+	                <p class="text-muted" id="name-label" th:text="${userInfoDto.name}"></p>
+                </div>
+                <hr>
                 <div th:if="${userInfoDto.userId} eq ${session['LoginInfo'].userId}">
 	                <strong><i class="fas fa-user-lock"></i> パスワード変更</strong>
 	                <div id="nickname-edit" class="form-group d-flat">

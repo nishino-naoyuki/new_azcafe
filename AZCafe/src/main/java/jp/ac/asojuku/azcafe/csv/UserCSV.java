@@ -11,7 +11,7 @@ public class UserCSV {
 	private int roleId;
 	//学籍番号/社員番号
 	@CsvBindByName(column = "学籍番号/社員番号") 
-	private String name;
+	private String orgNo;
 	//メールアドレス
 	@CsvBindByName(column = "メールアドレス") 
 	private String mailAddress;
@@ -27,4 +27,7 @@ public class UserCSV {
 	//入学年度
 	@CsvBindByName(column = "入学年度") 
 	private String admissionYear;
+	//名前
+	@CsvBindByName(column = "名前") 
+	private String name;
 }

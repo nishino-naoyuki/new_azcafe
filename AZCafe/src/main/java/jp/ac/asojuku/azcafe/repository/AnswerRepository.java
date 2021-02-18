@@ -17,6 +17,9 @@ public interface AnswerRepository
 
 	@Query("select a from AnswerTblEntity a where userId = :userId")
 	public List<AnswerTblEntity> getList(@Param("userId")Integer userId);
+
+	@Query("select a from AnswerTblEntity a where assignmentId = :assignmentId")
+	public List<AnswerTblEntity> getListByAssId(@Param("assignmentId")Integer assignmentId);
 	
 	
 }

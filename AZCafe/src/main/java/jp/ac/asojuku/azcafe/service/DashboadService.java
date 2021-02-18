@@ -196,6 +196,7 @@ public class DashboadService {
 		dashBoadDto.setFollowNum(followNum);
 		dashBoadDto.setFollowerNum(followerNum);
 		dashBoadDto.setGoodNum(goodNum);
+		dashBoadDto.setPoint(userEntity.getPoint());
 		
 		return userEntity;
 	}

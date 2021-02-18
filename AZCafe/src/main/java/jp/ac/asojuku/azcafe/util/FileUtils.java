@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -344,6 +345,27 @@ public class FileUtils {
 			makeDir(path.getParent().toString());
 		}
 		try (BufferedWriter bw = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+            // ファイルへの書き込み
+			for(String line : content) {
+				bw.write(line);
+				bw.newLine();
+			}
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new AZCafeException(e);
+        }
+		
+		return path;
+	}
+
+	public static Path outputFile(String filePath,List<String> content,String encode) throws AZCafeException {
+		Path path = Paths.get(filePath);
+		
+		if( !Files.isWritable(path.getParent()) ) {
+			makeDir(path.getParent().toString());
+		}
+		try (BufferedWriter bw = Files.newBufferedWriter(path, Charset.forName(encode))) {
             // ファイルへの書き込み
 			for(String line : content) {
 				bw.write(line);

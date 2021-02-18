@@ -146,6 +146,7 @@ public class ManagementController {
 		createUserDto.setNickname(userInputForm.getNickname());
 		createUserDto.setPass(userInputForm.getPass1());
 		createUserDto.setAdmissionYear(Integer.valueOf(userInputForm.getAdmissionYear()));
+		createUserDto.setName(userInputForm.getName());
 		
 		
 		return createUserDto;

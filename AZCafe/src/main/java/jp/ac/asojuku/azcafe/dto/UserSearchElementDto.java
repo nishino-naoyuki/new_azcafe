@@ -12,4 +12,5 @@ public class UserSearchElementDto {
 	private Integer followNum;
 	private Integer followerNum;
 	private String avater;
+	private String name;
 }

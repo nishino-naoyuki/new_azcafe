@@ -25,6 +25,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,20 +35,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.ac.asojuku.azcafe.config.AZCafeConfig;
 import jp.ac.asojuku.azcafe.csv.UserCSV;
 import jp.ac.asojuku.azcafe.dto.CSVProgressDto;
+import jp.ac.asojuku.azcafe.dto.RankingDto;
+import jp.ac.asojuku.azcafe.dto.UserSearchElementDto;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
 import jp.ac.asojuku.azcafe.form.UserInputCSVForm;
+import jp.ac.asojuku.azcafe.form.UserSearchConditionForm;
 import jp.ac.asojuku.azcafe.service.UserCSVService;
+import jp.ac.asojuku.azcafe.service.UserService;
 import jp.ac.asojuku.azcafe.util.FileUtils;
 
 
 @RestController
 public class FileController {
+	private final int ALL = -1;
 	private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 	@Autowired
 	ResourceLoader resourceLoader;
-
 	@Autowired
 	UserCSVService userCSVService;
+	@Autowired
+	UserService userService;
 	
 	@ResponseBody
 	@RequestMapping(value = "/getImage/{id}", method = {RequestMethod.GET })
@@ -114,6 +121,98 @@ public class FileController {
         return outputResult(userList);
 	}
 	
+	/**
+	 * ランキングのCSVファイルを出力する
+	 * 
+	 * @param hoomeroomId
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value= {"/csv/ranking"}, method=RequestMethod.GET)
+	public Object outpuRnakingCsv(@RequestParam Integer hoomeroomId) throws IOException {
+
+		//ディレクトリを作成する
+	    String uploadDir = mkCSVOutputdirs();
+	    String csvPath = uploadDir + "/ranking.csv";
+		//	ランキング取得
+		List<RankingDto> rankingList = userService.getRanking(( hoomeroomId == ALL ? null : hoomeroomId));
+		//出力！
+		boolean result = userCSVService.outputRnakingCsv(rankingList, csvPath);
+
+		byte[] b  = {};
+		if( result ) {
+			Resource resource = resourceLoader.getResource("file:" + csvPath);
+			InputStream csvStream = resource.getInputStream();
+			
+			// byteへ変換
+			b = IOUtils.toByteArray(csvStream);
+		}
+		 //もうファイルはいらないので削除
+		FileUtils.delete(csvPath);
+		
+		// レスポンスデータとして返却
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		headers.setContentDispositionFormData("filename", "ranking.csv");
+		headers.setContentLength(b.length);
+		return new HttpEntity<byte[]>(b, headers);
+	}
+
+	@RequestMapping(value= {"/csv/user"}, method=RequestMethod.GET)
+	public Object outputUserCsv(@Valid UserSearchConditionForm cond) throws IOException {
+
+		//ディレクトリを作成する
+	    String uploadDir = mkCSVOutputdirs();
+	    String csvPath = uploadDir + "/ranking.csv";
+	    
+	    //ユーザーを検索する
+		List<UserSearchElementDto> list = userService.getList(cond);
+		boolean result = userCSVService.outputUserInfo(list, csvPath);
+
+		byte[] b  = {};
+		if( result ) {
+			Resource resource = resourceLoader.getResource("file:" + csvPath);
+			InputStream csvStream = resource.getInputStream();
+			
+			// byteへ変換
+			b = IOUtils.toByteArray(csvStream);
+		}
+		 //もうファイルはいらないので削除
+		FileUtils.delete(csvPath);
+		
+		// レスポンスデータとして返却
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		headers.setContentDispositionFormData("filename", "userList.csv");
+		headers.setContentLength(b.length);
+		return new HttpEntity<byte[]>(b, headers);
+	}
+	
+	/**
+	 * アップロードディレクトリの作成
+	 * 
+	 * @return
+	 */
+	private String mkCSVOutputdirs() {
+    	//アップロードディレクトリを取得する
+    	StringBuilder filePath = new StringBuilder(AZCafeConfig.getInstance().getCsvoutputdir());
+    	
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        File uploadDir = new File(filePath.toString(), sdf.format(now));
+        // 既に存在する場合はプレフィックスをつける
+        int prefix = 0;
+        while(uploadDir.exists()){
+            prefix++;
+            uploadDir =
+                    new File(filePath.toString() + sdf.format(now) + "-" + String.valueOf(prefix));
+        }
+
+        // フォルダ作成
+        FileUtils.makeDir( uploadDir.toString());
+
+        return uploadDir.toString();
+	}
 
     /**
      * CSVファイルアップロード用のディレクトリを作成する

@@ -11,4 +11,5 @@ public class UserSearchConditionForm {
 	private Integer homeroomId;
 	private Integer roleId;
 	private Integer level;
+	private String name;
 }

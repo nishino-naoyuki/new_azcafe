@@ -247,36 +247,37 @@
 		                    <p>コンパイルエラーの内容</p>
 		                  	<textarea id="compile-msg" rows="4" cols="120" disabled></textarea>
 		                  </div>
-		                  <div class="col-md-10">
-		                    <div class="info-box">
-		                      <span class="info-box-icon bg-success"><i class="far fa-window-maximize"></i></span>
-		        
-		                      <div class="info-box-content">
-		                        <span class="info-box-text">出力結果の得点</span>
-		                        <span class="info-box-number"  id="scoreForOutput" th:text="|${assignmentdetailDto.gradingResultDto.scoreForOutput}点|"></span>
-		                      </div>
-		                      <!-- /.info-box-content -->
-		                    </div>
+		                  <div class="row d-flex">
+			                  <div class="col-md-6">
+			                    <div class="info-box">
+			                      <span class="info-box-icon bg-success"><i class="far fa-window-maximize"></i></span>
+			        
+			                      <div class="info-box-content">
+			                        <span class="info-box-text">出力結果の得点</span>
+			                        <span class="info-box-number"  id="scoreForOutput" th:text="|${assignmentdetailDto.gradingResultDto.scoreForOutput}点|"></span>
+			                      </div>
+			                      <!-- /.info-box-content -->
+			                    </div>
+			                  </div>
+			                  
+			                  <div class="col-md-6">
+			                    <div class="info-box">
+			                      <span class="info-box-icon bg-success"><i class="far fa-file-code"></i></span>
+			        
+			                      <div class="info-box-content">
+			                        <span class="info-box-text">ソースコードの得点</span>
+			                        <span class="info-box-number" id="scoreForSource" th:text="|${assignmentdetailDto.gradingResultDto.scoreForSource}点|"></span>
+			                      </div>
+			                      <!-- /.info-box-content -->
+			                    </div>
+			                  </div>
 		                  </div>
-		                  
 		                  <div class="col-md-10">
 		                    <div class="info-box">
-		                      <span class="info-box-icon bg-success"><i class="far fa-file-code"></i></span>
+		                      <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
 		        
 		                      <div class="info-box-content">
-		                        <span class="info-box-text">ソースコードの得点</span>
-		                        <span class="info-box-number" id="scoreForSource" th:text="|${assignmentdetailDto.gradingResultDto.scoreForSource}点|"></span>
-		                      </div>
-		                      <!-- /.info-box-content -->
-		                    </div>
-		                  </div>
-		                  
-		                  <div class="col-md-10">
-		                    <div class="info-box">
-		                      <span class="info-box-icon bg-success"><i class="far fa-file-code"></i></span>
-		        
-		                      <div class="info-box-content">
-		                        <span class="info-box-text">ポイント</span>
+		                        <span class="info-box-text">ポイント（点数+難易度ボーナス-提出回数減点）</span>
 		                        <span class="info-box-number" id="point" th:text="|${assignmentdetailDto.gradingResultDto.point}点|"></span>
 		                      </div>
 		                      <!-- /.info-box-content -->

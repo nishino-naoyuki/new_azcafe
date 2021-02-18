@@ -10,4 +10,7 @@ public class RankingDto {
 	private String nickName;
 	private Integer point;
 	private String homeroomeName;
+	private String name;
+	//以下CSV出力用情報
+	private String orgNo;
 }

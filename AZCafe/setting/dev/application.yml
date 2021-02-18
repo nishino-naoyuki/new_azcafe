@@ -21,7 +21,7 @@ azcafe:
   salt: 5fr2FjxT
   avaterbasedir: C:/img
   tokenlimit: 1
-  passwordpolicy: 
+  passwordpolicy:   csvoutputdir: C:/output  csvoutputencode: Shift_JIS
   csvuploaddir: C:/upload
   batchdir: c:/batch
   batchfileext: bat 
@@ -30,4 +30,4 @@ azcafe:
   gradingjavac: comple_java.bat
   gradingjava: exec_java.bat
   checkstyle: checkstyle_java.bat
-  gradingjavascript: exec_javascript.bat  handminus: 5  difficulty:    veasy: 0    easy: 2    normal: 5    diff: 7    vdiff: 10    
+  gradingjavascript: exec_javascript.bat  studentdenied: ^/user/reset/password$,^/homeroom/update,^/assignment/(edit|create|confirm|insert),^/manage/.*,^user/csvinput  nologindisplay: /,/login,/auth,/logout,/css/.+,/img/.+,/getImage/.+,/favicon.ico,/error/.*  handminus: 5  difficulty:    veasy: 0    easy: 2    normal: 5    diff: 7    vdiff: 10    

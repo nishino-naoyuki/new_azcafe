@@ -54,6 +54,8 @@ public class AssignmentService {
 	TestCaseRepository testCaseRepository;
 	@Autowired
 	AnswerRepository answerRepository;
+	@Autowired
+	GradingService gradingService;
 	
 	/**
 	 * userIdで指定したユーザーがanswerIdで指定した解答にイイネを追加する
@@ -151,6 +153,7 @@ public class AssignmentService {
 	@Transactional(rollbackFor = Exception.class)
 	public void insertOrUpdate(AssignmentDto dto) {
 		AssignmentTblEntity assignmentTblEntity = null;
+		
 		if( dto.getAssignmentId() != null ) {
 			assignmentTblEntity = assignmentRepository.getOne(dto.getAssignmentId());
 		}
@@ -190,11 +193,16 @@ public class AssignmentService {
 	 * @return
 	 */
 	private AssignmentTblEntity insertAssignment(AssignmentTblEntity entity,AssignmentDto dto,GroupTblEntity groupEntity) {
+
+		boolean updateDifficulty = false;	//難易度変更フラグ
+		
 		if( dto == null ) {
 			return new AssignmentTblEntity();
 		}
 		if( entity == null ) {
 			entity = new AssignmentTblEntity();
+		}else {
+			updateDifficulty = (entity.getDifficulty() != dto.getDifficultyAsInt());
 		}
 		
 		entity.setTitle(dto.getTitle());
@@ -207,9 +215,33 @@ public class AssignmentService {
 		//問題グループ
 		entity.setGroupId(groupEntity.getGroupId());
 		
-		assignmentRepository.save(entity);
+		entity = assignmentRepository.save(entity);
+		
+		//難易度が変更になった場合は現在解答済みの答えのポイントを変更する
+		if( updateDifficulty ) {
+			updatePoint(entity);
+		}
 		
 		return entity;
+	}
+	
+	/**
+	 * 難易度が変更になったときにポイントを更新する
+	 * 
+	 * @param entity
+	 */
+	private void updatePoint(AssignmentTblEntity entity) {
+		
+		List<AnswerTblEntity> ansList =  answerRepository.getListByAssId(entity.getAssignmentId());
+		//答えの更新
+		for(AnswerTblEntity ansEntity : ansList ) {
+			int point = gradingService.calPoint(ansEntity, (ansEntity.getCorrectFlg()==1));
+			ansEntity.setPoint(point);
+			answerRepository.save(ansEntity);
+			//ユーザーの情報も更新
+			gradingService.updateUserTotalPoint(ansEntity.getUserId());
+		}
+				
 	}
 	
 	/**

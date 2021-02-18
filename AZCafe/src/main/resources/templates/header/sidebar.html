@@ -9,7 +9,7 @@
       <div class="user-panel department mt-1 pb-1 mb-1 d-flex align-items-center">
         <i class="fas fa-chalkboard"></i>
         <div class="info">
-          <a href="user-info.html" class="d-block" th:text="${session['LoginInfo'].courseName}"></a>
+          <div href="user-info.html" class="d-block" th:text="${session['LoginInfo'].courseName}"></div>
         </div>
       </div>
       <div class="user-panel mt-3 pb-2 mb-3 d-flex">
@@ -55,7 +55,7 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <li th:unless="${session['LoginInfo'].isStudent()}" class="nav-item">
             <a th:href="@{/assignment/create}" class="nav-link">
               <i class="nav-icon fas fa-plus-circle"></i>
               <p>
@@ -71,7 +71,7 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <li th:unless="${session['LoginInfo'].isStudent()}" class="nav-item">
             <a th:href="@{/manage/index}" class="nav-link">
               <i class="nav-icon fas fa-cog"></i>
               <p>
@@ -79,7 +79,7 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <li th:unless="${session['LoginInfo'].isStudent()}" class="nav-item">
             <a th:href="@{/user/reset/password}" class="nav-link">
               <i class="nav-icon fas fa-unlock-alt"></i>
               <p>

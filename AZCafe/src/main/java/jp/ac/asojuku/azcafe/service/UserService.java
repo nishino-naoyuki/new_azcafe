@@ -62,7 +62,8 @@ public class UserService {
 
 		List<UserTblEntity> entityList = userRepository.findAll(
 				Specification.
-						where(homeroomEquals(homeroomId)),
+						where(homeroomEquals(homeroomId)).
+						and(roleEquals(RoleId.STUDENT.getId())),
 						Sort.by(Sort.Direction.DESC, "point").
 						and(Sort.by(Sort.Direction.ASC,"homeroomTbl.homeroomId")).
 						and(Sort.by(Sort.Direction.ASC,"orgNo"))
@@ -79,6 +80,8 @@ public class UserService {
 			dto.setNickName(userEntity.getNickName());
 			dto.setHomeroomeName(userEntity.getHomeroomTbl().getName());
 			dto.setAvater(userEntity.getAvater());
+			dto.setName(userEntity.getName());
+			dto.setOrgNo(userEntity.getOrgNo());
 			dto.setPoint(userEntity.getPoint());
 			if( userEntity.getPoint() != prePoint) {
 				rank = count;
@@ -244,6 +247,7 @@ public class UserService {
 		userInfo.setUserId(entity.getUserId());
 		userInfo.setOrgNo(entity.getOrgNo());
 		userInfo.setNickName(entity.getNickName());
+		userInfo.setName(entity.getName());
 		userInfo.setAvater(entity.getAvater());
 		userInfo.setFollowNum(entity.getFollowNum());
 		userInfo.setFollowerNum(entity.getFollowerNum());
@@ -348,6 +352,7 @@ public class UserService {
 		List<UserTblEntity> entityList = userRepository.findAll(
 				Specification.
 						where(mailContains(cond.getMail())).
+						and(nameContains(cond.getName())).
 						and(homeroomEquals(cond.getHomeroomId())).
 						and(nicknameContains(cond.getNickname())).
 						and(roleEquals(cond.getRoleId())).
@@ -360,6 +365,7 @@ public class UserService {
 			UserSearchElementDto dto = new UserSearchElementDto();
 			
 			dto.setUserId(entity.getUserId());
+			dto.setName(entity.getName());
 			dto.setNickName(entity.getNickName());
 			dto.setOrgNo(entity.getOrgNo());
 			dto.setHomeroomeName(entity.getHomeroomTbl().getName());
@@ -557,7 +563,7 @@ public class UserService {
 		entity.setAvater(createUserDto.getIconFileName());
 		entity.setRole(createUserDto.getRoleId());
 		entity.setOrgNo(createUserDto.getStudentNo());
-		entity.setName(createUserDto.getNickname());
+		entity.setName(createUserDto.getName());
 		entity.setNickName(createUserDto.getNickname());
 		entity.setMail(createUserDto.getMail());
 		entity.setEnterYear(createUserDto.getAdmissionYear());

@@ -44,7 +44,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-	              <div class="col-md-10">
+	              <div class="col-md-12">
 	                <div class="info-box">
 	                  <span class="info-box-icon bg-success"><i class="far fa-window-maximize"></i></span>
 	    
@@ -77,7 +77,7 @@
 	                </tr>
 	                </tbody>
 	              </table>
-	              <div class="col-md-10">
+	              <div class="col-md-12">
 	                <div class="info-box">
 	                  <span class="info-box-icon bg-success"><i class="far fa-file-code"></i></span>
 	    
@@ -88,10 +88,21 @@
 	                  <!-- /.info-box-content -->
 	                </div>
 	              </div>
-	              <div class="col-sm-10">
+	              <div class="col-sm-12">
 	                 <textarea class="form-control" rows="4" cols="120" th:text="${gradingResultDetailDto.gradingResultDto.checkStyleMsg}" disabled></textarea> 
 	              </div>
 	              
+                  <div class="col-md-12">
+                    <div class="info-box">
+                      <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
+        
+                      <div class="info-box-content">
+                        <span class="info-box-text">ポイント（点数+難易度ボーナス-提出回数減点）</span>
+                        <span class="info-box-number" id="point" th:text="|${gradingResultDetailDto.gradingResultDto.point}点|"></span>
+                      </div>
+                      <!-- /.info-box-content -->
+                    </div>
+                  </div>
               <!-- /.card-body -->
               </div>
            </div>

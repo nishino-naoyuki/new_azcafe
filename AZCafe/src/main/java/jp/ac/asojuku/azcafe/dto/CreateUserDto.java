@@ -1,9 +1,5 @@
 package jp.ac.asojuku.azcafe.dto;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 
@@ -22,4 +18,5 @@ public class CreateUserDto {
 	private Integer admissionYear;
 	private String pass;
 	private Integer homeroomId;
+	private String name;
 }

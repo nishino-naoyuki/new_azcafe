@@ -56,6 +56,15 @@ public class AssignmentController {
 	@Autowired
 	CommentServie commentServie;
 
+	/**
+	 * 課題の編集画面を表示する
+	 * ※項目入力済みの登録画面を出しているだけ
+	 * 
+	 * @param assignmentForm
+	 * @param assignmentId
+	 * @param mv
+	 * @return
+	 */
 	@RequestMapping(value= {"/edit"}, method=RequestMethod.GET)
 	public ModelAndView edit(
 			AssignmentForm assignmentForm,
@@ -294,6 +303,11 @@ public class AssignmentController {
         return mv;
 	}
 	
+	/**
+	 * 挿入または更新を行う
+	 * 
+	 * @return
+	 */
 	@RequestMapping(value= {"/insert"}, method=RequestMethod.POST)
 	@ResponseBody
 	public String insertOrUpdate() {
@@ -345,6 +359,12 @@ public class AssignmentController {
 		return form;
 	}
 	
+	/**
+	 * dtoからformを復元する
+	 * @param form
+	 * @param dto
+	 * @return
+	 */
 	private AssignmentForm getFormFromDto(AssignmentForm form,AssignmentDto dto) {
 		if(form == null ) {
 			form = new AssignmentForm();
