@@ -277,4 +277,117 @@
     margin: auto;
 }
 
-    
+#waiting {
+  width: 100vw;
+  height: 100vh;
+  transition: all 1s;
+  background-color: rgba( 0, 0, 0, 0.4 );
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  display: none;
+  margin: auto;
+}
+
+#waiting .string{
+	animation: loading 1.5s infinite;
+}
+
+#waiting .string:nth-child(2){
+  animation-delay: .2s;
+}
+#waiting .string:nth-child(3){
+  animation-delay: .3s;
+}
+#waiting .string:nth-child(4){
+  animation-delay: .6s;
+}
+#waiting .string:nth-child(5){
+  animation-delay: .8s;
+}
+
+@keyframes loading {
+  0% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.1); 
+    opacity: 1; // “§–¾‚É
+  }
+  100% {
+    transform: scale(1); 
+    opacity: 0.3; // “§–¾‚É
+  }
+}
+
+  .correct-ans{
+    color: #008040;
+    animation: correct 1.5s 1;
+  }
+  
+@keyframes correct {
+  0% {
+    transform: rotate(0deg) scale(0);
+    opacity: 0.3;
+  }
+  90% {
+    transform: rotate(360deg) scale(1); 
+    opacity: 1;
+  }
+  91% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+  .incorrect-ans{
+    color: #e9c105;
+    animation: incorrect 1.5s 1;
+  }
+  
+@keyframes incorrect {
+  0% {
+    transform: scale(0);
+    opacity: 0.1;
+  }
+  40% {
+    transform: scale(1); 
+    opacity: 1;
+  }
+  55% {
+     transform: scale(0.7); 
+  }
+  70% {
+     transform: scale(1); 
+  }
+  85% {
+     transform: scale(0.8); 
+  }
+  100% {
+     transform: scale(1); 
+  }
+}
+  
+.error-ans{
+  color: #ff8080;
+}
+.dialog-text{
+	padding: 5px;
+}
+
+.dialog-success{
+	color: #008040;
+}
+
+.dialog-info{
+	color: #0000ff;
+}
+
+.dialog-error{
+	color: #ff8080;
+}

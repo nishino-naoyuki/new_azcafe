@@ -33,6 +33,20 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">        
+	  <!--実行中画面 -->
+	  <div id="waiting" class="col-md-12 align-items-center justify-content-center" >
+          		<div class="d-flex justify-content-center flex-column align-items-center">
+				<p><i class="fas fa-8x fa-sync-alt fa-spin"></i></p>
+				<div class="d-flex">
+			      <h2 class="string">採</h2>
+			      <h2 class="string">点</h2>
+			      <h2 class="string">中</h2>
+			      <h2 class="string">・</h2>
+			      <h2 class="string">・</h2>
+			      <h2 class="string">・</h2>
+				</div>
+          		</div>
+		</div>
         <!-- Main row -->
         <div class="row">
           <!-- Left col -->
@@ -229,10 +243,6 @@
 	                        </div>
 	                      </div>
 	                    </div>
-                    <div class="overlay dark" id="waiting">
-                      採点中・・・
-                      <i class="fas fa-2x fa-sync-alt fa-spin"></i>
-                    </div>
                   </div>
                 </div>
                 
@@ -292,7 +302,11 @@
           </div>
           <!-- /.col -->
         </div>
+        </div>
         <!-- /.row -->
+        <button id="dialog-grading-correct" type="button" class="btn btn-default" data-toggle="modal"   data-target="#modal-correct"></button>
+        <button id="dialog-grading-incorrect" type="button" class="btn btn-default" data-toggle="modal"   data-target="#modal-incorrect"></button>
+        <button id="dialog-grading-error" type="button" class="btn btn-default" data-toggle="modal"   data-target="#modal-error"></button>
       </div><!--/. container-fluid -->
     </section>
     <!-- /.content -->
@@ -308,6 +322,62 @@
 </div>
 <!-- ./wrapper -->
 
+<!-- 正解ダイアログ -->
+<div class="modal fade" id="modal-correct">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-body d-flex justify-content-center align-items-center">
+        <i class="far fa-3x fa-check-circle correct-ans"></i>
+        <div class="dialog-text"><h4>正解です！</h4></div>
+	      </div>
+	      <div class="modal-footer justify-content-end">
+	        <button type="button" class="btn-sm btn-primary dialog-close refresh-btn" data-dismiss="modal">Close</button>
+	      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- 不正解ダイアログ -->
+<div class="modal fade" id="modal-incorrect">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-body d-flex justify-content-center align-items-center">
+          <i class="fas fa-3x fa-exclamation-triangle incorrect-ans"></i>
+          <div class="dialog-text"><h4>残念、不正解です！</h4></div>
+	    </div>
+        <div class="modal-body d-flex justify-content-center align-items-center">
+          <div class="dialog-text">詳しくは採点結果をクリックしてください</div>
+	    </div>
+	    <div class="modal-footer justify-content-end">
+	        <button type="button" class="btn-sm btn-primary dialog-close refresh-btn" data-dismiss="modal">Close</button>
+	    </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+<!-- エラーダイアログ -->
+<div class="modal fade" id="modal-error">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-body d-flex justify-content-center align-items-center">
+          <i class="fas fa-times fa-3x error-ans"></i>
+          <div class="dialog-text"><h4>コンパイルエラーです</h4></div>
+	    </div>
+        <div class="modal-body d-flex justify-content-center align-items-center">
+          <div class="dialog-text">プログラムを修正してください</div>
+	    </div>
+	    <div class="modal-footer justify-content-end">
+	        <button type="button" class="btn-sm btn-primary dialog-close" data-dismiss="modal">Close</button>
+	    </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+      <!-- /.modal -->
 <!-- REQUIRED SCRIPTS -->
 <meta id="parent" th:replace="/header/include_js"></meta>
 
@@ -330,7 +400,17 @@
   <script th:src="@{/ace/src/ace.js}" type="text/javascript" charset="utf-8"></script>
   <script th:src="@{ace/src/ext-language_tools.js}" type="text/javascript" charset="utf-8"></script>
 <script>
+const showWaiting = () =>{
+	$("#waiting").addClass("d-flex");
+	$("#waiting").show();
+}
+const hideWaiting = () =>{
+	$("#waiting").removeClass("d-flex");
+	$("#waiting").hide();
+}
+
 $(function () {
+  
   bsCustomFileInput.init();
     $('#example1').DataTable({
       "paging": true,
@@ -361,10 +441,16 @@ $(function () {
 
   $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
-    $("#waiting").hide();
     $("#compile-err").hide();
+    $("#dialog-grading-correct").hide();
+    $("#dialog-grading-incorrect").hide();
+    $("#dialog-grading-error").hide();
   });
 
+  //＋ボタンクリック
+  $(document).on('click','.refresh-btn',function(){
+	  location.reload();
+  });
   //＋ボタンクリック
   $(document).on('click','#code_plus',function(){
     checkFontSize();
@@ -419,8 +505,9 @@ $(function () {
       return;
     }
     
-    $("#waiting").show();
+    showWaiting();
     $("#compile-err").hide();
+    const waitingBox = $("#waiting");
     
     const ansText = editor.getValue();
     $("#answer_text").val(ansText);
@@ -436,23 +523,28 @@ $(function () {
         dataType    : "json"
     })
     .done(function(data){
-    	if( data.correct ){
+    	hideWaiting();
+    	if( data.correct ){    		
     		//正解！
     		const totalScore = data.scoreForOutput + data.scoreForSource;
     		$(".totalScore").text(totalScore);
-    		alert("正解:詳細は点数をクリック");
-            location.reload();
+    		//alert("正解:詳細は点数をクリック");
+    		$("#dialog-grading-correct").click();
+            //location.reload();
     	}else if( data.compleErrMsg != null && data.compleErrMsg != "" ){
-    		alert("コンパイルエラーです");
+    		//alert("コンパイルエラーです");
+    		$("#dialog-grading-error").click();
     		//コンパイルエラー
     	    $("#compile-msg").text(data.compleErrMsg);
     	    $("#compile-err").show();
     	}else{
     		//エラー
-    		alert("不正解:詳細は点数をクリック");
-            location.reload();
+    		$("#dialog-grading-incorrect").click();
+    		//alert("不正解:詳細は点数をクリック");
+            //location.reload();
     	}        
-        $("#waiting").hide();
+        $("#scoreForOutput").text(data.scoreForOutput );
+        $("#scoreForSource").text(data.scoreForSource );
     })
     .fail(function(jqXHR, textStatus, errorThrown){
         alert("fail");
@@ -469,7 +561,7 @@ $(function () {
       alert("ファイルを選択してください");
       return;
     }
-    alert(inputVal);
+    //alert(inputVal);
     const formdata = new FormData($('#answer_file_form').get(0));
     
     $("#waiting").show();
@@ -486,20 +578,22 @@ $(function () {
         dataType    : "json"
     })
     .done(function(data){
+    	hideWaiting();
     	if( data.correct ){
     		//正解！
     		const totalScore = data.scoreForOutput + data.scoreForSource;
     		$(".totalScore").text(totalScore);
-    		alert("正解:詳細は点数をクリック");
+    		$("#dialog-grading-correct").click();
     	}else if( data.compleErrMsg != null && data.compleErrMsg != "" ){
     		//コンパイルエラー
+    		$("#dialog-grading-error").click();
     	    $("#compile-msg").text(data.compleErrMsg);
     	    $("#compile-err").show();
     	}else{
     		//エラー
-    		alert("不正解:詳細は点数をクリック");
+    		$("#dialog-grading-incorrect").click();
     	}        
-        $("#waiting").hide();
+        //$("#waiting").hide();
         $("#scoreForOutput").text(data.scoreForOutput );
         $("#scoreForSource").text(data.scoreForSource );
     })
@@ -521,6 +615,8 @@ $(function () {
 	  const resultUrl = /*[[@{/assignment/result}]]*/ "/assignment/result";
 	  window.location.href = resultUrl + "?assignmentId="+$("#assignmentId").val();
   });
+  
+  
 
 </script>
 

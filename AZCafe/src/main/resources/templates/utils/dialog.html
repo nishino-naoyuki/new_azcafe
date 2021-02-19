@@ -1,0 +1,21 @@
+<script th:src="@{/utils/dialog.js}"></script>
+
+<button id="dialog-message-btn" type="button" class="btn btn-default" data-toggle="modal"   data-target="#modal-correct"></button>
+<!-- メッセージダイアログ -->
+<div class="modal fade" id="modal-correct">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-body d-flex justify-content-center align-items-center">
+        <i class="far fa-3x fa-check-circle dialog-success"></i>
+        <i class="far fa-3x fa-check-circle dialog-info"></i>
+        <i class="far fa-3x fa-check-circle dialog-error"></i>
+        <div class="dialog-text"><h4 id="dialog-text-message"></h4></div>
+	      </div>
+	      <div class="modal-footer justify-content-end">
+	        <button type="button" class="btn-sm btn-primary dialog-close refresh-btn" data-dismiss="modal">Close</button>
+	      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>

@@ -88,7 +88,7 @@
                       </div>
                       <div class="form-group">
                         <label for="name">名前<span class="float-right text-danger">（必須）</span></label>
-                        <input type="text"  name="name" id="name" class="form-control" placeholder="名前" th:field="*{nickname}">
+                        <input type="text"  name="name" id="name" class="form-control" placeholder="名前" th:field="*{name}">
                       </div>
                       <div class="form-group">
                         <label for="nickname">ニックネーム<span class="float-right text-danger">（必須）</span></label>
@@ -124,7 +124,7 @@
                         </div>
                       </div>
                       <div class="form-group">
-                          <button class="btn btn-primary"  id="csv_start">登録</button>
+                          <button type="button" class="btn btn-primary"  id="csv_start">登録</button>
                       </div>
                     </form>
                   </div>
@@ -174,13 +174,12 @@
     <!-- Control sidebar content goes here -->
   </aside>
   <!-- /.control-sidebar -->
-
-
 </div>
 <!-- ./wrapper -->
 
 <!-- REQUIRED SCRIPTS -->
 <meta id="parent" th:replace="/header/include_js"></meta>
+<meta id="parent" th:replace="/utils/dialog"></meta>
 
 <!-- PAGE PLUGINS -->
 <!-- jQuery Mapael -->
@@ -210,7 +209,7 @@
 <script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 </head>
 <script th:if="${completeflg}">
-alert("登録完了しました");
+showMessage("success","登録完了です");
 </script>
 <script>
   $(document).on('click', '.edit-classname', function(){
@@ -243,9 +242,11 @@ alert("登録完了しました");
 	}).done(function(data) {
 		if( data == "ok"){
 			label.html(name);
-			alert("クラス名を更新しました");
+			showMessage("success","クラス名を更新しました");
+			//alert("クラス名を更新しました");
 		}else{
-			alert("登録に失敗しました");
+			showMessage("error","登録に失敗しました");
+			//alert("登録に失敗しました");
 		}
 	}).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
         alert("登録に失敗しました");
@@ -253,6 +254,8 @@ alert("登録完了しました");
   });
   
   $(function () {
+	  
+	  
     // クリックで画像を選択する場合
     $('#drop_area').on('click', function () {
       $('#input_file').click();
@@ -277,7 +280,6 @@ alert("登録完了しました");
       "autoWidth": false,
       "responsive": true,
     });
-
   });
 
   // ドラッグしている要素がドロップ領域に入ったとき・領域にある間
@@ -374,11 +376,11 @@ $(document).on('drop', function (event) {
 		//alert("csv_start")
 		// 要素規定の動作をキャンセルする
         //event.preventDefault();
-		
+				
 		if( !confirm("処理を開始します。途中で中断はできません。\nよろしいですか？")){
 			return;
 		}
-		
+
         var ajaxUrl = /*[[@{/user/csvinput}]]*/ "/user/csvinput";
         //alert(ajaxUrl)
 		//Ajax！
@@ -409,7 +411,8 @@ $(document).on('drop', function (event) {
         		if( json.errorMsg != null){
     	    		$("#errorMsg").text(json.errorMsg);
         		}else if(json.now > 0){
-        			alert("登録完了しました！\n処理件数"+json.total+"件");
+        			showMessage("success","登録完了しました！\n処理件数"+json.total+"件");
+        			//alert("登録完了しました！\n処理件数"+json.total+"件");
         		}
                 removeLoading();
             }).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理

@@ -260,6 +260,7 @@
       
 <!-- REQUIRED SCRIPTS -->
 <meta id="parent" th:replace="/header/include_js"></meta>
+<meta id="parent" th:replace="/utils/dialog"></meta>
 
 <!-- DataTables  & Plugins -->
 <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
@@ -300,9 +301,11 @@
         data : {userId: userId,nickName: nickname}
 	}).done(function(data) {
 		if( data == "ok" ){
-			alert("ニックネーム変更しました");
+			showMessage("success","ニックネーム変更しました");
+			//alert("ニックネーム変更しました");
 		}else{
-			alert(data);
+			showMessage("error",data);
+			//alert(data);
 		}
 	}).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
         alert("登録に失敗しました");
@@ -321,19 +324,44 @@
 	        data : {userId: userId,password1: password1, password2: password2}
 		}).done(function(data) {
 			if( data == "ok" ){
-				alert("パスワード変更しました");
+				showMessage("success","パスワード変更しました");
+				//alert("パスワード変更しました");
 			}else{
-				alert(data);
+				showMessage("error",data);
+				//alert(data);
 			}
 		}).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
 	        alert("登録に失敗しました");
 	    });
   })
+  
+  const exeFollowRelease = (userId) =>{
+	  //alert("");
+	  $(".user-label").each(function(i, o){
+		  ///alert(i+" "+$(o).data("id"));
+		  if( $(o).data("id") == userId ){
+			  $(o).find(".btn-follow-btn").removeClass("d-none");
+			  $(o).find(".btn-follow-release").addClass("d-none");
+		  }
+	  });
+  }
+
+  const exeFollow = (userId) =>{
+	 // alert("");
+	  $(".user-label").each(function(i, o){
+		 // alert(i+" "+$(o).data("id"));
+		  if( $(o).data("id") == userId ){
+			  $(o).find(".btn-follow-btn").addClass("d-none");
+			  $(o).find(".btn-follow-release").removeClass("d-none");
+		  }
+	  });
+  }
+  
   $(document).on('click',".btn-follow-release",function(){
     let userId = $(this).data("id");
     let buttonObj = $(this);
     //alert("btn-follow-release id="+userId);
-
+	  
 	$.ajax({
         type : "POST",                  // HTTP通信の種類
         url  : /*[[@{/user/removeFollow}]]*/ "/user/removeFollow",                 // リクエストを送信する先のURL
@@ -341,6 +369,7 @@
         data : {userId: userId}
 	}).done(function(data) {
 		updateDisplay(buttonObj,data);
+		exeFollowRelease(userId);
 	}).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
         alert("登録に失敗しました");
     });
@@ -358,6 +387,7 @@
         data : {userId: userId}
 	}).done(function(data) {
 		updateDisplay(buttonObj,data);
+		exeFollow(userId);
 	}).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
         alert("登録に失敗しました");
     });

@@ -179,6 +179,11 @@ public class FileUtils {
         List<String> listA = readLine(fileA);
         List<String> listB = readLine(fileB);
         
+        //どちらかが空はエラー（回答が無い？）
+        if( listA.size() == 0 || listB.size() == 0) {
+        	return false;
+        }
+        
         //最後の改行を削除
         String tailA = listA.get(listA.size()-1);
         if( tailA.equals("\n")) {
