@@ -52,6 +52,7 @@
                   <li class="nav-item"><a class="nav-link" href="#question-body" data-toggle="tab">問題本文</a></li>
                   <li class="nav-item"><a class="nav-link" href="#answer-list" data-toggle="tab">解答設定</a></li>
                   <li class="nav-item"><a class="nav-link" href="#public-setting" data-toggle="tab">公開設定</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#skill-setting" data-toggle="tab">スキル設定</a></li>
                 </ul>
               </div><!-- /.card-header -->
               <div class="card-body">
@@ -158,13 +159,23 @@
                               <label class="btn bg-primary">
                                 <input type="radio" th:name="|publicStateList[${status.index}].publicState|" id="option_b2" value="1" autocomplete="off"   th:checked="${dto.publicState == 1}"> 公開
                               </label>
+                              <!-- 
                               <label class="btn bg-primary">
                                 <input type="radio" th:name="|publicStateList[${status.index}].publicState|" id="option_b3" value="2" autocomplete="off" th:checked="${dto.publicState == 2}" > 必須公開
                               </label>
+                               -->
                             </div>
                       	</tr>
                       </tbody>
                     </table>
+                  </div>
+                  <!-- スキル情報 -->
+                  <div class="tab-pane" id="skill-setting">
+                      <div class="form-group">
+                      <div class="form-check" th:each="dto,status:${slillList}" >
+                           <input type="checkbox" class="form-check-input" th:name="|skillIdList[${status.index}]|"  th:text="${dto.name}" th:value="${dto.skillId}" th:field="*{skillIdList}">
+                      </div>
+                    </div>
                   </div>
                   <!-- /.tab-pane -->
                 </div>

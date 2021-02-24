@@ -94,6 +94,9 @@ public class UserTblEntity implements Serializable {
 	/** フォロー 一覧. */
 	private Set<FollowTblEntity> followTblSet;
 
+	/** スキルマップ 一覧. */
+	private Set<SkillMapTblEntity> skillMapTblSet;
+
 	/**
 	 * コンストラクタ.
 	 */
@@ -104,6 +107,7 @@ public class UserTblEntity implements Serializable {
 		this.autologinTblSet = new HashSet<AutologinTblEntity>();
 		this.commentTblSet = new HashSet<CommentTblEntity>();
 		this.followTblSet = new HashSet<FollowTblEntity>();
+		this.skillMapTblSet = new HashSet<SkillMapTblEntity>();
 	}
 
 	/**
@@ -668,6 +672,35 @@ public class UserTblEntity implements Serializable {
 	 */
 	public Set<FollowTblEntity> getFollowTblSet() {
 		return this.followTblSet;
+	}
+
+	/**
+	 * スキルマップ 一覧を設定します.
+	 * 
+	 * @param skillMapTblSet
+	 *            スキルマップ 一覧
+	 */
+	public void setSkillMapTblSet(Set<SkillMapTblEntity> skillMapTblSet) {
+		this.skillMapTblSet = skillMapTblSet;
+	}
+
+	/**
+	 * スキルマップ を追加します.
+	 * 
+	 * @param skillMapTbl
+	 *            スキルマップ
+	 */
+	public void addSkillMapTbl(SkillMapTblEntity skillMapTbl) {
+		this.skillMapTblSet.add(skillMapTbl);
+	}
+
+	/**
+	 * スキルマップ 一覧を取得します.
+	 * 
+	 * @return スキルマップ 一覧
+	 */
+	public Set<SkillMapTblEntity> getSkillMapTblSet() {
+		return this.skillMapTblSet;
 	}
 
 	/**

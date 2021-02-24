@@ -23,5 +23,23 @@
 		<property name="correctFlg" type="java.lang.Integer"
 			column="correct_flg" not-null="true" />
 
+		<property name="checkStyleMsg" type="java.lang.String"
+			column="check_style_msg" not-null="true" />
+
+		<property name="sourceScore" type="java.lang.Integer"
+			column="source_score" not-null="true" />
+
+		<property name="outputScore" type="java.lang.Integer"
+			column="output_score" not-null="true" />
+
+		<property name="answerDate" type="java.util.Date"
+			column="answer_date" not-null="true" />
+
+		<property name="point" type="java.lang.Integer"
+			column="point" not-null="true" />
+
+		<property name="handNum" type="java.lang.Integer"
+			column="hand_num" not-null="true" />
+
 	</class>
 </hibernate-mapping>

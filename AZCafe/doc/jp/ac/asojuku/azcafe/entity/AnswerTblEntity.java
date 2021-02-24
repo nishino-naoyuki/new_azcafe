@@ -1,6 +1,7 @@
 package jp.ac.asojuku.azcafe.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +30,24 @@ public class AnswerTblEntity implements Serializable {
 
 	/** 正解フラグ. */
 	private Integer correctFlg;
+
+	/** チェックスタイルのメッセージ. */
+	private String checkStyleMsg;
+
+	/** ソースコードの点数. */
+	private Integer sourceScore;
+
+	/** 出力の点数. */
+	private Integer outputScore;
+
+	/** 解答日付. */
+	private Date answerDate;
+
+	/** ポイント. */
+	private Integer point;
+
+	/** 提出回数. */
+	private Integer handNum;
 
 	/** 解答詳細テーブル 一覧. */
 	private Set<AnswerDetailTblEntity> answerDetailTblSet;
@@ -145,6 +164,120 @@ public class AnswerTblEntity implements Serializable {
 	 */
 	public Integer getCorrectFlg() {
 		return this.correctFlg;
+	}
+
+	/**
+	 * チェックスタイルのメッセージ を設定します.
+	 * 
+	 * @param checkStyleMsg
+	 *            チェックスタイルのメッセージ
+	 */
+	public void setCheckStyleMsg(String checkStyleMsg) {
+		this.checkStyleMsg = checkStyleMsg;
+	}
+
+	/**
+	 * チェックスタイルのメッセージ を取得します.
+	 * 
+	 * @return チェックスタイルのメッセージ
+	 */
+	public String getCheckStyleMsg() {
+		return this.checkStyleMsg;
+	}
+
+	/**
+	 * ソースコードの点数 を設定します.
+	 * 
+	 * @param sourceScore
+	 *            ソースコードの点数
+	 */
+	public void setSourceScore(Integer sourceScore) {
+		this.sourceScore = sourceScore;
+	}
+
+	/**
+	 * ソースコードの点数 を取得します.
+	 * 
+	 * @return ソースコードの点数
+	 */
+	public Integer getSourceScore() {
+		return this.sourceScore;
+	}
+
+	/**
+	 * 出力の点数 を設定します.
+	 * 
+	 * @param outputScore
+	 *            出力の点数
+	 */
+	public void setOutputScore(Integer outputScore) {
+		this.outputScore = outputScore;
+	}
+
+	/**
+	 * 出力の点数 を取得します.
+	 * 
+	 * @return 出力の点数
+	 */
+	public Integer getOutputScore() {
+		return this.outputScore;
+	}
+
+	/**
+	 * 解答日付 を設定します.
+	 * 
+	 * @param answerDate
+	 *            解答日付
+	 */
+	public void setAnswerDate(Date answerDate) {
+		this.answerDate = answerDate;
+	}
+
+	/**
+	 * 解答日付 を取得します.
+	 * 
+	 * @return 解答日付
+	 */
+	public Date getAnswerDate() {
+		return this.answerDate;
+	}
+
+	/**
+	 * ポイント を設定します.
+	 * 
+	 * @param point
+	 *            ポイント
+	 */
+	public void setPoint(Integer point) {
+		this.point = point;
+	}
+
+	/**
+	 * ポイント を取得します.
+	 * 
+	 * @return ポイント
+	 */
+	public Integer getPoint() {
+		return this.point;
+	}
+
+	/**
+	 * 提出回数 を設定します.
+	 * 
+	 * @param handNum
+	 *            提出回数
+	 */
+	public void setHandNum(Integer handNum) {
+		this.handNum = handNum;
+	}
+
+	/**
+	 * 提出回数 を取得します.
+	 * 
+	 * @return 提出回数
+	 */
+	public Integer getHandNum() {
+		return this.handNum;
 	}
 
 	/**

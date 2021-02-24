@@ -5,6 +5,10 @@ import org.slf4j.LoggerFactory;
 
 public class AZCafeException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Logger logger = LoggerFactory.getLogger(AZCafeException.class);
 
 	public AZCafeException(String errMsg){

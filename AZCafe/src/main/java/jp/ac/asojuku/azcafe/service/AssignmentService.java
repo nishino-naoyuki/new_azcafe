@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import jp.ac.asojuku.azcafe.dto.AssignmentTestCaseDto;
 import jp.ac.asojuku.azcafe.dto.GradingResultDto;
 import jp.ac.asojuku.azcafe.dto.GradingTestCaseResultDto;
+import jp.ac.asojuku.azcafe.dto.PublicAssignmentDto;
+import jp.ac.asojuku.azcafe.dto.SkillDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentDetailDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentElementDto;
@@ -23,6 +25,7 @@ import jp.ac.asojuku.azcafe.entity.FollowTblEntity;
 import jp.ac.asojuku.azcafe.entity.FollowTblId;
 import jp.ac.asojuku.azcafe.entity.GroupTblEntity;
 import jp.ac.asojuku.azcafe.entity.PublicAssignmentTblEntity;
+import jp.ac.asojuku.azcafe.entity.SkillAssTblEntity;
 import jp.ac.asojuku.azcafe.entity.TestCaseAnswerTblEntity;
 import jp.ac.asojuku.azcafe.entity.TestCaseTblEntity;
 import jp.ac.asojuku.azcafe.param.Difficulty;
@@ -32,6 +35,7 @@ import jp.ac.asojuku.azcafe.repository.AssignmentRepository;
 import jp.ac.asojuku.azcafe.repository.FollowRepository;
 import jp.ac.asojuku.azcafe.repository.GroupRepository;
 import jp.ac.asojuku.azcafe.repository.PublicAssignmentRepository;
+import jp.ac.asojuku.azcafe.repository.SkillAssRepository;
 import jp.ac.asojuku.azcafe.repository.TestCaseRepository;
 
 /**
@@ -56,7 +60,29 @@ public class AssignmentService {
 	AnswerRepository answerRepository;
 	@Autowired
 	GradingService gradingService;
-	
+	@Autowired
+	SkillAssRepository skillAssRepository;
+
+	/**
+	 * 公開情報を一括更新する
+	 * 
+	 * @param idList
+	 * @param publicList
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public int updatePublicStates(List<Integer> idList, List<AssignmentPublicDto> publicList) {
+		int count = 0;
+		
+		for(Integer assignmentId : idList) {
+			AssignmentTblEntity assignmentEntity = assignmentRepository.getOne(assignmentId);
+			//公開設定登録
+			insertPublicState(publicList,assignmentEntity);
+			count++;	//処理した件数
+		}
+		
+		return count;
+	}
 	/**
 	 * userIdで指定したユーザーがanswerIdで指定した解答にイイネを追加する
 	 * すでに追加されている場合は削除する
@@ -162,9 +188,34 @@ public class AssignmentService {
 		//本体登録
 		assignmentTblEntity = insertAssignment(assignmentTblEntity,dto,groupEntity);
 		//公開設定登録
-		insertPublicState(dto,assignmentTblEntity);
+		insertPublicState(dto.getPublicStateList(),assignmentTblEntity);
 		//テストケース登録
 		insertTestCase(dto,assignmentTblEntity);
+		//スキルマップ登録
+		insertSkillSetting(assignmentTblEntity,dto.getSkillIdList());
+	}
+	
+	/**
+	 * スキル設定を保存する
+	 * 
+	 * @param assignmentTblEntity
+	 * @param skillIdList
+	 */
+	private void insertSkillSetting(AssignmentTblEntity assignmentTblEntity,List<Integer> skillIdList) {
+		//いったん削除
+		skillAssRepository.delete(assignmentTblEntity.getAssignmentId());
+		//追加しなおす
+		List<SkillAssTblEntity> insertList = new ArrayList<>();
+		for(Integer skillId : skillIdList) {
+			SkillAssTblEntity entity = new SkillAssTblEntity();
+			
+			entity.setAssignmentId(assignmentTblEntity.getAssignmentId());
+			entity.setSkillId(skillId);
+			
+			insertList.add(entity);
+		}
+		
+		skillAssRepository.saveAll(insertList);
 	}
 	
 	/**
@@ -250,10 +301,13 @@ public class AssignmentService {
 	 * @param dto
 	 * @param assignmentTblEntity
 	 */
-	private void insertPublicState(AssignmentDto dto,AssignmentTblEntity assignmentTblEntity) {
+	private void insertPublicState(List<AssignmentPublicDto> publicList,AssignmentTblEntity assignmentTblEntity) {
 		List<PublicAssignmentTblEntity> publicStateList = new ArrayList<>();
 		
-		for( AssignmentPublicDto publicDto : dto.getPublicStateList()) {
+		//一旦今のものを削除する
+		publicAssignmentRepository.delete(assignmentTblEntity.getAssignmentId());
+		//登録しなおす
+		for( AssignmentPublicDto publicDto : publicList) {
 			PublicAssignmentTblEntity publicEntity = new PublicAssignmentTblEntity();
 			
 			publicEntity.setHomeroomId(publicDto.getHomeroomId());
@@ -368,6 +422,16 @@ public class AssignmentService {
 			gradingResult.setPoint(answerEntity.getPoint());
 		}
 		detail.setGradingResultDto(gradingResult);
+		//スキル設定を取得する
+		List<SkillDto> skillList = new ArrayList<>();
+		for( SkillAssTblEntity saEntity : assignmentTblEntity.getSkillAssTblSet() ) {
+			SkillDto skillDto = new SkillDto();
+			skillDto.setSkillId( saEntity.getSkillTbl().getSkillId() );
+			skillDto.setName( saEntity.getSkillTbl().getName() );
+			skillDto.setUpdateDate( saEntity.getSkillTbl().getUpdateDate() );
+			skillList.add(skillDto);
+		}
+		detail.setSkillList(skillList);
 		
 		return detail;
 	}

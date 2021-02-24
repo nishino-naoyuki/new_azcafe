@@ -90,6 +90,10 @@ public class AssignmentTblEntity implements Serializable {
 	@JoinColumn(name="assignmentId",insertable=false ,updatable=false)
 	private Set<TestCaseTblEntity> testCaseTblSet;
 
+	/** スキル設定. */
+	@OneToMany
+	@JoinColumn(name="assignmentId",insertable=false ,updatable=false)
+	private Set<SkillAssTblEntity> skillAssTblSet;
 	/**
 	 * コンストラクタ.
 	 */

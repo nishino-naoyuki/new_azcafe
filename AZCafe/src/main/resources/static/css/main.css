@@ -20,6 +20,13 @@
     margin: 0px 15px;
 }
 
+.skillmap-user-img {
+    border-radius: 50%;
+    float: left;
+    height: 50px;
+    width: 50px;
+    margin: 0px 15px;
+}
 .ranking-user-name {
     vertical-align:middle;
 }
@@ -390,4 +397,12 @@
 
 .dialog-error{
 	color: #ff8080;
+}
+
+.modal-dialog .dialog-padding{
+	padding: 20px;
+}
+
+.dialog-table-td{
+	padding: 0.25rem !important;
 }

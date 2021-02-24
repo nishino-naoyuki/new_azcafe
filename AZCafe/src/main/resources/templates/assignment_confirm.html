@@ -146,14 +146,29 @@
                                 <label class="btn bg-primary">
                                   <input type="radio" name="options" id="option_b2" autocomplete="off" disabled th:checked="${dto.publicState == 1}"> 公開
                                 </label>
+                                <!-- 
                                 <label class="btn bg-primary">
                                   <input type="radio" name="options" id="option_b3" autocomplete="off" disabled th:checked="${dto.publicState == 2}"> 必須公開
                                 </label>
+                                 -->
                               </div>
                             </td>
                           </tr>
                         </tbody>
                       </table>
+                    </div>
+                  </div>
+                </div>
+                <!-- スキル設定 -->
+                <div class="col-md-12">
+                  
+                  <div class="card">
+                    <div class="card-header d-flex p-0">
+                      <h3 class="card-title p-3">スキル設定</h3>
+                    </div>
+                    <div class="card-body">
+                      <h4>以下のスキルが設定されています</h4>
+                      <div th:utext="${assignmentDto.skillIdString}"></div>
                     </div>
                   </div>
                 </div>

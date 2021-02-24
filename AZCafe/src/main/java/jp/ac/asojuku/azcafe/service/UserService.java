@@ -3,6 +3,7 @@ package jp.ac.asojuku.azcafe.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import jp.ac.asojuku.azcafe.config.AZCafeConfig;
 import jp.ac.asojuku.azcafe.dto.CreateUserDto;
 import jp.ac.asojuku.azcafe.dto.LoginInfoDto;
 import jp.ac.asojuku.azcafe.dto.RankingDto;
+import jp.ac.asojuku.azcafe.dto.SkillMapDto;
 import jp.ac.asojuku.azcafe.dto.UserInfoDto;
 import jp.ac.asojuku.azcafe.dto.UserSearchElementDto;
 import jp.ac.asojuku.azcafe.dto.subclass.AssignmentResultDto;
@@ -25,6 +27,8 @@ import jp.ac.asojuku.azcafe.entity.FollowTblEntity;
 import jp.ac.asojuku.azcafe.entity.FollowTblId;
 import jp.ac.asojuku.azcafe.entity.HomeroomTblEntity;
 import jp.ac.asojuku.azcafe.entity.LevelTblEntity;
+import jp.ac.asojuku.azcafe.entity.SkillMapTblEntity;
+import jp.ac.asojuku.azcafe.entity.SkillTblEntity;
 import jp.ac.asojuku.azcafe.entity.UserTblEntity;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
 import jp.ac.asojuku.azcafe.form.UserSearchConditionForm;
@@ -32,6 +36,7 @@ import jp.ac.asojuku.azcafe.param.RoleId;
 import jp.ac.asojuku.azcafe.repository.AnswerRepository;
 import jp.ac.asojuku.azcafe.repository.AutoLoginRepository;
 import jp.ac.asojuku.azcafe.repository.FollowRepository;
+import jp.ac.asojuku.azcafe.repository.SkillRepository;
 import jp.ac.asojuku.azcafe.repository.UserRepository;
 import jp.ac.asojuku.azcafe.util.Digest;
 import jp.ac.asojuku.azcafe.util.FileUtils;
@@ -51,6 +56,8 @@ public class UserService {
 	AnswerRepository answerRepository;
 	@Autowired
 	AZCafeConfig config;
+	@Autowired
+	SkillRepository skillRepository;
 
 	/**
 	 * ランキングを取得する
@@ -317,8 +324,32 @@ public class UserService {
 			
 			userInfo.addAssignmentResultDto(dto);
 		}
+		//スキルマップ
+		List<SkillTblEntity> skillAllList = skillRepository.findAll();
+		Set<SkillMapTblEntity> skillMapSet = entity.getSkillMapTblSet();
+		for( SkillTblEntity skillEntity : skillAllList ) {
+			int point = containSkill(skillEntity.getSkillId(),skillMapSet);
+			SkillMapDto skillMapDto = new SkillMapDto();
+			skillMapDto.setSkillId(skillEntity.getSkillId());
+			skillMapDto.setPoint(point);
+			skillMapDto.setName(skillEntity.getName());
+			
+			userInfo.addSkillMapDto(skillMapDto);
+		}
 		
 		return userInfo;
+	}
+	
+	private int containSkill(Integer skillId,Set<SkillMapTblEntity> skillMapSet) {
+		int point = 0;
+		for( SkillMapTblEntity skillmap : skillMapSet) {
+			if( skillmap.getSkillId() == skillId ) {
+				point = skillmap.getPoint();
+				break;
+			}
+		}
+		
+		return point;
 	}
 	
 	/**

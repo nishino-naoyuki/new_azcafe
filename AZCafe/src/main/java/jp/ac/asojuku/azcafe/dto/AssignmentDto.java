@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import jp.ac.asojuku.azcafe.form.AssignmentTestCaseForm;
+import jp.ac.asojuku.azcafe.exception.AZCafeException;
 import jp.ac.asojuku.azcafe.form.AssignmentPublicForm;
 import jp.ac.asojuku.azcafe.param.Difficulty;
 import lombok.Data;
@@ -27,6 +28,9 @@ public class AssignmentDto {
 	
 	private List<AssignmentTestCaseDto> answerList;
 	
+	private List<Integer> skillIdList;
+	private String skillIdString;	//表示用
+	
 	public void setDifficulty(Integer difficulty) {
 		this.difficulty = Difficulty.getBy(difficulty);
 	}
@@ -48,6 +52,20 @@ public class AssignmentDto {
 			answerList = new ArrayList<>();
 		}
 		answerList.add(dto);
+	}
+	public void addSkillId(List<String> strIdList) throws AZCafeException {
+		try {
+			for(String id : strIdList) {
+				int intSkillId = Integer.parseInt(id);
+				if( skillIdList == null ) {
+					skillIdList = new ArrayList<>();
+				}
+				skillIdList.add(intSkillId);
+			}
+		}catch(Exception e) {
+			//数値しか入らないはずなのに変換できない？！
+			throw new AZCafeException(e);
+		}
 	}
 	
 	//form->Dto for List

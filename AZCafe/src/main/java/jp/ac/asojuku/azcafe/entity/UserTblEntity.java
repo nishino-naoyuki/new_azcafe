@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -93,6 +94,11 @@ public class UserTblEntity implements Serializable {
 
 	/** 更新日. */
 	private Date updateDate;
+	
+	/** スキルマップ. */
+	@OneToMany
+	@JoinColumn(name="userId",insertable=false ,updatable=false)
+	private Set<SkillMapTblEntity> skillMapTblSet;
 	
 	/** 解答いいね 一覧. */
 	//private Set<AnswerGoodTblEntity> answerGoodTblSet;

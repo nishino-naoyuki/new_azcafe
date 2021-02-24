@@ -14,12 +14,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jp.ac.asojuku.azcafe.dto.CreateUserDto;
 import jp.ac.asojuku.azcafe.dto.HomeroomDto;
+import jp.ac.asojuku.azcafe.dto.SkillDto;
 import jp.ac.asojuku.azcafe.err.ErrorCode;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
 import jp.ac.asojuku.azcafe.form.UserInputForm;
 import jp.ac.asojuku.azcafe.param.RoleId;
 import jp.ac.asojuku.azcafe.param.SessionConst;
 import jp.ac.asojuku.azcafe.service.HomeroomService;
+import jp.ac.asojuku.azcafe.service.SkillService;
 import jp.ac.asojuku.azcafe.service.UserService;
 import jp.ac.asojuku.azcafe.util.FileUtils;
 import jp.ac.asojuku.validator.UserValidator;
@@ -41,6 +43,9 @@ public class ManagementController {
 	
 	@Autowired
 	HomeroomService homeroomService;
+	
+	@Autowired
+	SkillService skillService;
 
 	/**
 	 * 登録の入力画面を表示する
@@ -53,8 +58,11 @@ public class ManagementController {
 		
 		//クラス一覧取得
 		List<HomeroomDto> list = homeroomService.getAll();
+		//スキル一覧
+		List<SkillDto> slillList = skillService.getAll();
 				
 		mv.addObject("homeroomList", list);
+		mv.addObject("slillList", slillList);
         mv.addObject("userInputForm",new UserInputForm());
 		mv.addObject("completeflg", false);
 		mv.addObject("kind", "user");

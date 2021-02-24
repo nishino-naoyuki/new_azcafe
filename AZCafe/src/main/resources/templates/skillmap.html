@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta id="parent" th:replace="/header/include_css"></meta>
+  <!-- DataTables -->
+  <link rel="stylesheet" th:href="@{/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}">
+</head>
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+<div class="wrapper">
+  <!-- Navbar -->
+  <!-- ヘッダー -->
+   <div id="parent" th:replace="/header/header"></div>   
+
+  <!-- サイドバー -->
+    <div id="parent" th:replace="/header/sidebar"></div>  
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-12">
+            <h1 class="m-0">スキルマップ</h1>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">        
+        <!-- Main row -->
+        <div class="row">
+          <!-- Left col -->
+          <div class="col-md-12">
+            <div class="card card-primary shadow-none">
+              <div class="card-header d-flex justify-content-start align-items-center">
+	            <div th:unless="${userInfo.avater}">
+	              <img th:src="@{/img/no_image.jpg}" class="skillmap-user-img img-fluid img-circle" alt="User Image">
+	            </div>
+	            <div th:if="${userInfo.avater}">
+	              <img th:src="@{'/getImage/'+${userInfo.avater}}" class="skillmap-user-img img-fluid img-circle" alt="User Image">
+	            </div>
+                <h1 class="card-title" th:text="|${userInfo.nickName}さんのスキルマップです|"></h1>
+
+                <!-- /.card-tools -->
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <div class="col-md-10">
+                </div>
+              <!-- /.card-body -->
+            </div>
+          </div>
+          <!-- /.col -->
+        </div>
+        </div>
+        <!-- /.row -->
+      </div><!--/. container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+<meta id="parent" th:replace="/header/include_js"></meta>
+
+<script>
+
+
+</script>
+
+</body>
+
+</html>

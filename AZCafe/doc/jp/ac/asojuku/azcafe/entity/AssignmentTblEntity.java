@@ -58,6 +58,9 @@ public class AssignmentTblEntity implements Serializable {
 	/** 公開設定 一覧. */
 	private Set<PublicAssignmentTblEntity> publicAssignmentTblSet;
 
+	/** スキルと課題のテーブル 一覧. */
+	private Set<SkillAssTblEntity> skillAssTblSet;
+
 	/** テストケース 一覧. */
 	private Set<TestCaseTblEntity> testCaseTblSet;
 
@@ -68,6 +71,7 @@ public class AssignmentTblEntity implements Serializable {
 		this.answerTblSet = new HashSet<AnswerTblEntity>();
 		this.assignmentGoodTblSet = new HashSet<AssignmentGoodTblEntity>();
 		this.publicAssignmentTblSet = new HashSet<PublicAssignmentTblEntity>();
+		this.skillAssTblSet = new HashSet<SkillAssTblEntity>();
 		this.testCaseTblSet = new HashSet<TestCaseTblEntity>();
 	}
 
@@ -365,6 +369,35 @@ public class AssignmentTblEntity implements Serializable {
 	 */
 	public Set<PublicAssignmentTblEntity> getPublicAssignmentTblSet() {
 		return this.publicAssignmentTblSet;
+	}
+
+	/**
+	 * スキルと課題のテーブル 一覧を設定します.
+	 * 
+	 * @param skillAssTblSet
+	 *            スキルと課題のテーブル 一覧
+	 */
+	public void setSkillAssTblSet(Set<SkillAssTblEntity> skillAssTblSet) {
+		this.skillAssTblSet = skillAssTblSet;
+	}
+
+	/**
+	 * スキルと課題のテーブル を追加します.
+	 * 
+	 * @param skillAssTbl
+	 *            スキルと課題のテーブル
+	 */
+	public void addSkillAssTbl(SkillAssTblEntity skillAssTbl) {
+		this.skillAssTblSet.add(skillAssTbl);
+	}
+
+	/**
+	 * スキルと課題のテーブル 一覧を取得します.
+	 * 
+	 * @return スキルと課題のテーブル 一覧
+	 */
+	public Set<SkillAssTblEntity> getSkillAssTblSet() {
+		return this.skillAssTblSet;
 	}
 
 	/**

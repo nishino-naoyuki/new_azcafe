@@ -48,6 +48,7 @@
                   <li class="nav-item"><a class="nav-link" th:classappend="${kind.equals('user')} ? active : '' " href="#user-regist" data-toggle="tab">ユーザー登録</a></li>
                   <li class="nav-item"><a class="nav-link" href="#user-csv-regist" data-toggle="tab">ユーザーCSV登録</a></li>
                   <li class="nav-item"><a class="nav-link" href="#edit-class" data-toggle="tab">クラス編集</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#edit-skill" data-toggle="tab">スキル編集</a></li>
                 </ul>
               </div><!-- /.card-header -->
               <div class="card-body">
@@ -128,7 +129,7 @@
                       </div>
                     </form>
                   </div>
-                  <!-- 問題の本文情報 -->
+                  <!-- 学科の情報 -->
                   <div class="tab-pane" id="edit-class">
                     <table id="example1" class="table table-bordered table-striped">
                       <thead>
@@ -152,6 +153,45 @@
                       </tbody>
                     </table>
                   </div>
+                  
+                  <!-- スキル -->
+                  <div class="tab-pane" id="edit-skill">
+			        <div class="row">
+			          <div class="col-md-12">
+	                      <div class="input-group form-group">
+	                        <label for="skill">スキル名<span class="float-right text-danger">（必須）</span></label>
+                            <input type="text" name="name" id="insert-new-skill-name" class="form-control" placeholder="新規スキル名" >
+	                        <span class="input-group-append">
+	                          <button type="button" id="insert-new-skill" class="btn btn-primary btn-flat" data-toggle="tooltip" title="入力したスキル名を登録する">登録</button>
+	                        </span>	          
+	                      </div>
+			          </div>
+			        </div>
+			        <hr>
+			        <h4>スキル名一覧</h4>
+                    <table id="skill-table" class="table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th>スキルID</th>
+                          <th>スキル名</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr th:each="dto:${slillList}">
+                          	<td th:text="${dto.skillId}" ></td>
+	                        <td class="d-flex align-items-center">
+	                          <div class="text-muted skillname-label skillname" th:text="${dto.name}"></div>
+	                          <i class="far fa-edit small-icon edit-skillname" data-toggle="tooltip" title="スキル名の編集"></i>
+	                          <div class="skillname-edit d-none">
+	                            <input type="text" name="skillName" class="form-control skillname"  th:value="${dto.name}">
+	                            <button class="btn-sm btn-primary btn-skillname-appy" th:data-id="${dto.skillId}"  >適用</button>
+	                          </div>
+                        </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  
                   <!-- /.tab-pane -->
                 </div>
                 <!-- /.tab-content -->
@@ -212,6 +252,8 @@
 showMessage("success","登録完了です");
 </script>
 <script>
+  let skillTable = null;
+  
   $(document).on('click', '.edit-classname', function(){
     let label = $(this).parent().find(".classname-label");
     //alert($(this).parent().find(".classname-label").css("display"));
@@ -225,6 +267,18 @@ showMessage("success","登録完了です");
     }
   });
 
+  $(document).on('click', '.edit-skillname', function(){
+    let label = $(this).parent().find(".skillname-label");
+    //alert($(this).parent().find(".classname-label").css("display"));
+
+    if(label.css("display")=="block"){
+      label.css("display","none");
+      $(this).parent().find(".skillname-edit").removeClass("d-none");
+    }else{
+      label.css("display","block");
+      $(this).parent().find(".skillname-edit").addClass("d-none");
+    }
+  });
   
   $(document).on('click', '.btn-classname-appy', function(){
     let id = $(this).data("id");
@@ -253,6 +307,70 @@ showMessage("success","登録完了です");
     });
   });
   
+
+  $(document).on('click', '.btn-skillname-appy', function(){
+    let id = $(this).data("id");
+    let name = $(this).siblings(".skillname").val();
+    let label = $(this).parent().siblings(".skillname")
+    //alert("適用クリック id="+id + " name=" + name);
+
+    var ajaxUrl = /*[[@{/skill/update}]]*/ "/skill/update";
+
+	$.ajax({
+        type : "POST",                  // HTTP通信の種類
+        url  : /*[[@{/skill/update}]]*/ "/skill/update",                 // リクエストを送信する先のURL
+        dataType : "json",              // サーバーから返されるデータの型
+        data : {id: id, name:name}
+	}).done(function(data) {
+		if( data.success ){
+			label.html(data.resultInfo.name);
+			showMessage("success","スキル名を更新しました");
+			//alert("クラス名を更新しました");
+		}else{
+			showMessage("error",data.message);
+			//alert("登録に失敗しました");
+		}
+	}).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
+        alert("登録に失敗しました");
+    });
+  });
+  
+	//スキル新規登録
+  $(document).on('click', '#insert-new-skill', function(){
+    let name = $("#insert-new-skill-name").val();
+    
+    if( name.length == 0 ){
+    	showMessage("error","スキル名を入力してください");
+    	return;
+    }
+    //alert("適用クリック id="+id + " name=" + name);
+
+    var ajaxUrl = /*[[@{/skill/insert}]]*/ "/skill/insert";
+
+	$.ajax({
+        type : "POST",                  // HTTP通信の種類
+        url  : /*[[@{/skill/insert}]]*/ "/skill/insert",                 // リクエストを送信する先のURL
+        dataType : "json",              // サーバーから返されるデータの型
+        data : {name:name}
+	}).done(function(data) {
+		if( data.success ){
+			//const id = data.resultInfo.id;
+			const name = data.resultInfo.name;
+			skillTable.row.add([
+				data.resultInfo.skillId,
+				data.resultInfo.name
+			]).draw();
+			showMessage("success","スキル名を追加しました");
+			//alert("クラス名を更新しました");
+		}else{
+			showMessage("error",data.message);
+			//alert("登録に失敗しました");
+		}
+	}).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
+        alert("登録に失敗しました");
+    });
+  });
+  
   $(function () {
 	  
 	  
@@ -272,6 +390,15 @@ showMessage("success","登録完了です");
     });
     
     $('#example1').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+    skillTable = $('#skill-table').DataTable({
       "paging": true,
       "lengthChange": false,
       "searching": false,

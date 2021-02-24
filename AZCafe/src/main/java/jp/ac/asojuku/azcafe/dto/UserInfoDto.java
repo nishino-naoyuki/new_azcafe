@@ -24,6 +24,7 @@ public class UserInfoDto {
 	private List<FollowElementDto> followList = new ArrayList<>();
 	private List<FollowElementDto> followerList = new ArrayList<>();
 	private List<AssignmentResultDto> assignmentRetList = new ArrayList<>();
+	private List<SkillMapDto> skillMap = new ArrayList<>();
 	
 	public void addFollowElementDto(FollowElementDto dto) {
 		followList.add(dto);
@@ -33,5 +34,8 @@ public class UserInfoDto {
 	}
 	public void addAssignmentResultDto(AssignmentResultDto dto) {
 		assignmentRetList.add(dto);
+	}
+	public void addSkillMapDto(SkillMapDto dto) {
+		skillMap.add(dto);
 	}
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="jp.ac.asojuku.azcafe.entity">
+
+	<class name="SkillMapTblEntity" table="SKILL_MAP_TBL">
+
+		<id name="skillmapId" type="java.lang.Integer" column="skillmap_id">
+			<generator class="assigned" />
+		</id>
+
+		<property name="userId" type="java.lang.Integer"
+			column="user_id" not-null="true" />
+
+		<property name="skillId" type="java.lang.Integer"
+			column="skill_id" not-null="true" />
+
+		<property name="point" type="java.lang.Integer"
+			column="point" not-null="true" />
+
+	</class>
+</hibernate-mapping>

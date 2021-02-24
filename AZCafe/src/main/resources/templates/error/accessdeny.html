@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>アクセス拒否</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" th:href="@{/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
+  <!-- Theme style -->
+  <link rel="stylesheet" th:href="@{/dist/css/adminlte.css}">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+	
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+  <!-- ヘッダー -->
+   <div id="parent" th:replace="/header/header"></div>   
+
+  <!-- サイドバー -->
+    <div id="parent" th:replace="/header/sidebar"></div>  
+
+        <div class="content-wrapper">
+         <section class="content">
+           <div class="container-fluid">         
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">アクセス拒否</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa fa-ban"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    アクセス拒否
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                        	利用権限がないページにアクセスしようとしました。
+                        </div>
+                    </div>
+                </div>
+            </div>
+           </div>
+          </section>
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+	
+	<meta id="parent" th:replace="/header/include_js"></meta>
+</body>
+
+</html>

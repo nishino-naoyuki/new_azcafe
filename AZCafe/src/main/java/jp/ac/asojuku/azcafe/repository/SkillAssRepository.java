@@ -8,12 +8,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import jp.ac.asojuku.azcafe.entity.PublicAssignmentTblEntity;
+import jp.ac.asojuku.azcafe.entity.SkillAssTblEntity;
 
-public interface PublicAssignmentRepository 
-	extends JpaSpecificationExecutor<PublicAssignmentTblEntity>, JpaRepository<PublicAssignmentTblEntity, Integer>{
+public interface SkillAssRepository extends
+	JpaSpecificationExecutor<SkillAssTblEntity>,JpaRepository<SkillAssTblEntity,Integer>{
+
 	@Modifying
 	@Transactional
-	@Query("delete from PublicAssignmentTblEntity p where assignmentId=:assignmentId")
+	@Query("delete from SkillAssTblEntity s where assignmentId=:assignmentId")
 	public void delete(@Param("assignmentId") int assignmentId);
 }

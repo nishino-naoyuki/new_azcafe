@@ -3,6 +3,7 @@ package jp.ac.asojuku.azcafe.service;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +17,8 @@ import jp.ac.asojuku.azcafe.dto.GradingTestCaseResultDto;
 import jp.ac.asojuku.azcafe.entity.AnswerDetailTblEntity;
 import jp.ac.asojuku.azcafe.entity.AnswerTblEntity;
 import jp.ac.asojuku.azcafe.entity.AssignmentTblEntity;
+import jp.ac.asojuku.azcafe.entity.SkillAssTblEntity;
+import jp.ac.asojuku.azcafe.entity.SkillMapTblEntity;
 import jp.ac.asojuku.azcafe.entity.TestCaseAnswerTblEntity;
 import jp.ac.asojuku.azcafe.entity.UserTblEntity;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
@@ -24,6 +27,7 @@ import jp.ac.asojuku.azcafe.param.Language;
 import jp.ac.asojuku.azcafe.repository.AnswerDetailRepository;
 import jp.ac.asojuku.azcafe.repository.AnswerRepository;
 import jp.ac.asojuku.azcafe.repository.AssignmentRepository;
+import jp.ac.asojuku.azcafe.repository.SkillMapRepository;
 import jp.ac.asojuku.azcafe.repository.TestCaseAnswerRepository;
 import jp.ac.asojuku.azcafe.repository.UserRepository;
 import jp.ac.asojuku.azcafe.service.grading.GradingFactory;
@@ -48,6 +52,8 @@ public class GradingService {
 	AnswerDetailRepository answerDetailRepository;
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	SkillMapRepository skillMapRepository;
 
 	/**
 	 * @param userId
@@ -74,6 +80,10 @@ public class GradingService {
 			insertAnswerCode(answerEntity,"",code);
 			//ユーザーテーブルのポイント更新
 			updateUserTotalPoint(userId);
+			//スキルポイントを更新
+			updateSkillMap(userId,
+					entity,
+					(answerEntity.getCorrectFlg()==1?true:false));
 		}
 		
 		return result;
@@ -97,6 +107,10 @@ public class GradingService {
 			insertAnswerCodes(answerEntity,srcFileList);
 			//ユーザーテーブルのポイント更新
 			updateUserTotalPoint(userId);
+			//スキルポイントを更新
+			updateSkillMap(userId,
+					entity,
+					(answerEntity.getCorrectFlg()==1?true:false));
 		}
 		
 		return result;
@@ -121,6 +135,52 @@ public class GradingService {
 		userEntity.setPoint(point);
 		
 		userRepository.save(userEntity);
+	}
+	
+	/**
+	 * スキルマップを更新する
+	 * 同じ問題に対して何度も回答することと問題が更新されることを考慮して毎回作り直す
+	 * 
+	 * @param userId
+	 * @param entity
+	 * @param isCorrect
+	 */
+	private void updateSkillMap(Integer userId,AssignmentTblEntity entity,boolean isCorrect) {
+		if( isCorrect != true || entity.getSkillAssTblSet() == null) {
+			return;	//正解ではない場合何もしない
+		}
+		
+		//ユーザーの解答をすべて取得
+		List<AnswerTblEntity> ansList = answerRepository.getList(userId);
+		
+		//一旦ユーザーのスキルマップを全部削除する
+		skillMapRepository.delete(userId);
+		
+		//一旦マップを作る（毎回SQLを発行すると重い）
+		HashMap<Integer,Integer> skillMap = new HashMap<>();
+		for(AnswerTblEntity ansEntity : ansList) {
+			for( SkillAssTblEntity skillass : ansEntity.getAssignmentTbl().getSkillAssTblSet() ) {
+				int skillId = skillass.getSkillId();
+				if( skillMap.containsKey(skillId) ) {
+					//すでに登録してる
+					skillMap.put(skillId, skillMap.get(skillId)+1);
+				}else {
+					skillMap.put(skillId, 1);
+				}				
+			}
+		}
+		
+		//マップを元に登録するEntityのリストを作る
+		List<SkillMapTblEntity> entityList = new ArrayList<>();
+		for(Integer key : skillMap.keySet()) {
+			SkillMapTblEntity smEntity = new SkillMapTblEntity();
+			smEntity.setPoint(skillMap.get(key));
+			smEntity.setUserId(userId);
+			smEntity.setSkillId(key);
+			entityList.add(smEntity);
+		}
+		
+		skillMapRepository.saveAll(entityList);
 	}
 
 	/**

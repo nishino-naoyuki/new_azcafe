@@ -1,5 +1,6 @@
 package jp.ac.asojuku.azcafe.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -18,14 +19,18 @@ import org.springframework.web.servlet.ModelAndView;
 import jp.ac.asojuku.azcafe.dto.AssignmentDetailDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentDto;
 import jp.ac.asojuku.azcafe.dto.AssignmentElementDto;
+import jp.ac.asojuku.azcafe.dto.AssignmentPublicDto;
 import jp.ac.asojuku.azcafe.dto.CommentInsertDto;
 import jp.ac.asojuku.azcafe.dto.GradingResultDetailDto;
 import jp.ac.asojuku.azcafe.dto.GroupDto;
 import jp.ac.asojuku.azcafe.dto.HomeroomDto;
 import jp.ac.asojuku.azcafe.dto.LoginInfoDto;
+import jp.ac.asojuku.azcafe.dto.SkillDto;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
 import jp.ac.asojuku.azcafe.exception.AZCafePermissonDeniedException;
 import jp.ac.asojuku.azcafe.form.AssignmentForm;
+import jp.ac.asojuku.azcafe.form.AssignmentPublicForm;
+import jp.ac.asojuku.azcafe.form.AssignmentUpdatePublicForm;
 import jp.ac.asojuku.azcafe.param.SessionConst;
 import jp.ac.asojuku.azcafe.repository.AnswerGoodRepository;
 import jp.ac.asojuku.azcafe.service.AnswerService;
@@ -33,6 +38,7 @@ import jp.ac.asojuku.azcafe.service.AssignmentService;
 import jp.ac.asojuku.azcafe.service.CommentServie;
 import jp.ac.asojuku.azcafe.service.GroupService;
 import jp.ac.asojuku.azcafe.service.HomeroomService;
+import jp.ac.asojuku.azcafe.service.SkillService;
 
 /**
  * 課題コントローラ
@@ -55,7 +61,69 @@ public class AssignmentController {
 	GroupService groupService;
 	@Autowired
 	CommentServie commentServie;
+	@Autowired
+	SkillService skillService;
 
+	/**
+	 * 更新する
+	 * @param assignmentForm
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value= {"/update/public"}, method=RequestMethod.POST)
+	public Object updatePublicStates(AssignmentUpdatePublicForm assignmentForm) {
+		
+		String idList = assignmentForm.getIdlist();
+		List<Integer> assIdList = getIdList(idList);
+		
+		int count = assignmentService.updatePublicStates(assIdList, getPublicList(assignmentForm));
+		
+		return (count > 0 ? "ok":"ng");
+	}
+	
+	/**
+	 * 公開情報のリストDTOを取得する
+	 * @param assignmentForm
+	 * @return
+	 */
+	private List<AssignmentPublicDto> getPublicList(AssignmentUpdatePublicForm assignmentForm){
+		List<AssignmentPublicDto> publicList = new ArrayList<AssignmentPublicDto>();
+		
+		for(AssignmentPublicForm publicForm : assignmentForm.getPublicStateList()) {
+			AssignmentPublicDto dto = new AssignmentPublicDto();
+			
+			dto.setHomeroomId(publicForm.getHomeroomId());
+			dto.setPublicState(publicForm.getPublicState());
+			
+			publicList.add(dto);
+		}
+		
+		return publicList;
+	}
+	
+	/**
+	 * CSV形式で送られたIDをIntegerのリストに入れなおす
+	 * 例外が発生した場合0件のリストを返す
+	 * @param idStringList
+	 * @return
+	 */
+	private List<Integer> getIdList(String idStringList){
+		List<Integer> assIdList = new ArrayList<>();
+		if( idStringList == null ) {
+			return assIdList;
+		}
+		
+		try {
+			String[] idArray = idStringList.split(",");
+			for( String idString : idArray) {
+				assIdList.add( Integer.parseInt(idString) );
+			}
+		}catch(Exception e) {
+			;//無処理
+		}
+		
+		return assIdList;
+	}
 	/**
 	 * 課題の編集画面を表示する
 	 * ※項目入力済みの登録画面を出しているだけ
@@ -76,6 +144,9 @@ public class AssignmentController {
 		//課題グループを取得する
 		List<GroupDto> groupList = groupService.getAll();
 		mv.addObject("groupList",groupList);
+		//スキル一覧
+		List<SkillDto> slillList = skillService.getAll();
+		mv.addObject("slillList", slillList);
 		//dto->form
 		getFormFromDto(assignmentForm,assignmentDto);
 		assignmentForm.setAssignmentId(assignmentId);
@@ -206,9 +277,12 @@ public class AssignmentController {
 			//ログイン情報が無いことはないはずだが、直リンされた場合を一応考慮
 			throw new AZCafeException("ログイン情報がありません。ログインしなおしてください");
 		}
+		//クラス一覧取得
+		List<HomeroomDto> list = homeroomService.getAll();
 		//一覧取得
 		List<AssignmentElementDto> assignmentList = assignmentService.getAll(loginInfo.getUserId());
-		
+
+		mv.addObject("homeroomList", list);
 		mv.addObject("assignmentList",assignmentList);
 		
         mv.setViewName("assignment_list");
@@ -256,6 +330,9 @@ public class AssignmentController {
 		//課題グループを取得する
 		List<GroupDto> groupList = groupService.getAll();
 		mv.addObject("groupList",groupList);
+		//スキル一覧
+		List<SkillDto> slillList = skillService.getAll();
+		mv.addObject("slillList", slillList);
 		
 		if( returnFlg != null && returnFlg == 1) {
 			//確認画面からの戻り
@@ -263,7 +340,7 @@ public class AssignmentController {
 		}else {
 			//初期化（左メニューからの表示）
 			List<HomeroomDto> list = homeroomService.getAll();			
-			mv.addObject("homeroomList", list);
+			mv.addObject("homeroomList", list);	
 			assignmentForm.initPublicStateList(list); 
 		}
 		
@@ -278,17 +355,21 @@ public class AssignmentController {
 	 * @param assignmentForm
 	 * @param mv
 	 * @return
+	 * @throws AZCafeException 
 	 */
 	@RequestMapping(value= {"/confirm"}, method=RequestMethod.POST)
 	public ModelAndView confirm(
 			@Valid AssignmentForm assignmentForm,BindingResult bindingResult,
-			ModelAndView mv) {
+			ModelAndView mv) throws AZCafeException {
 		
 		if( bindingResult.hasErrors()) {
 			//エラーがある場合
 			//クラス一覧取得
 			List<HomeroomDto> list = homeroomService.getAll();
 			mv.addObject("homeroomList", list);
+			//スキル一覧
+			List<SkillDto> slillList = skillService.getAll();
+			mv.addObject("slillList", slillList);
 	        mv.setViewName("assignment_create");
 		}else {
 			//セッションに保存して画面遷移
@@ -329,8 +410,9 @@ public class AssignmentController {
 	 * Form→DTO変換
 	 * @param assignmentForm
 	 * @return
+	 * @throws AZCafeException 
 	 */
-	private AssignmentDto getDtoFrom(AssignmentForm assignmentForm) {
+	private AssignmentDto getDtoFrom(AssignmentForm assignmentForm) throws AZCafeException {
 		AssignmentDto dto = new AssignmentDto();
 		
 		dto.setAssignmentId(assignmentForm.getAssignmentId());
@@ -340,8 +422,29 @@ public class AssignmentController {
 		dto.setContent(assignmentForm.getContent());
 		dto.setAnswerList(assignmentForm.getAnswerList());
 		dto.setPublicStateList(assignmentForm.getPublicStateList());
+		dto.addSkillId(assignmentForm.getSkillIdList());
+		//スキルマップの文字列を作成する
+		dto.setSkillIdString(createSkillsString(assignmentForm.getSkillIdList()));
 		
 		return dto;
+	}
+	
+	/**
+	 * 表示用のスキル設定文字列を作成する
+	 * @param skillList
+	 * @return
+	 */
+	private String createSkillsString(List<String> skillList) {
+		List<SkillDto> skillDtoList = skillService.getAll();
+		
+		StringBuffer sb = new StringBuffer();
+		for(SkillDto dto : skillDtoList) {
+			if( skillList.contains(dto.getSkillId().toString()) ) {
+				sb.append("<p>").append(dto.getName()).append("</p>");
+			}
+		}
+		
+		return sb.toString();
 	}
 	
 	/**
@@ -377,6 +480,13 @@ public class AssignmentController {
 		form.setAnswerList(dto.getAnswerList());
 		form.setPublicStateList(dto.getPublicStateList());
 		form.setContent(dto.getContent());
+		List<String> idList = new ArrayList<>();
+		if( dto.getSkillIdList() != null ) {
+			for(Integer intId : dto.getSkillIdList()) {
+				idList.add(intId.toString());
+			}
+		}
+		form.setSkillIdList(idList);
 		
 		return form;
 	}

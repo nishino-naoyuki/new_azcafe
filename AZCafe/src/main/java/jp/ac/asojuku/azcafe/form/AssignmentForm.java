@@ -43,6 +43,8 @@ public class AssignmentForm {
 	@Valid
 	private List<AssignmentTestCaseForm> answerList;
 	
+	private List<String> skillIdList;
+	
 	//公開設定初期化用メソッド
 	public void initPublicStateList(List<HomeroomDto> homeroomList) {
 		if( publicStateList == null ) {

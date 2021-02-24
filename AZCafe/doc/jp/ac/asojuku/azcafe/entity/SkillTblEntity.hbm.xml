@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="jp.ac.asojuku.azcafe.entity">
+
+	<class name="SkillTblEntity" table="SKILL_TBL">
+
+		<id name="skillId" type="java.lang.Integer" column="skill_id">
+			<generator class="assigned" />
+		</id>
+
+		<property name="name" type="java.lang.String"
+			column="name" not-null="true" />
+
+		<property name="updateDate" type="java.util.Date"
+			column="update_date" not-null="false" />
+
+	</class>
+</hibernate-mapping>

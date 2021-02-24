@@ -56,7 +56,7 @@
                 <h1 class="card-title" th:text="${assignmentdetailDto.title}"></h1>
 
                 <div class="card-tools">
-                  <button type="button" class="btn btn-tool" id="question-edit"   data-toggle="tooltip" title="この問題を編集する">
+                  <button th:unless="${session['LoginInfo'].isStudent()}" type="button" class="btn btn-tool" id="question-edit"   data-toggle="tooltip" title="この問題を編集する">
                     <i class="fas fa-edit"></i>
                   </button>
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -106,6 +106,19 @@
                     
                 </div>
                 
+                <div class="d-flex">
+                  <div class="col-md-12">
+                    <div class="info-box">
+                      <span class="info-box-icon bg-warning"><i class="fab fa-angellist"></i></span>
+        
+                      <div class="info-box-content score_result">
+                        <span class="info-box-text">この問題で獲得可能なスキル</span>
+                        <span class="info-box-number" th:text="${assignmentdetailDto.getSkillSetting()}"></span>
+                      </div>
+                      <!-- /.info-box-content -->
+                    </div>
+                  </div>
+                </div>
                 <!-- 問題文 -->
                 <div class="col-md-12">
                   <div class="card card-outline card-primary">
