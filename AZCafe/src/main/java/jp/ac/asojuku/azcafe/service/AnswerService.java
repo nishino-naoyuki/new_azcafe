@@ -1,5 +1,7 @@
 package jp.ac.asojuku.azcafe.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,22 @@ public class AnswerService {
 	@Autowired
 	FollowRepository followRepository;
 
+	/**
+	 * 指定された問題に対して何人の回答が付いているかを取得する
+	 * 
+	 * @param assignmentId
+	 * @return
+	 */
+	public int getAnswerdNum(Integer assignmentId) {
+		int count = 0;
+		
+		List<AnswerTblEntity> ansList = 
+				answerRepository.getListByAssId( assignmentId );
+		
+		count = ( ansList != null  ? ansList.size():0 );
+		
+		return count;
+	}
 	/**
 	 * userIdで指定したユーザーのassignmentIdで指定した問題の解答を見れるかどうか
 	 * ログインユーザーが見れるかどうか

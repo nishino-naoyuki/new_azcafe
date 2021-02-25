@@ -22,6 +22,7 @@ import lombok.Data;
 public class AssignmentForm {
 	
 	private Integer assignmentId;
+	private Integer ansCount;
 
 	@NotEmpty(message = "{errmsg0301}")
 	@Size(max = 30, message="{errmsg0304}")

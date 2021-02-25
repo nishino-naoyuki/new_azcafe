@@ -41,6 +41,7 @@
       <div class="container-fluid">
         <form th:action="@{/assignment/confirm}" id="question-form" method="POST" th:object="${assignmentForm}">
         <input type="hidden" name="assignmentId" th:field="*{assignmentId}">
+        <input type="hidden" name="ansCount" th:field="*{ansCount}">
         <p id="error" th:each="error : ${#fields.detailedErrors()}" th:text="${error.message}"></p>
         <div class="row">
           <!-- /.col -->
@@ -91,6 +92,9 @@
                   <div class="tab-pane" id="answer-list">
                     <div class="form-group">
                       <button class="btn btn-default" id="btn-ans-add">解答追加</button>
+                    </div>
+                    <div th:if="*{ansCount} gt 0" class="form-group">
+                      <div class="text-danger"  th:text="|*{ansCount}人この問題に解答しています。解答（このタブのページ）を修正した場合はこの問題に現在出されている解答は無効となり削除されますのでご注意ください|"></div>
                     </div>
                     <div class="col-md-12" id="answer-list-elements">
                       <div class="card card-primary answer-list-element" id="element-base" style="display: none;">
@@ -215,8 +219,6 @@
 <script th:src="@{/plugins/raphael/raphael.min.js}"></script>
 <script th:src="@{/plugins/jquery-mapael/jquery.mapael.min.js}"></script>
 <script th:src="@{/plugins/jquery-mapael/maps/usa_states.min.js}"></script>
-<!-- ChartJS -->
-<script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
 <!-- typehead -->
 <script th:src="@{/js/typeahead.bundle.js}"></script>
 <!-- include summernote js -->

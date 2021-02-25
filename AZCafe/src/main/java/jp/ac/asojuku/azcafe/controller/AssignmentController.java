@@ -80,50 +80,52 @@ public class AssignmentController {
 		
 		return (count > 0 ? "ok":"ng");
 	}
-	
+
 	/**
-	 * 公開情報のリストDTOを取得する
-	 * @param assignmentForm
+	 * 問題作成のメソッド
+	 * @param mv
 	 * @return
 	 */
-	private List<AssignmentPublicDto> getPublicList(AssignmentUpdatePublicForm assignmentForm){
-		List<AssignmentPublicDto> publicList = new ArrayList<AssignmentPublicDto>();
+	@RequestMapping(value= {"/edit"}, method=RequestMethod.GET)
+	public ModelAndView edit(
+			AssignmentForm assignmentForm,
+			ModelAndView mv,
+			@RequestParam(required = false) Integer assignmentId,
+			@RequestParam(required = false) Integer returnFlg) {
+
+		//課題グループを取得する
+		List<GroupDto> groupList = groupService.getAll();
+		mv.addObject("groupList",groupList);
+		//スキル一覧
+		List<SkillDto> slillList = skillService.getAll();
+		mv.addObject("slillList", slillList);
+		//ホームルーム一覧をセットする
+		List<HomeroomDto> list = homeroomService.getAll();			
+		mv.addObject("homeroomList", list);
 		
-		for(AssignmentPublicForm publicForm : assignmentForm.getPublicStateList()) {
-			AssignmentPublicDto dto = new AssignmentPublicDto();
-			
-			dto.setHomeroomId(publicForm.getHomeroomId());
-			dto.setPublicState(publicForm.getPublicState());
-			
-			publicList.add(dto);
+		int ansCount = 0;
+		if( returnFlg != null && returnFlg == 1) {
+			//確認画面からの戻り
+			getFormFromSession(assignmentForm);
+		} else if( assignmentId != null ){
+			//課題IDの指定がある場合は更新の時。その場合は現状のデータを取得する
+			AssignmentDto assignmentDto =  assignmentService.get(assignmentId);
+			getFormFromDto(assignmentForm,assignmentDto);
+			assignmentForm.setAssignmentId(assignmentId);
+			//解答済みの人がいるかのチェック
+			ansCount = answerService.getAnswerdNum(assignmentId);
+			assignmentForm.setAnsCount(ansCount);//この問題の解答者数をセットする
+		}else {
+			//新規追加の画面
+			assignmentForm.initPublicStateList(list); 
+			assignmentForm.setAnsCount(ansCount);//この問題の解答者数をセットする
 		}
 		
-		return publicList;
+        mv.setViewName("assignment_create");
+        return mv;
 	}
 	
-	/**
-	 * CSV形式で送られたIDをIntegerのリストに入れなおす
-	 * 例外が発生した場合0件のリストを返す
-	 * @param idStringList
-	 * @return
-	 */
-	private List<Integer> getIdList(String idStringList){
-		List<Integer> assIdList = new ArrayList<>();
-		if( idStringList == null ) {
-			return assIdList;
-		}
-		
-		try {
-			String[] idArray = idStringList.split(",");
-			for( String idString : idArray) {
-				assIdList.add( Integer.parseInt(idString) );
-			}
-		}catch(Exception e) {
-			;//無処理
-		}
-		
-		return assIdList;
-	}
+	
 	/**
 	 * 課題の編集画面を表示する
 	 * ※項目入力済みの登録画面を出しているだけ
@@ -133,8 +135,8 @@ public class AssignmentController {
 	 * @param mv
 	 * @return
 	 */
-	@RequestMapping(value= {"/edit"}, method=RequestMethod.GET)
-	public ModelAndView edit(
+	@RequestMapping(value= {"/edit2222"}, method=RequestMethod.GET)
+	public ModelAndView edit_botshu(
 			AssignmentForm assignmentForm,
 			@RequestParam(required = false) Integer assignmentId,
 			ModelAndView mv) {
@@ -147,12 +149,15 @@ public class AssignmentController {
 		//スキル一覧
 		List<SkillDto> slillList = skillService.getAll();
 		mv.addObject("slillList", slillList);
+		//ホームルーム一覧を取得
+		List<HomeroomDto> list = homeroomService.getAll();			
+		mv.addObject("homeroomList", list);
+		//解答済みの人がいるかのチェック
+		int ansCount = answerService.getAnswerdNum(assignmentId);
+		mv.addObject("ansCount", ansCount);
 		//dto->form
 		getFormFromDto(assignmentForm,assignmentDto);
 		assignmentForm.setAssignmentId(assignmentId);
-		
-		List<HomeroomDto> list = homeroomService.getAll();			
-		mv.addObject("homeroomList", list);
 
         mv.setViewName("assignment_create");
         return mv;
@@ -333,6 +338,8 @@ public class AssignmentController {
 		//スキル一覧
 		List<SkillDto> slillList = skillService.getAll();
 		mv.addObject("slillList", slillList);
+		//新規登録なのでこの問題の回答者は0人
+		mv.addObject("ansCount", 0);
 		
 		if( returnFlg != null && returnFlg == 1) {
 			//確認画面からの戻り
@@ -487,7 +494,58 @@ public class AssignmentController {
 			}
 		}
 		form.setSkillIdList(idList);
+		//解答済みの人がいるかのチェック
+		int ansCount = 0;
+		if( dto.getAssignmentId() != null ) {
+			ansCount = answerService.getAnswerdNum( dto.getAssignmentId());			
+		}
+		form.setAnsCount(ansCount);//この問題の解答者数をセットする
 		
 		return form;
+	}
+
+	
+	/**
+	 * 公開情報のリストDTOを取得する
+	 * @param assignmentForm
+	 * @return
+	 */
+	private List<AssignmentPublicDto> getPublicList(AssignmentUpdatePublicForm assignmentForm){
+		List<AssignmentPublicDto> publicList = new ArrayList<AssignmentPublicDto>();
+		
+		for(AssignmentPublicForm publicForm : assignmentForm.getPublicStateList()) {
+			AssignmentPublicDto dto = new AssignmentPublicDto();
+			
+			dto.setHomeroomId(publicForm.getHomeroomId());
+			dto.setPublicState(publicForm.getPublicState());
+			
+			publicList.add(dto);
+		}
+		
+		return publicList;
+	}
+	
+	/**
+	 * CSV形式で送られたIDをIntegerのリストに入れなおす
+	 * 例外が発生した場合0件のリストを返す
+	 * @param idStringList
+	 * @return
+	 */
+	private List<Integer> getIdList(String idStringList){
+		List<Integer> assIdList = new ArrayList<>();
+		if( idStringList == null ) {
+			return assIdList;
+		}
+		
+		try {
+			String[] idArray = idStringList.split(",");
+			for( String idString : idArray) {
+				assIdList.add( Integer.parseInt(idString) );
+			}
+		}catch(Exception e) {
+			;//無処理
+		}
+		
+		return assIdList;
 	}
 }

@@ -52,6 +52,9 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <div class="col-md-10">
+                    <div class="position-relative mb-4">
+                      <canvas id="skillmap-chart"></canvas>
+                    </div>
                 </div>
               <!-- /.card-body -->
             </div>
@@ -77,9 +80,89 @@
 
 <!-- REQUIRED SCRIPTS -->
 <meta id="parent" th:replace="/header/include_js"></meta>
+<script src="plugins/chart.js/Chart.min.js"></script>
+<script th:inline="javascript">
+$(function(){
 
-<script>
+	  var ticksStyle = {
+	    fontColor: '#495057',
+	    fontStyle: 'bold'
+	  }
 
+	  var mode = 'index'
+	  var intersect = true
+
+	  const labelList = [
+	  [# th:each="skill : ${userInfo.skillMap}"]    
+	  [[${skill.name}]]  ,
+	  [/]
+	  ];
+	  
+	  const dataList = [
+		  [# th:each="skill : ${userInfo.skillMap}"]    
+		  [[${skill.point}]]  ,
+		  [/]
+		  ];
+	  
+	var $SkillmapChart = $('#skillmap-chart');
+	var SkillmapChart = new Chart($SkillmapChart, {
+	    type: 'horizontalBar',
+	    data: {
+	      labels: labelList,
+	      datasets: [
+	        {
+	          backgroundColor: '#007bff',
+	          borderColor: '#007bff',
+	          hoverBorderColor: 'rgba(0, 0, 0, 0.1)',
+	          data: dataList
+	        }
+	      ]
+	    },
+	    options: {
+    	  title: {
+            display: true,
+            text: 'スキルマップ（単位：ポイント）'
+          },
+	      maintainAspectRatio: false,
+	      tooltips: {
+	        mode: mode,
+	        intersect: intersect
+	      },
+	      hover: {
+	        mode: mode,
+	        intersect: intersect
+	      },
+	      legend: {
+	        display: false
+	      },
+	      scales: {
+	        xAxes: [{
+	          // display: false,
+	          gridLines: {
+	            display: true,
+	            lineWidth: '4px',
+	            color: 'rgba(0, 0, 0, .2)',
+	            zeroLineColor: 'transparent'
+	          },
+	          ticks: {
+	        	  beginAtZero: true,
+		    	  stepSize : 1,
+	              userCallback: function(label, index, labels) {
+	            	  return label + "pt";
+		           }
+	          }
+	        }],
+	        yAxes: [{
+	          display: true,
+	          gridLines: {
+	              display: false
+	          },
+	          ticks: ticksStyle
+	        }]
+	      }
+	    }
+	  })
+})
 
 </script>
 

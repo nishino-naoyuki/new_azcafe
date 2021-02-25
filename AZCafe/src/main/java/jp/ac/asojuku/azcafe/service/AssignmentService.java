@@ -2,6 +2,7 @@ package jp.ac.asojuku.azcafe.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -328,6 +329,18 @@ public class AssignmentService {
 	private void insertTestCase(AssignmentDto dto,AssignmentTblEntity assignmentTblEntity) {
 		List<TestCaseTblEntity> testCaseList = new ArrayList<>();
 		
+		if( !isChangeTestCase(
+				dto.getAnswerList(),assignmentTblEntity.getTestCaseTblSet() ) ) {
+			//変更なし！の場合は何もしない
+			return;
+		}		
+		//////////////////////////////////////////////////////
+		//変更がある場合は　解凍の削除→テストケースの削除→テストケース登録しなおし　をする
+		//解答の削除
+		answerRepository.delete(assignmentTblEntity.getAssignmentId());
+		//テストケースの削除
+		testCaseRepository.delete(assignmentTblEntity.getAssignmentId());		
+		//再登録
 		int no = 1;
 		for( AssignmentTestCaseDto testcase : dto.getAnswerList()) {
 			TestCaseTblEntity testcaseEntity = new TestCaseTblEntity();
@@ -341,6 +354,44 @@ public class AssignmentService {
 		}
 		
 		testCaseRepository.saveAll(testCaseList);
+	}
+	
+	/**
+	 * テストケースに変更があるかをチェックする
+	 * @param newTestCaseList
+	 * @param nowTestCaseSet
+	 * @return
+	 */
+	private boolean isChangeTestCase(
+			List<AssignmentTestCaseDto> newTestCaseList,
+			Set<TestCaseTblEntity> nowTestCaseSet) {
+		if( nowTestCaseSet == null ) {
+			return true;	//nowTestCaseSetがない時は新規登録
+		}
+		boolean isChange = false;
+		
+		//数に変更があるときは変更有！
+		if( newTestCaseList.size() != nowTestCaseSet.size() ) {
+			return true;
+		}
+		
+		//数も同じときはひとつずつ比べる！
+		for(AssignmentTestCaseDto newTestCase : newTestCaseList ) {
+			boolean isFound = false;
+			
+			for(TestCaseTblEntity nowTestCase : nowTestCaseSet ) {
+				if(    newTestCase.getInput().equals(nowTestCase.getInputText()) &&
+						newTestCase.getOutput().equals(nowTestCase.getOutputTxt())) {
+					isFound = true;
+					break;
+				}
+				if( !isFound ) {
+					isChange = true;	//変更有！
+					break;
+				}
+			}
+		}
+		return isChange;
 	}
 	
 	/**
