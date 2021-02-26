@@ -2,8 +2,11 @@ package jp.ac.asojuku.azcafe.repository;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -40,4 +43,9 @@ public interface AnswerGoodRepository
 	
 	@Query("select g from AnswerGoodTblEntity g where userId = :userId and answerId = :answerId")
 	public AnswerGoodTblEntity getGoodBy(@Param("answerId")Integer answerId,@Param("userId")Integer userId);
+
+	@Modifying
+	@Transactional
+	@Query("delete  from AnswerGoodTblEntity g where g.answerId in (select a.answerId from AnswerTblEntity a where a.assignmentId=:assignmentId)")
+	public void deleteAssignmentId(@Param("assignmentId") int assignmentId);
 }

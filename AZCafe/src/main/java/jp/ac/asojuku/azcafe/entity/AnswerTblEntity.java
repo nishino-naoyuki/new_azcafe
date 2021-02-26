@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -67,23 +68,23 @@ public class AnswerTblEntity implements Serializable {
 	/** 提出回数. */
 	private Integer handNum;
 	/** 解答詳細テーブル 一覧. */
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="answerId",insertable=true ,updatable=true)
 	private Set<AnswerDetailTblEntity> answerDetailTblSet;
 	
 	/** 解答いいね 一覧. */
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="answerId",insertable=true ,updatable=true)
 	private Set<AnswerGoodTblEntity> answerGoodTblSet;
 
 	/** コメント 一覧. */
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="answerId",insertable=true ,updatable=true)
 	@OrderBy(value = "entryDate desc")
 	private Set<CommentTblEntity> commentTblSet;
 
 	/** テストケースごとの答えテーブル 一覧. */
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="answerId",insertable=true ,updatable=true)
 	private Set<TestCaseAnswerTblEntity> testCaseAnswerTblSet;
 

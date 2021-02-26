@@ -101,6 +101,7 @@ public class AssignmentTblEntity implements Serializable {
 		this.assignmentGoodTblSet = new HashSet<AssignmentGoodTblEntity>();
 		this.publicQuestionTblSet = new HashSet<PublicAssignmentTblEntity>();
 		this.testCaseTblSet = new HashSet<TestCaseTblEntity>();
+		this.skillAssTblSet = new HashSet<SkillAssTblEntity>();
 	}
 
 	@PrePersist

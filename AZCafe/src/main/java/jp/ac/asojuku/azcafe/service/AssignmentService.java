@@ -30,13 +30,16 @@ import jp.ac.asojuku.azcafe.entity.SkillAssTblEntity;
 import jp.ac.asojuku.azcafe.entity.TestCaseAnswerTblEntity;
 import jp.ac.asojuku.azcafe.entity.TestCaseTblEntity;
 import jp.ac.asojuku.azcafe.param.Difficulty;
+import jp.ac.asojuku.azcafe.repository.AnswerDetailRepository;
 import jp.ac.asojuku.azcafe.repository.AnswerGoodRepository;
 import jp.ac.asojuku.azcafe.repository.AnswerRepository;
 import jp.ac.asojuku.azcafe.repository.AssignmentRepository;
+import jp.ac.asojuku.azcafe.repository.CommentRepository;
 import jp.ac.asojuku.azcafe.repository.FollowRepository;
 import jp.ac.asojuku.azcafe.repository.GroupRepository;
 import jp.ac.asojuku.azcafe.repository.PublicAssignmentRepository;
 import jp.ac.asojuku.azcafe.repository.SkillAssRepository;
+import jp.ac.asojuku.azcafe.repository.TestCaseAnswerRepository;
 import jp.ac.asojuku.azcafe.repository.TestCaseRepository;
 
 /**
@@ -63,6 +66,12 @@ public class AssignmentService {
 	GradingService gradingService;
 	@Autowired
 	SkillAssRepository skillAssRepository;
+	@Autowired
+	AnswerDetailRepository answerDetailRepository;
+	@Autowired
+	CommentRepository commentRepository;
+	@Autowired
+	TestCaseAnswerRepository testCaseAnswerRepository;
 
 	/**
 	 * 公開情報を一括更新する
@@ -205,6 +214,9 @@ public class AssignmentService {
 	private void insertSkillSetting(AssignmentTblEntity assignmentTblEntity,List<Integer> skillIdList) {
 		//いったん削除
 		skillAssRepository.delete(assignmentTblEntity.getAssignmentId());
+		if( skillIdList == null ) {
+			return;
+		}
 		//追加しなおす
 		List<SkillAssTblEntity> insertList = new ArrayList<>();
 		for(Integer skillId : skillIdList) {
@@ -336,7 +348,12 @@ public class AssignmentService {
 		}		
 		//////////////////////////////////////////////////////
 		//変更がある場合は　解凍の削除→テストケースの削除→テストケース登録しなおし　をする
+		
 		//解答の削除
+		answerDetailRepository.deleteAssignmentId(assignmentTblEntity.getAssignmentId());
+		answerGoodRepository.deleteAssignmentId(assignmentTblEntity.getAssignmentId());
+		commentRepository.deleteAssignmentId(assignmentTblEntity.getAssignmentId());
+		testCaseAnswerRepository.deleteAssignmentId(assignmentTblEntity.getAssignmentId());
 		answerRepository.delete(assignmentTblEntity.getAssignmentId());
 		//テストケースの削除
 		testCaseRepository.delete(assignmentTblEntity.getAssignmentId());		

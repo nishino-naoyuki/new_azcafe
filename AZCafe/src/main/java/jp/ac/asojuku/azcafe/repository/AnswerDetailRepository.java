@@ -16,4 +16,9 @@ extends JpaSpecificationExecutor<AnswerDetailTblEntity>, JpaRepository<AnswerDet
 	@Transactional
 	@Query("delete from AnswerDetailTblEntity a where answerId=:answerId")
 	public void delete(@Param("answerId") int answerId);
+
+	@Modifying
+	@Transactional
+	@Query("delete  from AnswerDetailTblEntity d where d.answerId in (select a.answerId from AnswerTblEntity a where a.assignmentId=:assignmentId)")
+	public void deleteAssignmentId(@Param("assignmentId") int assignmentId);
 }

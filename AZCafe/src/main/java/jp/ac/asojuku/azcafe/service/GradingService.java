@@ -89,6 +89,7 @@ public class GradingService {
 		return result;
 	}
 	
+	@Transactional(rollbackFor = Exception.class)
 	public GradingResultDto execByFile(
 			Integer userId,
 			Integer assignmentId,
@@ -159,7 +160,16 @@ public class GradingService {
 		//一旦マップを作る（毎回SQLを発行すると重い）
 		HashMap<Integer,Integer> skillMap = new HashMap<>();
 		for(AnswerTblEntity ansEntity : ansList) {
-			for( SkillAssTblEntity skillass : ansEntity.getAssignmentTbl().getSkillAssTblSet() ) {
+			AssignmentTblEntity assEntity = ansEntity.getAssignmentTbl();
+			if( assEntity == null && (ansEntity.getAssignmentId() == entity.getAssignmentId())) {
+				//追加したばかりのAnswerTblEntityからはAssignmentTblEntityをとれない（苦肉の策・・・）
+				assEntity = entity;
+			}
+			if( assEntity.getSkillAssTblSet() == null ) {
+				continue;
+			}
+			
+			for( SkillAssTblEntity skillass : assEntity.getSkillAssTblSet() ) {
 				int skillId = skillass.getSkillId();
 				if( skillMap.containsKey(skillId) ) {
 					//すでに登録してる

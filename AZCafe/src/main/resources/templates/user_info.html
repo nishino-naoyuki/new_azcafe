@@ -115,6 +115,7 @@
                   <li class="nav-item"><a class="nav-link active" href="#answer-list" data-toggle="tab">解答一覧</a></li>
                   <li class="nav-item"><a class="nav-link" href="#follow-list" data-toggle="tab">フォローリスト</a></li>
                   <li class="nav-item"><a class="nav-link" href="#follower-list" data-toggle="tab">フォロワーリスト</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#skill-map" data-toggle="tab">スキルマップ</a></li>
                 </ul>
               </div><!-- /.card-header -->
               <div class="card-body">
@@ -201,6 +202,10 @@
 	                    </div>
                   </div>
                   <!-- /.tab-pane -->
+                  <div class="tab-pane" id="skill-map">
+	                    <!--スキルマップ-->
+	                    <canvas id="skillmap-chart"></canvas>
+                  </div>
                 </div>
                 <!-- /.tab-content -->
               </div><!-- /.card-body -->
@@ -275,7 +280,7 @@
 <script th:src="@{/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
 <script th:src="@{/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
 <script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
-
+<script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
 <script>
   $(document).on('click', '#edit-nickname', function(){
         let label = document.getElementById("nickname-label");
@@ -524,6 +529,91 @@ $(document).on('drop', function (event) {
 });
 
   
+</script>
+
+<script th:inline="javascript">
+$(function(){
+
+	  var ticksStyle = {
+	    fontColor: '#495057',
+	    fontStyle: 'bold'
+	  }
+
+	  var mode = 'index'
+	  var intersect = true
+
+	  const labelList = [
+	  [# th:each="skill : ${userInfoDto.skillMap}"]    
+	  [[${skill.name}]]  ,
+	  [/]
+	  ];
+	  
+	  const dataList = [
+		  [# th:each="skill : ${userInfoDto.skillMap}"]    
+		  [[${skill.point}]]  ,
+		  [/]
+		  ];
+	  
+	var $SkillmapChart = $('#skillmap-chart');
+	//alert($SkillmapChart );
+	var SkillmapChart = new Chart($SkillmapChart, {
+	    type: 'horizontalBar',
+	    data: {
+	      labels: labelList,
+	      datasets: [
+	        {
+	          backgroundColor: '#6870BD',
+	          borderColor: '#6870BD',
+	          hoverBorderColor: 'rgba(0, 0, 0, 0.1)',
+	          data: dataList
+	        }
+	      ]
+	    },
+	    options: {
+    	  title: {
+            display: true,
+            text: 'スキルマップ（単位：ポイント）'
+          },
+	      tooltips: {
+	        mode: mode,
+	        intersect: intersect
+	      },
+	      hover: {
+	        mode: mode,
+	        intersect: intersect
+	      },
+	      legend: {
+	        display: false
+	      },
+	      scales: {
+	        xAxes: [{
+	          // display: false,
+	          gridLines: {
+	            display: true,
+	            lineWidth: '4px',
+	            color: 'rgba(0, 0, 0, .2)',
+	            zeroLineColor: 'transparent'
+	          },
+	          ticks: {
+	        	  beginAtZero: true,
+		    	  stepSize : 1,
+	              userCallback: function(label, index, labels) {
+	            	  return label + "pt";
+		           }
+	          }
+	        }],
+	        yAxes: [{
+	          display: true,
+	          gridLines: {
+	              display: false
+	          },
+	          ticks: ticksStyle
+	        }]
+	      }
+	    }
+	  })
+})
+
 </script>
 </body>
 
