@@ -9,14 +9,18 @@ import org.springframework.stereotype.Service;
 import jp.ac.asojuku.azcafe.config.MessageProperty;
 import jp.ac.asojuku.azcafe.dto.DashBoadDto;
 import jp.ac.asojuku.azcafe.dto.InfomationDto;
+import jp.ac.asojuku.azcafe.dto.LevelDto;
 import jp.ac.asojuku.azcafe.entity.AnswerGoodTblEntity;
 import jp.ac.asojuku.azcafe.entity.AnswerTblEntity;
 import jp.ac.asojuku.azcafe.entity.AssignmentTblEntity;
 import jp.ac.asojuku.azcafe.entity.CommentTblEntity;
 import jp.ac.asojuku.azcafe.entity.FollowTblEntity;
+import jp.ac.asojuku.azcafe.entity.UserLevelTblEntity;
 import jp.ac.asojuku.azcafe.entity.UserTblEntity;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
 import jp.ac.asojuku.azcafe.param.InfoKind;
+import jp.ac.asojuku.azcafe.param.LevelRank;
+import jp.ac.asojuku.azcafe.param.RoleId;
 import jp.ac.asojuku.azcafe.repository.AnswerGoodRepository;
 import jp.ac.asojuku.azcafe.repository.AnswerRepository;
 import jp.ac.asojuku.azcafe.repository.AssignmentRepository;
@@ -185,18 +189,30 @@ public class DashboadService {
 		int followNum = followRepository.getFollowCount(userId);
 		int followerNum = followRepository.getFollowerCount(userId);
 		int goodNum = answerGoodRepository.getGoodCount(userId);
-		int assignmentNum =
-				assignmentRepository.getAssignmentCount(userEntity.getHomeroomTbl().getHomeroomId());
+		int assignmentNum = 0;
+		
+		if( RoleId.TEACHER.equals(userEntity.getRole())) {
+			assignmentNum = assignmentRepository.getAssignmentCountTeacher(userEntity.getHomeroomTbl().getHomeroomId());
+		}else {
+			assignmentNum = assignmentRepository.getAssignmentCount(userEntity.getHomeroomTbl().getHomeroomId());
+		}
 		List<AnswerTblEntity> answerList = answerRepository.getList(userId);
 		
 		//dtoにセット
-		dashBoadDto.setLevel(userEntity.getLevelTbl().getName());
 		dashBoadDto.setAnswerNum(answerList.size());
 		dashBoadDto.setAssignmentNum(assignmentNum);
 		dashBoadDto.setFollowNum(followNum);
 		dashBoadDto.setFollowerNum(followerNum);
 		dashBoadDto.setGoodNum(goodNum);
 		dashBoadDto.setPoint(userEntity.getPoint());
+		//称号をセット
+		for( UserLevelTblEntity entity : userEntity.getUserLevelSet() ) {
+			LevelDto lvDto = new LevelDto();
+			lvDto.setLevelId(entity.getLevelTbl().getLevelId());
+			lvDto.setName(entity.getLevelTbl().getName());
+			lvDto.setRank( LevelRank.getBy(entity.getLevelTbl().getLevel()) );
+			dashBoadDto.addLevelList(lvDto);
+		}
 		
 		return userEntity;
 	}

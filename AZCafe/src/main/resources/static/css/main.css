@@ -406,3 +406,23 @@
 .dialog-table-td{
 	padding: 0.25rem !important;
 }
+
+.badge-bronze {
+    color: #fff;
+    background-color: #a52a2a;
+}
+
+.badge-sliver {
+    color: #00000;
+    background-color: #c0c0c0;
+}
+
+.badge-cold {
+    color: #00000;
+    background-color: #ffd700;
+}
+
+.badge-platinum {
+    color: #00000;
+    background-color: #dcdcdc;
+}

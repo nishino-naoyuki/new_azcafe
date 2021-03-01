@@ -49,9 +49,6 @@ public class UserTblEntity implements Serializable {
 	/** 紹介文. */
 	private String introduction;
 
-	/** 称号マスターテーブル. */
-	private LevelTblEntity levelTbl;
-
 	/** アバター（アイコン）のパス. */
 	private String avater;
 
@@ -97,6 +94,9 @@ public class UserTblEntity implements Serializable {
 	/** スキルマップ 一覧. */
 	private Set<SkillMapTblEntity> skillMapTblSet;
 
+	/** ユーザー称号テーブル 一覧. */
+	private Set<UserLevelTblEntity> userLevelTblSet;
+
 	/**
 	 * コンストラクタ.
 	 */
@@ -108,6 +108,7 @@ public class UserTblEntity implements Serializable {
 		this.commentTblSet = new HashSet<CommentTblEntity>();
 		this.followTblSet = new HashSet<FollowTblEntity>();
 		this.skillMapTblSet = new HashSet<SkillMapTblEntity>();
+		this.userLevelTblSet = new HashSet<UserLevelTblEntity>();
 	}
 
 	/**
@@ -317,25 +318,6 @@ public class UserTblEntity implements Serializable {
 	 */
 	public String getIntroduction() {
 		return this.introduction;
-	}
-
-	/**
-	 * 称号マスターテーブル を設定します.
-	 * 
-	 * @param levelTbl
-	 *            称号マスターテーブル
-	 */
-	public void setLevelTbl(LevelTblEntity levelTbl) {
-		this.levelTbl = levelTbl;
-	}
-
-	/**
-	 * 称号マスターテーブル を取得します.
-	 * 
-	 * @return 称号マスターテーブル
-	 */
-	public LevelTblEntity getLevelTbl() {
-		return this.levelTbl;
 	}
 
 	/**
@@ -701,6 +683,35 @@ public class UserTblEntity implements Serializable {
 	 */
 	public Set<SkillMapTblEntity> getSkillMapTblSet() {
 		return this.skillMapTblSet;
+	}
+
+	/**
+	 * ユーザー称号テーブル 一覧を設定します.
+	 * 
+	 * @param userLevelTblSet
+	 *            ユーザー称号テーブル 一覧
+	 */
+	public void setUserLevelTblSet(Set<UserLevelTblEntity> userLevelTblSet) {
+		this.userLevelTblSet = userLevelTblSet;
+	}
+
+	/**
+	 * ユーザー称号テーブル を追加します.
+	 * 
+	 * @param userLevelTbl
+	 *            ユーザー称号テーブル
+	 */
+	public void addUserLevelTbl(UserLevelTblEntity userLevelTbl) {
+		this.userLevelTblSet.add(userLevelTbl);
+	}
+
+	/**
+	 * ユーザー称号テーブル 一覧を取得します.
+	 * 
+	 * @return ユーザー称号テーブル 一覧
+	 */
+	public Set<UserLevelTblEntity> getUserLevelTblSet() {
+		return this.userLevelTblSet;
 	}
 
 	/**

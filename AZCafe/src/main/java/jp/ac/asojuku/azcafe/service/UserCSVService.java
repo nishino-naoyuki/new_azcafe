@@ -314,9 +314,6 @@ public class UserCSVService {
 		
 		if( entity == null ) {
 			entity = new UserTblEntity();
-			LevelTblEntity levelTblEntity = new LevelTblEntity();
-			levelTblEntity.setLevelId(1);
-			entity.setLevelTbl(levelTblEntity);
 			entity.setFollowerNum(0);
 			entity.setFollowNum(0);
 			entity.setGoodNum(0);

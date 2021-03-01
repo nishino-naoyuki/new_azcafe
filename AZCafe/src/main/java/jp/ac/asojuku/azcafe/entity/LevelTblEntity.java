@@ -37,5 +37,22 @@ public class LevelTblEntity implements Serializable {
 	/** 説明. */
 	private String description;
 
+	/** 必要ポイント. */
+	private Integer point;
+
+	/** 必要な回答数. */
+	private Integer answer;
+
+	/** フォロワー数. */
+	private Integer follower;
+
+	/** イイネの数. */
+	private Integer good;
+
+	/** コメントの数. */
+	private Integer comment;
+
+	/** レベル. */
+	private Integer level;
 
 }

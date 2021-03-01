@@ -24,14 +24,32 @@ public class LevelTblEntity implements Serializable {
 	/** 説明. */
 	private String description;
 
-	/** ユーザー 一覧. */
-	private Set<UserTblEntity> userTblSet;
+	/** 必要ポイント. */
+	private Integer point;
+
+	/** 必要な回答数. */
+	private Integer answer;
+
+	/** フォロワー数. */
+	private Integer follower;
+
+	/** イイネの数. */
+	private Integer good;
+
+	/** コメントの数. */
+	private Integer comment;
+
+	/** レベル. */
+	private Integer level;
+
+	/** ユーザー称号テーブル 一覧. */
+	private Set<UserLevelTblEntity> userLevelTblSet;
 
 	/**
 	 * コンストラクタ.
 	 */
 	public LevelTblEntity() {
-		this.userTblSet = new HashSet<UserTblEntity>();
+		this.userLevelTblSet = new HashSet<UserLevelTblEntity>();
 	}
 
 	/**
@@ -92,32 +110,146 @@ public class LevelTblEntity implements Serializable {
 	}
 
 	/**
-	 * ユーザー 一覧を設定します.
+	 * 必要ポイント を設定します.
 	 * 
-	 * @param userTblSet
-	 *            ユーザー 一覧
+	 * @param point
+	 *            必要ポイント
 	 */
-	public void setUserTblSet(Set<UserTblEntity> userTblSet) {
-		this.userTblSet = userTblSet;
+	public void setPoint(Integer point) {
+		this.point = point;
 	}
 
 	/**
-	 * ユーザー を追加します.
+	 * 必要ポイント を取得します.
 	 * 
-	 * @param userTbl
-	 *            ユーザー
+	 * @return 必要ポイント
 	 */
-	public void addUserTbl(UserTblEntity userTbl) {
-		this.userTblSet.add(userTbl);
+	public Integer getPoint() {
+		return this.point;
 	}
 
 	/**
-	 * ユーザー 一覧を取得します.
+	 * 必要な回答数 を設定します.
 	 * 
-	 * @return ユーザー 一覧
+	 * @param answer
+	 *            必要な回答数
 	 */
-	public Set<UserTblEntity> getUserTblSet() {
-		return this.userTblSet;
+	public void setAnswer(Integer answer) {
+		this.answer = answer;
+	}
+
+	/**
+	 * 必要な回答数 を取得します.
+	 * 
+	 * @return 必要な回答数
+	 */
+	public Integer getAnswer() {
+		return this.answer;
+	}
+
+	/**
+	 * フォロワー数 を設定します.
+	 * 
+	 * @param follower
+	 *            フォロワー数
+	 */
+	public void setFollower(Integer follower) {
+		this.follower = follower;
+	}
+
+	/**
+	 * フォロワー数 を取得します.
+	 * 
+	 * @return フォロワー数
+	 */
+	public Integer getFollower() {
+		return this.follower;
+	}
+
+	/**
+	 * イイネの数 を設定します.
+	 * 
+	 * @param good
+	 *            イイネの数
+	 */
+	public void setGood(Integer good) {
+		this.good = good;
+	}
+
+	/**
+	 * イイネの数 を取得します.
+	 * 
+	 * @return イイネの数
+	 */
+	public Integer getGood() {
+		return this.good;
+	}
+
+	/**
+	 * コメントの数 を設定します.
+	 * 
+	 * @param comment
+	 *            コメントの数
+	 */
+	public void setComment(Integer comment) {
+		this.comment = comment;
+	}
+
+	/**
+	 * コメントの数 を取得します.
+	 * 
+	 * @return コメントの数
+	 */
+	public Integer getComment() {
+		return this.comment;
+	}
+
+	/**
+	 * レベル を設定します.
+	 * 
+	 * @param level
+	 *            レベル
+	 */
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
+
+	/**
+	 * レベル を取得します.
+	 * 
+	 * @return レベル
+	 */
+	public Integer getLevel() {
+		return this.level;
+	}
+
+	/**
+	 * ユーザー称号テーブル 一覧を設定します.
+	 * 
+	 * @param userLevelTblSet
+	 *            ユーザー称号テーブル 一覧
+	 */
+	public void setUserLevelTblSet(Set<UserLevelTblEntity> userLevelTblSet) {
+		this.userLevelTblSet = userLevelTblSet;
+	}
+
+	/**
+	 * ユーザー称号テーブル を追加します.
+	 * 
+	 * @param userLevelTbl
+	 *            ユーザー称号テーブル
+	 */
+	public void addUserLevelTbl(UserLevelTblEntity userLevelTbl) {
+		this.userLevelTblSet.add(userLevelTbl);
+	}
+
+	/**
+	 * ユーザー称号テーブル 一覧を取得します.
+	 * 
+	 * @return ユーザー称号テーブル 一覧
+	 */
+	public Set<UserLevelTblEntity> getUserLevelTblSet() {
+		return this.userLevelTblSet;
 	}
 
 	/**

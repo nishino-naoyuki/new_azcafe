@@ -35,8 +35,10 @@
           <div class="col-12">
             <div class="info-box d-flex">
               <div class="info-box-content">
-                 <span class="info-box-text">現在のあなたの称号</span>
-                 <h2 th:text="${session['LoginInfo'].levelName}"></h2>
+                 <span class="info-box-text">獲得したの称号</span>
+                  <div class="d-flex" >
+                    <span th:each="level ,status:${dashBoadDto.levelList}"  class="badge"  th:classappend="${level.getRankClass()}" th:text="${level.name}"></span>
+                  </div>
               </div>
             </div>
           </div>

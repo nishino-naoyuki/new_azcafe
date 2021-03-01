@@ -20,6 +20,9 @@ public interface CommentRepository
 			+ "where c.answerId=a.answerId and a.userId = :userId and DATEDIFF(now() ,c.entryDate) <= 5")
 	public List<CommentTblEntity> getCommentRecentry(@Param("userId")Integer userId);
 
+	@Query("select count(*) from CommentTblEntity c where c.userId = :userId")
+	public int getCount(@Param("userId")Integer userId);
+
 	//userIdで指定した人がフォロー中の人の中でコメントを最近した人を取得する
 	@Query("select c from CommentTblEntity c "
 			+ ", AnswerTblEntity a "

@@ -38,6 +38,7 @@ import jp.ac.asojuku.azcafe.service.AssignmentService;
 import jp.ac.asojuku.azcafe.service.CommentServie;
 import jp.ac.asojuku.azcafe.service.GroupService;
 import jp.ac.asojuku.azcafe.service.HomeroomService;
+import jp.ac.asojuku.azcafe.service.LevelService;
 import jp.ac.asojuku.azcafe.service.SkillService;
 
 /**
@@ -63,6 +64,8 @@ public class AssignmentController {
 	CommentServie commentServie;
 	@Autowired
 	SkillService skillService;
+	@Autowired
+	LevelService levelService;
 
 	/**
 	 * 更新する
@@ -220,6 +223,8 @@ public class AssignmentController {
 		
 		GradingResultDetailDto gradingResultDetailDto =
 				commentServie.insert(commentInsertDto);
+		//称号更新
+		levelService.updateLevel(loginInfo.getUserId());
 		
 		mv.addObject("gradingResultDetailDto", gradingResultDetailDto);
         mv.setViewName("assignment_result");
@@ -300,10 +305,11 @@ public class AssignmentController {
 	 * @param id
 	 * @return
 	 * @throws AZCafeException 
+	 * @throws AZCafePermissonDeniedException 
 	 */
 	@RequestMapping(value= {"/detail"}, method=RequestMethod.GET)
 	public ModelAndView detail(
-			ModelAndView mv,@RequestParam(required = false) Integer id) throws AZCafeException {
+			ModelAndView mv,@RequestParam(required = false) Integer id) throws AZCafeException, AZCafePermissonDeniedException {
 
 		//セッションからログイン情報を取得
 		LoginInfoDto loginInfo = (LoginInfoDto)session.getAttribute(SessionConst.LOGININFO);
@@ -313,6 +319,10 @@ public class AssignmentController {
 		}
 		
 		AssignmentDetailDto assignmentdetailDto = assignmentService.getDetail(id,loginInfo.getUserId());
+		if( assignmentdetailDto == null ) {
+			//不正に問題を見ようとした
+			throw new AZCafePermissonDeniedException("この問題を見る権限がありません");
+		}
 		
 		mv.addObject("assignmentdetailDto",assignmentdetailDto);
 		mv.addObject("assignmentId",id);

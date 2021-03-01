@@ -31,6 +31,7 @@ import jp.ac.asojuku.azcafe.form.GradingByTextForm;
 import jp.ac.asojuku.azcafe.param.Language;
 import jp.ac.asojuku.azcafe.param.SessionConst;
 import jp.ac.asojuku.azcafe.service.GradingService;
+import jp.ac.asojuku.azcafe.service.LevelService;
 import jp.ac.asojuku.azcafe.util.FileUtils;
 
 /**
@@ -49,6 +50,8 @@ public class GradingController {
 	
 	@Autowired
 	GradingService gradingService;
+	@Autowired
+	LevelService levelService;
 	
 	@Autowired
 	HttpSession session;
@@ -70,6 +73,8 @@ public class GradingController {
 																form.getAssignmentId(),
 																Language.getBy(form.getLanguage()), 
 																form.getAnswerText());
+		//称号更新
+		levelService.updateLevel(loginInfo.getUserId());
 
 		ObjectMapper mapper = new ObjectMapper();
         String jsonString = mapper.writeValueAsString(result);

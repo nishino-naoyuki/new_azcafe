@@ -70,13 +70,13 @@
                     </div>
                   </div>
                   <div class="form-group row">
-                    <div class="col-sm-6">
+                    <!-- div class="col-sm-6">
                       <label for="level">称号</label>
                       <select class="form-control" id="level" name="level">
                         <option value="-1">指定なし</option>
                         <option th:each="dto:${levelList}" th:value="${dto.levelId}" th:text="${dto.name}" ></option>
                       </select>
-                    </div>
+                    </div -->
                     <div th:unless="${session['LoginInfo'].isStudent()}" class="col-sm-6">
                       <label for="q-name">名前</label>
                       <input type="text" name="name"  class="form-control" id="q-name" placeholder="名前">
@@ -112,7 +112,7 @@
                       <th>クラス</th>
                       <th>ニックネーム</th>
                       <th th:unless="${session['LoginInfo'].isStudent()}">名前</th>
-                      <th>称号</th>
+                      <!-- th>称号</th -->
                       <th>フォロワ数</th>
                       <th>イイネ数</th>
                     </tr>
@@ -227,7 +227,6 @@
 	                		return '<a href="'+url+'?userId='+row.userId+'">'+img+'</a>'+data;
 	                	}
 	            	},
-	                { data: "level" },
 	                { data: "followNum" },
 	                { data: "followerNum" }
 	            ]
@@ -304,7 +303,6 @@
 	                	}
 	            	},
 	                { data: "name" },
-	                { data: "level" },
 	                { data: "followNum" },
 	                { data: "followerNum" }
 	            ]

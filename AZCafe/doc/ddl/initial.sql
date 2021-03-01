@@ -1,13 +1,9 @@
-INSERT INTO level_tbl (`level_id`, `name`, `description`) VALUES ('1', '未経験', ' ');
-INSERT INTO level_tbl (`level_id`, `name`, `description`) VALUES ('2', 'かけだし', ' ');
-INSERT INTO level_tbl (`level_id`, `name`, `description`) VALUES ('3', '見習い', ' ');
-INSERT INTO level_tbl (`level_id`, `name`, `description`) VALUES ('4', '人並み', ' ');
-INSERT INTO level_tbl (`level_id`, `name`, `description`) VALUES ('5', '一人前', ' ');
-INSERT INTO level_tbl (`level_id`, `name`, `description`) VALUES ('6', 'エース', ' ');
-INSERT INTO level_tbl (`level_id`, `name`, `description`) VALUES ('7', '一流', ' ');
-INSERT INTO level_tbl (`level_id`, `name`, `description`) VALUES ('8', 'カリスマ', ' ');
-INSERT INTO level_tbl (`level_id`, `name`, `description`) VALUES ('9', 'キング', ' ');
-INSERT INTO level_tbl (`level_id`, `name`, `description`) VALUES ('10', '神', ' ');
+INSERT INTO level_tbl(`level_id`,`name`,`description`,`point`,`answer`,`follower`,`good`,`comment`,`level`)VALUES(1,'かけだし','',0,1,0,0,0,0);
+INSERT INTO level_tbl(`level_id`,`name`,`description`,`point`,`answer`,`follower`,`good`,`comment`,`level`)VALUES(2,'ひよっこ','',0,5,0,0,0,0);
+INSERT INTO level_tbl(`level_id`,`name`,`description`,`point`,`answer`,`follower`,`good`,`comment`,`level`)VALUES(3,'見習い','',900,10,0,0,0,0);
+INSERT INTO level_tbl(`level_id`,`name`,`description`,`point`,`answer`,`follower`,`good`,`comment`,`level`)VALUES(4,'人並み','',1400,15,1,0,0,1);
+INSERT INTO level_tbl(`level_id`,`name`,`description`,`point`,`answer`,`follower`,`good`,`comment`,`level`)VALUES(5,'一人前み','',2500,30,1,0,0,2);
+INSERT INTO level_tbl(`level_id`,`name`,`description`,`point`,`answer`,`follower`,`good`,`comment`,`level`)VALUES(6,'神','',4500,50,10,10,5,3);
 
 INSERT INTO course_tbl(`course_id`,`name`,`year`)VALUES(1,'情報工学科',4);
 INSERT INTO course_tbl(`course_id`,`name`,`year`)VALUES(2,'情報システム専攻科',3);

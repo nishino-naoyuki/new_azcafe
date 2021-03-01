@@ -69,11 +69,6 @@ public class UserTblEntity implements Serializable {
 	/** 紹介文. */
 	private String introduction;
 
-	/** 称号マスターテーブル. */
-    @OneToOne
-    @JoinColumn(name="levelId")
-	private LevelTblEntity levelTbl;
-
 	/** アバター */
 	private String avater;
 
@@ -100,6 +95,11 @@ public class UserTblEntity implements Serializable {
 	@JoinColumn(name="userId",insertable=false ,updatable=false)
 	private Set<SkillMapTblEntity> skillMapTblSet;
 	
+	/** 称号連関. */
+	@OneToMany
+	@JoinColumn(name="userId",insertable=false ,updatable=false)
+	private Set<UserLevelTblEntity> userLevelSet;
+	
 	/** 解答いいね 一覧. */
 	//private Set<AnswerGoodTblEntity> answerGoodTblSet;
 
@@ -124,6 +124,8 @@ public class UserTblEntity implements Serializable {
 		//this.commentTblSet = new HashSet<CommentTblEntity>();
 		//this.followTblSet = new HashSet<FollowTblEntity>();
 		//this.questionGoodTblSet = new HashSet<QuestionGoodTblEntity>();
+		this.skillMapTblSet = new HashSet<SkillMapTblEntity>();
+		this.userLevelSet = new HashSet<UserLevelTblEntity>();
 	}
 
 	@PrePersist

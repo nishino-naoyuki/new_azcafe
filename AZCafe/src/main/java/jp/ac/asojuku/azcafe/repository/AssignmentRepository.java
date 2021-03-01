@@ -12,11 +12,36 @@ import jp.ac.asojuku.azcafe.entity.AssignmentTblEntity;
 public interface AssignmentRepository 
 	extends JpaSpecificationExecutor<AssignmentTblEntity>, JpaRepository<AssignmentTblEntity,Integer>{
 
-	@Query("select count(*) from AssignmentTblEntity a "
+	@Query("select distinct a from AssignmentTblEntity a "
 			+ "left join a.publicQuestionTblSet p "
+			+ ", UserTblEntity u  "
+			+ "where p.assignmentId = a.assignmentId and "
+			+ "p.homeroomId = u.homeroomTbl.homeroomId and "
+			+ "a.assignmentId = :assignmentId and "
+			+ "((u.role=1 and u.userId = :userId) or (u.role=0 and u.userId = :userId and p.publicState <> 0))  ")
+	public AssignmentTblEntity getAssignment(@Param("assignmentId")Integer assignmentId,@Param("userId")Integer userId);
+	
+	@Query("select distinct a from AssignmentTblEntity a "
+			+ "left join a.publicQuestionTblSet p "
+			+ ", UserTblEntity u  "
+			+ "where p.assignmentId = a.assignmentId and "
+			+ "p.homeroomId = u.homeroomTbl.homeroomId and "
+			+ "((u.role=1 and u.userId = :userId) or (u.role=0 and u.userId = :userId and p.publicState <> 0))  "
+			+ "order by a.groupTbl.name,a.groupInNo")
+	public List<AssignmentTblEntity> getAssignmentList(@Param("userId")Integer userId);
+	
+	@Query("select count(distinct a) from AssignmentTblEntity a "
+			+ "left join a.publicQuestionTblSet p "
+			+ ", UserTblEntity u  "
 			+ "where p.homeroomId = :homeroomId and p.publicState <> 0")
 	public Integer getAssignmentCount(@Param("homeroomId")Integer homeroomId);
 
+	@Query("select count(distinct a) from AssignmentTblEntity a "
+			+ "left join a.publicQuestionTblSet p "
+			+ ", UserTblEntity u  "
+			+ "where p.homeroomId = :homeroomId")
+	public Integer getAssignmentCountTeacher(@Param("homeroomId")Integer homeroomId);
+	
 	@Query("select a from AssignmentTblEntity a "
 			+ "left join a.publicQuestionTblSet p "
 			+ "where p.homeroomId = :homeroomId and p.publicState <> 0 and DATEDIFF(now() ,a.createDate) <= 5")

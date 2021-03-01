@@ -17,5 +17,23 @@
 		<property name="description" type="java.lang.String"
 			column="description" not-null="true" />
 
+		<property name="point" type="java.lang.Integer"
+			column="point" not-null="true" />
+
+		<property name="answer" type="java.lang.Integer"
+			column="answer" not-null="true" />
+
+		<property name="follower" type="java.lang.Integer"
+			column="follower" not-null="true" />
+
+		<property name="good" type="java.lang.Integer"
+			column="good" not-null="true" />
+
+		<property name="comment" type="java.lang.Integer"
+			column="comment" not-null="true" />
+
+		<property name="level" type="java.lang.Integer"
+			column="level" not-null="true" />
+
 	</class>
 </hibernate-mapping>

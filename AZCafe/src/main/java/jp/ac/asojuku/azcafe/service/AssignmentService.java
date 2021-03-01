@@ -127,7 +127,11 @@ public class AssignmentService {
 		if( assignmentId == null ) {
 			return null;
 		}
-		AssignmentTblEntity entity = assignmentRepository.getOne(assignmentId);
+		AssignmentTblEntity entity = assignmentRepository.getAssignment(assignmentId,userId);
+		
+		if( entity == null ) {
+			return null;
+		}
 		
 		return getDetailFrom(userId,entity);
 	}
@@ -139,7 +143,7 @@ public class AssignmentService {
 		List<AssignmentElementDto> list = new ArrayList<>();
 		
 		List<AssignmentTblEntity> entityList = 
-				assignmentRepository.findAll(Sort.by(Sort.Direction.ASC, "groupId","groupInNo"));
+				assignmentRepository.getAssignmentList(userId);
 		
 		for( AssignmentTblEntity entity : entityList ) {
 			AssignmentElementDto dto = getFrom(userId,entity);

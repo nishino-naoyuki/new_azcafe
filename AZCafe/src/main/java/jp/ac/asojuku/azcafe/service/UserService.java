@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jp.ac.asojuku.azcafe.config.AZCafeConfig;
 import jp.ac.asojuku.azcafe.dto.CreateUserDto;
+import jp.ac.asojuku.azcafe.dto.LevelDto;
 import jp.ac.asojuku.azcafe.dto.LoginInfoDto;
 import jp.ac.asojuku.azcafe.dto.RankingDto;
 import jp.ac.asojuku.azcafe.dto.SkillMapDto;
@@ -29,14 +30,17 @@ import jp.ac.asojuku.azcafe.entity.HomeroomTblEntity;
 import jp.ac.asojuku.azcafe.entity.LevelTblEntity;
 import jp.ac.asojuku.azcafe.entity.SkillMapTblEntity;
 import jp.ac.asojuku.azcafe.entity.SkillTblEntity;
+import jp.ac.asojuku.azcafe.entity.UserLevelTblEntity;
 import jp.ac.asojuku.azcafe.entity.UserTblEntity;
 import jp.ac.asojuku.azcafe.exception.AZCafeException;
 import jp.ac.asojuku.azcafe.form.UserSearchConditionForm;
+import jp.ac.asojuku.azcafe.param.LevelRank;
 import jp.ac.asojuku.azcafe.param.RoleId;
 import jp.ac.asojuku.azcafe.repository.AnswerRepository;
 import jp.ac.asojuku.azcafe.repository.AutoLoginRepository;
 import jp.ac.asojuku.azcafe.repository.FollowRepository;
 import jp.ac.asojuku.azcafe.repository.SkillRepository;
+import jp.ac.asojuku.azcafe.repository.UserLevelRepository;
 import jp.ac.asojuku.azcafe.repository.UserRepository;
 import jp.ac.asojuku.azcafe.util.Digest;
 import jp.ac.asojuku.azcafe.util.FileUtils;
@@ -58,6 +62,8 @@ public class UserService {
 	AZCafeConfig config;
 	@Autowired
 	SkillRepository skillRepository;
+	@Autowired
+	UserLevelRepository userLevelRepository;
 
 	/**
 	 * ランキングを取得する
@@ -258,7 +264,8 @@ public class UserService {
 		userInfo.setAvater(entity.getAvater());
 		userInfo.setFollowNum(entity.getFollowNum());
 		userInfo.setFollowerNum(entity.getFollowerNum());
-		userInfo.setLevel(entity.getLevelTbl().getName());
+		userInfo.setLevelList(getLevelList(entity));
+		//userInfo.setLevel(entity.getLevelTbl().getName());
 		userInfo.setHomeroomeName( entity.getHomeroomTbl().getName() );
 		userInfo.setRole( RoleId.search(entity.getRole()) );
 		if(loginUserId != entity.getUserId() ) {
@@ -400,7 +407,7 @@ public class UserService {
 			dto.setNickName(entity.getNickName());
 			dto.setOrgNo(entity.getOrgNo());
 			dto.setHomeroomeName(entity.getHomeroomTbl().getName());
-			dto.setLevel(entity.getLevelTbl().getName());
+			dto.setLevelList(getLevelList(entity));
 			dto.setAvater(entity.getAvater());
 			dto.setFollowNum(entity.getFollowNum());
 			dto.setFollowerNum(entity.getFollowerNum());
@@ -568,7 +575,7 @@ public class UserService {
 		dto.setHomeroomId(entity.getHomeroomTbl().getHomeroomId());
 		dto.setCourseName( entity.getHomeroomTbl().getName() );
 		dto.setGrade(entity.getGrade());
-		dto.setLevelName(entity.getLevelTbl().getName());
+		//dto.setLevelName(entity.getLevelTbl().getName());
 		dto.setAvater(entity.getAvater());
 		dto.setFollowNum(entity.getFollowNum());
 		dto.setFollowerNum(entity.getFollowerNum());
@@ -605,9 +612,6 @@ public class UserService {
 		entity.setHomeroomTbl(homeroomTblEntity);
 		
 		if( isNew ) {
-			LevelTblEntity levelTblEntity = new LevelTblEntity();
-			levelTblEntity.setLevelId(1);
-			entity.setLevelTbl(levelTblEntity);
 			entity.setFollowerNum(0);
 			entity.setFollowNum(0);
 			entity.setGoodNum(0);
@@ -616,6 +620,24 @@ public class UserService {
 		}
 		
 		return entity;
+	}
+	
+	/**
+	 * 称号一覧を取得する
+	 * @param userEntity
+	 * @return
+	 */
+	private List<LevelDto> getLevelList(UserTblEntity userEntity ){
+		List<LevelDto> list = new ArrayList<>();
+		
+		for( UserLevelTblEntity entity : userEntity.getUserLevelSet() ) {
+			LevelDto lvDto = new LevelDto();
+			lvDto.setLevelId(entity.getLevelTbl().getLevelId());
+			lvDto.setName(entity.getLevelTbl().getName());
+			lvDto.setRank( LevelRank.getBy(entity.getLevelTbl().getLevel()) );
+			list.add(lvDto);
+		}
+		return list;
 	}
 
 }

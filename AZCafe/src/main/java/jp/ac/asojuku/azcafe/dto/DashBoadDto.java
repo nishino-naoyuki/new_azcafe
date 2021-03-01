@@ -29,18 +29,16 @@ public class DashBoadDto {
 	}
 	
 	private String level;
+	private List<LevelDto> levelList =  new ArrayList<>();;
 	private Integer answerNum;
 	private Integer assignmentNum;
 	private Integer goodNum;
 	private Integer followNum;
 	private Integer followerNum;
 	private Integer point;
-	private List<InfomationDto> newInfoList;
+	private List<InfomationDto> newInfoList =  new ArrayList<>();;
 	
 	public void addInfomationDto(InfomationDto info) {
-		if( newInfoList == null ) {
-			newInfoList = new ArrayList<>();
-		}
 		newInfoList.add(info);
 	}
 	
@@ -48,6 +46,10 @@ public class DashBoadDto {
 		if( newInfoList != null ) {
 			Collections.sort(newInfoList,new InfoComparator());
 		}
+	}
+	
+	public void addLevelList(LevelDto dto) {
+		levelList.add(dto);
 	}
 	
 }

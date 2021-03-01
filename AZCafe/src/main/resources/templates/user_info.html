@@ -58,7 +58,12 @@
                     <b>フォロワー数</b> <a class="float-right" id="MyFollowerNum" th:text="${userInfoDto.followerNum}"></a>
                   </li>
                   <li class="list-group-item">
-                    <b>称号</b> <a class="float-right" th:text="${userInfoDto.level}"></a>
+                    <b>称号</b> 
+                    <div class="float-right">
+                      <div class="flex-column" th:each="level ,status:${userInfoDto.levelList}" >
+                        <span class="badge"  th:classappend="${level.getRankClass()}" th:text="${level.name}"></span>
+                      </div>
+                    </div>
                   </li>
                 </ul>
                 <div th:unless="${userInfoDto.userId} eq ${session['LoginInfo'].userId}">

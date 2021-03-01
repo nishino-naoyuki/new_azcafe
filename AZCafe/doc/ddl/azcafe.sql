@@ -15,6 +15,7 @@ DROP TABLE IF EXISTS ASSIGNMENT_TBL;
 DROP TABLE IF EXISTS AUTOLOGIN_TBL;
 DROP TABLE IF EXISTS FOLLOW_TBL;
 DROP TABLE IF EXISTS SKILL_MAP_TBL;
+DROP TABLE IF EXISTS USER_LEVEL_TBL;
 DROP TABLE IF EXISTS USER_TBL;
 DROP TABLE IF EXISTS HOMEROOM_TBL;
 DROP TABLE IF EXISTS COURSE_TBL;
@@ -182,6 +183,24 @@ CREATE TABLE LEVEL_TBL
 	level_id int NOT NULL AUTO_INCREMENT,
 	name varchar(100) NOT NULL,
 	description varchar(2000) NOT NULL,
+	-- この称号に必要なポイント
+	point int NOT NULL COMMENT 'この称号に必要なポイント',
+	-- この称号に必要な回答数
+	answer int NOT NULL COMMENT 'この称号に必要な回答数',
+	-- この称号に必要なフォロワー数
+	follower int NOT NULL COMMENT 'この称号に必要なフォロワー数',
+	-- この称号に必要なイイネ数
+	good int NOT NULL COMMENT 'この称号に必要なイイネ数',
+	-- 自分が書いたコメントの数
+	comment int NOT NULL COMMENT '自分が書いたコメントの数',
+	-- 0:ブロンズ
+	-- 1:シルバー
+	-- 2:ゴールド
+	-- 3:プラチナ
+	level int NOT NULL COMMENT '0:ブロンズ
+1:シルバー
+2:ゴールド
+3:プラチナ',
 	PRIMARY KEY (level_id)
 );
 
@@ -304,6 +323,15 @@ CREATE TABLE USER_DELETE_TBL
 );
 
 
+CREATE TABLE USER_LEVEL_TBL
+(
+	user_level_id int NOT NULL AUTO_INCREMENT,
+	level_id int NOT NULL,
+	user_id int NOT NULL,
+	PRIMARY KEY (user_level_id)
+);
+
+
 CREATE TABLE USER_TBL
 (
 	user_id int NOT NULL AUTO_INCREMENT,
@@ -334,7 +362,6 @@ CREATE TABLE USER_TBL
 教員の場合は入社年度（教員の場合みないので適当でＯＫ）',
 	-- 自己紹介文
 	introduction varchar(3000) NOT NULL COMMENT '自己紹介文',
-	level_id int NOT NULL,
 	-- 画像のファイル名
 	avater varchar(2000) COMMENT '画像のファイル名',
 	-- 問題を解くたびに更新する
@@ -458,7 +485,7 @@ ALTER TABLE USER_TBL
 ;
 
 
-ALTER TABLE USER_TBL
+ALTER TABLE USER_LEVEL_TBL
 	ADD FOREIGN KEY (level_id)
 	REFERENCES LEVEL_TBL (level_id)
 	ON UPDATE RESTRICT
@@ -547,6 +574,14 @@ ALTER TABLE FOLLOW_TBL
 
 
 ALTER TABLE SKILL_MAP_TBL
+	ADD FOREIGN KEY (user_id)
+	REFERENCES USER_TBL (user_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE USER_LEVEL_TBL
 	ADD FOREIGN KEY (user_id)
 	REFERENCES USER_TBL (user_id)
 	ON UPDATE RESTRICT

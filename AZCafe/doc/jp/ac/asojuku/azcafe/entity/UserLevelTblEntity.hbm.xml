@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="jp.ac.asojuku.azcafe.entity">
+
+	<class name="UserLevelTblEntity" table="USER_LEVEL_TBL">
+
+		<id name="userLevelId" type="java.lang.Integer" column="user_level_id">
+			<generator class="assigned" />
+		</id>
+
+		<property name="levelId" type="java.lang.Integer"
+			column="level_id" not-null="true" />
+
+		<property name="userId" type="java.lang.Integer"
+			column="user_id" not-null="true" />
+
+	</class>
+</hibernate-mapping>

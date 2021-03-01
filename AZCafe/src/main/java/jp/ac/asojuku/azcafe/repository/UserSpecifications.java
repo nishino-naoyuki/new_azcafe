@@ -81,12 +81,12 @@ public class UserSpecifications {
      * @return
      */
     public static Specification<UserTblEntity> levelEquals(Integer level) {
-        return level == NO_SELECT ? null : new Specification<UserTblEntity>() {
+        return level == null || level == NO_SELECT ? null : new Specification<UserTblEntity>() {
 			@Override
 			public Predicate toPredicate(Root<UserTblEntity> root, CriteriaQuery<?> query,
 					CriteriaBuilder cb) {
 				// TODO 自動生成されたメソッド・スタブ
-				return cb.equal(root.get("levelTbl").get("levelId"),  level );
+				return cb.equal(root.get("userLevelSet").get("levelTbl").get("levelId"),  level );
 			}
         };
     }
