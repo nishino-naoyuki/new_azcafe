@@ -237,9 +237,10 @@
 <script th:src="@{/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
 <script th:src="@{/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
 <script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
-</head>
+
 
 <script th:inline="javascript">
+/*<![CDATA[*/
   const maxLength = 20000; //問題の文字数
   
   const list = [
@@ -357,7 +358,7 @@
     });
   });
 
-
+  /*]]>*/
 </script>
 </body>
 

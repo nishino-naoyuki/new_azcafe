@@ -10,11 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jp.ac.asojuku.azcafe.dto.LevelDto;
 import jp.ac.asojuku.azcafe.entity.LevelTblEntity;
+import jp.ac.asojuku.azcafe.entity.SkillMapTblEntity;
+import jp.ac.asojuku.azcafe.entity.SkillTblEntity;
 import jp.ac.asojuku.azcafe.entity.UserLevelTblEntity;
 import jp.ac.asojuku.azcafe.entity.UserTblEntity;
 import jp.ac.asojuku.azcafe.repository.AnswerRepository;
 import jp.ac.asojuku.azcafe.repository.CommentRepository;
 import jp.ac.asojuku.azcafe.repository.LevelRepository;
+import jp.ac.asojuku.azcafe.repository.SkillMapRepository;
+import jp.ac.asojuku.azcafe.repository.SkillRepository;
 import jp.ac.asojuku.azcafe.repository.UserLevelRepository;
 import jp.ac.asojuku.azcafe.repository.UserRepository;
 
@@ -30,6 +34,10 @@ public class LevelService {
 	CommentRepository commentRepository;
 	@Autowired
 	UserLevelRepository userLevelRepository;
+	@Autowired
+	SkillMapRepository skillMapRepository;
+	@Autowired
+	SkillRepository skillRepository;
 	
 	/**
 	 * 称号の一覧を取得する
@@ -70,6 +78,20 @@ public class LevelService {
 		List<UserLevelTblEntity> userLvList = new ArrayList<>();
 		//称号の作成しなおし
 		userLevelRepository.delete(userId);
+
+		//スキルポイントの最高ポイントを取得
+		List<SkillTblEntity> skillList = skillRepository.findAll();
+		int maxPoint = -1;
+		for(SkillTblEntity skill : skillList ) {
+			SkillMapTblEntity skillmap = skillMapRepository.getOne(skill.getSkillId(), userId);
+			int skillPt = 0;
+			if( skillmap != null ) {
+				skillPt = skillmap.getPoint();
+			}
+			if( skillPt > maxPoint ) {
+				maxPoint = skillPt;
+			}
+		}
 		
 		for( LevelTblEntity entity : entityList ) {
 			//称号チェック
@@ -85,7 +107,7 @@ public class LevelService {
 				userLvList.add(ule);				
 			}
 		}
-		
+				
 		//更新
 		userLevelRepository.saveAll(userLvList);
 	}

@@ -53,6 +53,12 @@ public class AssignmentDto {
 		}
 		answerList.add(dto);
 	}
+	public void addSkillId(Integer skillId ) {
+		if( skillIdList == null ) {
+			skillIdList = new ArrayList<>();
+		}
+		skillIdList.add(skillId);
+	}
 	public void addSkillId(List<String> strIdList) throws AZCafeException {
 		try {
 			for(String id : strIdList) {

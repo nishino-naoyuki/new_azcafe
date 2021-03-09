@@ -219,7 +219,8 @@
     });
   });
 </script>
-<script th:unless="${session['LoginInfo'].isStudent()}">
+<script th:unless="${session['LoginInfo'].isStudent()}" th:inline="javascript" >
+/*<![CDATA[*/
 //学生の場合は更新用のJavascriptも表示しない
 
   $(document).on('click','#selectAll',function(){
@@ -285,5 +286,6 @@
            alert("通信に失敗しました。"+textStatus+" errorThrown:"+errorThrown);
        });
   })
+/*]]>*/
 </script>
 </html>

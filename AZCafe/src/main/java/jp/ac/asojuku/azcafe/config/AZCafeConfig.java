@@ -45,4 +45,5 @@ public class AZCafeConfig {
 	private String studentdenied;	//学生が見れない画面のリスト（CSV）
 	private Integer handminus;
 	private Map<String, Integer> difficulty;
+	private Integer skillmaplimit;	//スキルマップ
 }

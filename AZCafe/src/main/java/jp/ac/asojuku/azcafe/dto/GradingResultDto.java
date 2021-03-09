@@ -18,14 +18,11 @@ public class GradingResultDto {
 	String compleErrMsg;	//コンパイルエラー
 	int scoreForOutput;	//出力結果の点数
 	int scoreForSource;	//ソースコードの点数
-	List<GradingTestCaseResultDto> testCaseResultList = null;
+	List<GradingTestCaseResultDto> testCaseResultList = new ArrayList<>();
 	String checkStyleMsg;
 	int point;
 	
 	public void addGradingTestCaseResult(GradingTestCaseResultDto testCaseRet) {
-		if( testCaseResultList == null ) {
-			testCaseResultList = new ArrayList<>();
-		}
 		testCaseResultList.add(testCaseRet);
 	}
 		

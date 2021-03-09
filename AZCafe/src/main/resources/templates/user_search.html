@@ -176,7 +176,8 @@
     });
   });
 </script>
-<script th:if="${session['LoginInfo'].isStudent()}">
+<script th:if="${session['LoginInfo'].isStudent()}" th:inline="javascript">
+/*<![CDATA[*/
 //ユーザーの場合のテーブル更新処理
   $('#user-search').on('click', function() {
 
@@ -238,7 +239,8 @@
        });
   });
 </script>
-<script th:unless="${session['LoginInfo'].isStudent()}">
+<script th:unless="${session['LoginInfo'].isStudent()}" th:inline="javascript">
+/*<![CDATA[*/
 //学生の時はCSV出力のscriptを表示しない
   $('#csv-output').on('click', function() {
 	//alert("csv output!")
@@ -313,5 +315,6 @@
            alert("検索が失敗しました。"+textStatus+" errorThrown:"+errorThrown);
        });
   });
+  /*]]>*/
 </script>
 </html>

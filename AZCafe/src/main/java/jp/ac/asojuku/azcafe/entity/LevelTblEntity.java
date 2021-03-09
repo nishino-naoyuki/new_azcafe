@@ -54,5 +54,8 @@ public class LevelTblEntity implements Serializable {
 
 	/** レベル. */
 	private Integer level;
+	
+	/** スキルポイント */
+	private Integer skillPoint;
 
 }

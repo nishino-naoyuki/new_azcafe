@@ -286,7 +286,8 @@
 <script th:src="@{/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
 <script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 <script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
-<script>
+<script th:inline="javascript">
+/*<![CDATA[*/
   $(document).on('click', '#edit-nickname', function(){
         let label = document.getElementById("nickname-label");
 
@@ -301,7 +302,7 @@
 
   $(document).on('click','#btn-nickname-appy',function(){
 
-    const userId = [[${userInfoDto.userId}]];
+    const userId = /*[[${userInfoDto.userId}]]*/0;
     const nickname = $("#nickname").val();
 
 	$.ajax({
@@ -323,7 +324,7 @@
   })
 
   $(document).on('click','#btn-password-change',function(){
-	    const userId = [[${userInfoDto.userId}]];
+	    const userId = /*[[${userInfoDto.userId}]]*/0;
 	    const password1 = $("#password1").val();
 	    const password2 = $("#password2").val();
 
@@ -405,7 +406,7 @@
   
   
   const updateDisplay = (thisElement,result) => {
-	    const dispUserId = [[${userInfoDto.userId}]];
+	    const dispUserId = /*[[${userInfoDto.userId}]]*/0;
 		//今のボタンを解除して、もう片方を表示する
 		thisElement.parent().find(".d-none").removeClass("d-none");
 		thisElement.addClass("d-none");	
@@ -533,10 +534,11 @@ $(document).on('drop', function (event) {
   event.preventDefault();
 });
 
-  
+  /*]]>*/
 </script>
 
 <script th:inline="javascript">
+/*<![CDATA[*/
 $(function(){
 
 	  var ticksStyle = {
@@ -550,13 +552,13 @@ $(function(){
 	  const labelList = [
 	  [# th:each="skill : ${userInfoDto.skillMap}"]    
 	  [[${skill.name}]]  ,
-	  [/]
+	 [/] 
 	  ];
 	  
 	  const dataList = [
 		  [# th:each="skill : ${userInfoDto.skillMap}"]    
-		  [[${skill.point}]]  ,
-		  [/]
+		 [[${skill.point}]]  ,
+		 [/]
 		  ];
 	  
 	var $SkillmapChart = $('#skillmap-chart');
@@ -618,7 +620,7 @@ $(function(){
 	    }
 	  })
 })
-
+  /*]]>*/
 </script>
 </body>
 

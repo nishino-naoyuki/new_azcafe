@@ -152,7 +152,7 @@
 	  $("#hrChange").submit();
   });
 </script>
-<script th:unless="${session['LoginInfo'].isStudent()}">
+<script th:unless="${session['LoginInfo'].isStudent()}" th:inline="javascript">
 //学生の時はCSV出力のscriptを表示しない
 	$('#rankig-csv-output').on('click', function() {
 		
@@ -163,5 +163,6 @@
         var url = /*[[@{/csv/ranking}]]*/ "/csv/ranking";
         window.location.href = url + "?hoomeroomId="+$("#classSelect").val();
 	});
+/*]]>*/
 </script>
 </html>

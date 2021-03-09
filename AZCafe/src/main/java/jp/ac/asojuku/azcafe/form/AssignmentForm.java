@@ -68,6 +68,9 @@ public class AssignmentForm {
 	 * @param answerList
 	 */
 	public void setAnswerList(List<AssignmentTestCaseDto> answerList) {
+		if( answerList == null ) {
+			return;
+		}
 		this.answerList = new ArrayList<>();
 		
 		for(AssignmentTestCaseDto dto : answerList) {

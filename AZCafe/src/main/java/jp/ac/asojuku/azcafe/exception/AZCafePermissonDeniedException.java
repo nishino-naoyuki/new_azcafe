@@ -5,6 +5,10 @@ import org.slf4j.LoggerFactory;
 
 public class AZCafePermissonDeniedException extends Exception{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3377186599045922339L;
 	Logger logger = LoggerFactory.getLogger(AZCafePermissonDeniedException.class);
 	
 	public AZCafePermissonDeniedException(String errMsg){

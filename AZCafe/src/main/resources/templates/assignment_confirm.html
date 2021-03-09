@@ -205,6 +205,7 @@
 <!-- REQUIRED SCRIPTS -->
 <!-- PAGE PLUGINS -->
 <meta id="parent" th:replace="/header/include_js"></meta>
+<meta id="parent" th:replace="/utils/dialog"></meta>
 
 <!-- DataTables  & Plugins -->
 <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
@@ -219,8 +220,8 @@
 <script th:src="@{/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
 <script th:src="@{/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
 <script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
-<script>
-
+<script th:inline="javascript">
+/*<![CDATA[*/
 $(document).on('click', '#btn-create', function(){
 
 	$.ajax({
@@ -228,9 +229,11 @@ $(document).on('click', '#btn-create', function(){
         url  : /*[[@{/assignment/insert}]]*/ "/assignment/insert",                 // リクエストを送信する先のURL
         dataType : "text"              // サーバーから返されるデータの型
 	}).done(function(data) {
-		alert(data);
+		showMessage("success",data);
+		//alert(data);
 	}).fail(function(XMLHttpRequest, textStatus, errorThrown) { // Ajax通信が失敗した時の処理
-        alert("登録に失敗しました");
+        //alert("登録に失敗しました");
+		showMessage("error","登録に失敗しました");
     });
 });
 
@@ -239,6 +242,7 @@ $(document).on('click', '#btn-return', function(){
 	url = url + "?returnFlg=1";
 	window.location.href = url;
 });
+/*]]>*/
 </script>
 
 </body>

@@ -206,7 +206,7 @@ public class UserCSVService {
 		}
 		String encode = AZCafeConfig.getInstance().getCsvoutputencode();
 		//出力する
-		try(Writer writer = new FileWriter(csvPath,Charset.forName(encode))){
+		try(Writer writer = new FileWriter(encode)){
 			StatefulBeanToCsv<UserRankingCSV> beanToCsv = new StatefulBeanToCsvBuilder<UserRankingCSV>(writer).build();			
 			beanToCsv.write(rankCsvList);
 		} catch (CsvDataTypeMismatchException e) {

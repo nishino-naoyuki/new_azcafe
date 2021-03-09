@@ -53,7 +53,7 @@ public abstract class GradingProcess {
 		}finally {
 			//一時ファイルの削除
 			if( workDir != null ) {
-				FileUtils.delete(workDir);
+//				FileUtils.delete(workDir);
 			}
 		}
 		return gradingResult;
@@ -75,7 +75,7 @@ public abstract class GradingProcess {
 		}finally {
 			//一時ファイルの削除
 			if( workDir != null ) {
-				FileUtils.delete(workDir);
+//				FileUtils.delete(workDir);
 			}
 		}
 		return gradingResult;

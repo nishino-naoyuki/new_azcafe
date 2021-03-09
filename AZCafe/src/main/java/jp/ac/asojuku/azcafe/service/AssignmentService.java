@@ -25,6 +25,7 @@ import jp.ac.asojuku.azcafe.entity.AssignmentTblEntity;
 import jp.ac.asojuku.azcafe.entity.FollowTblEntity;
 import jp.ac.asojuku.azcafe.entity.FollowTblId;
 import jp.ac.asojuku.azcafe.entity.GroupTblEntity;
+import jp.ac.asojuku.azcafe.entity.HomeroomTblEntity;
 import jp.ac.asojuku.azcafe.entity.PublicAssignmentTblEntity;
 import jp.ac.asojuku.azcafe.entity.SkillAssTblEntity;
 import jp.ac.asojuku.azcafe.entity.TestCaseAnswerTblEntity;
@@ -37,6 +38,7 @@ import jp.ac.asojuku.azcafe.repository.AssignmentRepository;
 import jp.ac.asojuku.azcafe.repository.CommentRepository;
 import jp.ac.asojuku.azcafe.repository.FollowRepository;
 import jp.ac.asojuku.azcafe.repository.GroupRepository;
+import jp.ac.asojuku.azcafe.repository.HomeroomRepository;
 import jp.ac.asojuku.azcafe.repository.PublicAssignmentRepository;
 import jp.ac.asojuku.azcafe.repository.SkillAssRepository;
 import jp.ac.asojuku.azcafe.repository.TestCaseAnswerRepository;
@@ -72,7 +74,20 @@ public class AssignmentService {
 	CommentRepository commentRepository;
 	@Autowired
 	TestCaseAnswerRepository testCaseAnswerRepository;
+	@Autowired
+	HomeroomRepository homeroomRepository;
 
+	public void addTestCase(String assName,String input,String output) {
+		AssignmentTblEntity assEntity = assignmentRepository.getAssignmentByName(assName);
+		if( assEntity != null ) {
+			TestCaseTblEntity testCaseEntity = new TestCaseTblEntity();
+			testCaseEntity.setAssignmentId(assEntity.getAssignmentId());
+			testCaseEntity.setInputText(input);
+			testCaseEntity.setOutputTxt(output);
+			testCaseEntity.setNo(1);
+			testCaseRepository.save(testCaseEntity);
+		}
+	}
 	/**
 	 * 公開情報を一括更新する
 	 * 
@@ -166,13 +181,20 @@ public class AssignmentService {
 		dto.setTitle(entity.getTitle());
 		dto.setContent(entity.getContents());
 		dto.setDifficulty(entity.getDifficulty());
-		for( PublicAssignmentTblEntity publicEntity :  entity.getPublicQuestionTblSet() ) {
+		List<HomeroomTblEntity> hrList = homeroomRepository.findAll();
+		for( HomeroomTblEntity hrEntity : hrList ) {
 			AssignmentPublicDto publicDto = new AssignmentPublicDto();
-			
-			publicDto.setHomeroomId(publicEntity.getHomeroomId());
-			publicDto.setHomeroomName(publicEntity.getHomeroomTbl().getName());
-			publicDto.setPublicState(publicEntity.getPublicState());
-			
+			publicDto.setHomeroomId(hrEntity.getHomeroomId());
+			publicDto.setHomeroomName(hrEntity.getName());
+			publicDto.setPublicState(0);	//非公開でいったん作成
+			//登録データを検索してあれば更新
+			for( PublicAssignmentTblEntity publicEntity :  entity.getPublicQuestionTblSet() ) {				
+				if(publicEntity.getHomeroomId() == hrEntity.getHomeroomId() ) {
+					//公開ステータス更新
+					publicDto.setPublicState(publicEntity.getPublicState());
+					break;
+				}
+			}			
 			dto.addAssignmentPublicDto(publicDto);
 		}
 		for(TestCaseTblEntity testCaseEntity : entity.getTestCaseTblSet()) {
@@ -183,6 +205,10 @@ public class AssignmentService {
 			
 			dto.addAssignmentTestCaseDto(tetCaseDto);
 		}
+		for(SkillAssTblEntity skillEntity : entity.getSkillAssTblSet()) {
+			dto.addSkillId(skillEntity.getSkillId());
+		}
+		
 		
 		return dto;
 	}

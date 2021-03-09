@@ -51,5 +51,9 @@ public interface AssignmentRepository
 			+ ",AnswerTblEntity s "
 			+ "where a.assignmentId = s.assignmentId and s.answerId = :answerId")
 	public AssignmentTblEntity getAssignmentByAnsId(@Param("answerId")Integer answerId);
+
+	@Query("select a from AssignmentTblEntity a "
+			+ "where a.title = :title")
+	public AssignmentTblEntity getAssignmentByName(@Param("title")String title);
 	
 }

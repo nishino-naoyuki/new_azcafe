@@ -153,15 +153,15 @@
 		                                解答欄
 		                                </h3>
 		                                <div class="answer_wrap_option d-flex">
-		                                    <button class="btn btn-default btn-sm m-r-5" data-placement="bottom" id="code_plus">
+		                                    <button type="button" class="btn btn-default btn-sm m-r-5" data-placement="bottom" id="code_plus">
 		                                    <i class="fa fa-search-plus" data-toggle="tooltip" title="大きくする"></i>
 		                                    </button>
-		                                    <button class="btn btn-default btn-sm m-r-5" data-placement="bottom" id="code_minus">
+		                                    <button type="button" class="btn btn-default btn-sm m-r-5" data-placement="bottom" id="code_minus">
 		                                    <i class="fa fa-search-minus" data-toggle="tooltip" title="小さくする"></i>
 		                                    </button>
 		                                  <select class="box form-control" name="language" id="language_id">
 		                                    <option value="">使用する言語</option>
-		                                    <option value="0">Java</option>
+		                                    <option value="0" selected>Java</option>
 		                                    <option value="1">JavaScript</option>
 		                                  </select>
 		                                </div>
@@ -411,8 +411,9 @@
 <script th:src="@{/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 <!-- ace -->
   <script th:src="@{/ace/src/ace.js}" type="text/javascript" charset="utf-8"></script>
-  <script th:src="@{ace/src/ext-language_tools.js}" type="text/javascript" charset="utf-8"></script>
-<script>
+  <script th:src="@{/ace/src/ext-language_tools.js}" type="text/javascript" charset="utf-8"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
 const showWaiting = () =>{
 	$("#waiting").addClass("d-flex");
 	$("#waiting").show();
@@ -628,9 +629,7 @@ $(function () {
 	  const resultUrl = /*[[@{/assignment/result}]]*/ "/assignment/result";
 	  window.location.href = resultUrl + "?assignmentId="+$("#assignmentId").val();
   });
-  
-  
-
+/*]]>*/
 </script>
 
 </body>

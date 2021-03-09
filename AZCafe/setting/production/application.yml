@@ -1,11 +1,14 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 3MB
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost/azcafe?serverTimezone=JST
     username: root
-    password: password
+    password: Abcc123.#
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: none
       
@@ -19,11 +22,27 @@ spring:
     
 azcafe:
   salt: 5fr2FjxT
-  avaterbasedir: C:/img
+  avaterbasedir: /var/azcafe/img
   tokenlimit: 1
   passwordpolicy: 
-  csvuploaddir: C:/upload
-  batchdir: c:/batch
-  batchfileext: sh 
-  codedir: c:/code
+  csvoutputdir: /var/azcafe/output
+  csvoutputencode: Shift_JIS
+  csvuploaddir: /var/azcafe/upload
+  batchdir: /var/azcafe/batch
+  batchfileext: bat 
+  codedir: /var/azcafe/code
   srcPrefix: src_
+  gradingjavac: comple_java.sh
+  gradingjava: exec_java.sh
+  checkstyle: checkstyle_java.sh
+  gradingjavascript: exec_javascript.sh
+  skillmaplimit: 100
+  studentdenied: ^/user/reset/password$,^/homeroom/update,^/assignment/(edit|create|confirm|insert),^/manage/.*,^user/csvinput
+  nologindisplay: /,/login,/auth,/logout,/css/.+,/img/.+,/getImage/.+,/favicon.ico,/error/.*,/js/.+,/dist/.+,/plugins/.+,/summernote/.+
+  handminus: 5
+  difficulty:
+    veasy: 0
+    easy: 2
+    normal: 5
+    diff: 7
+    vdiff: 10

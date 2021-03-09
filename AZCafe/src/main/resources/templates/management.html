@@ -249,7 +249,8 @@
 <script th:if="${completeflg}">
 showMessage("success","登録完了です");
 </script>
-<script>
+<script th:inline="javascript">
+/*<![CDATA[*/
   let skillTable = null;
   
   $(document).on('click', '.edit-classname', function(){
@@ -570,7 +571,7 @@ $(document).on('drop', function (event) {
 	function removeLoading(){
 	 $("#loading").remove();
 	}
-	
+/*]]>*/
 </script>
 </body>
 

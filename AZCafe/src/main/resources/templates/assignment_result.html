@@ -226,7 +226,8 @@
 <!-- ace -->
   <script th:src="@{/ace/src/ace.js}" type="text/javascript" charset="utf-8"></script>
   <script th:src="@{ace/src/ext-language_tools.js}" type="text/javascript" charset="utf-8"></script>
-<script>
+<script th:inline="javascript">
+/*<![CDATA[*/
 $(function () {
   bsCustomFileInput.init();
     $('#example1').DataTable({
@@ -264,7 +265,7 @@ $(function () {
 	        alert("登録に失敗しました");
 	    });
   });
-
+/*]]>*/
 </script>
 
 </body>

@@ -193,6 +193,7 @@ CREATE TABLE LEVEL_TBL
 	good int NOT NULL COMMENT 'この称号に必要なイイネ数',
 	-- 自分が書いたコメントの数
 	comment int NOT NULL COMMENT '自分が書いたコメントの数',
+	skill_point int NOT NULL,
 	-- 0:ブロンズ
 	-- 1:シルバー
 	-- 2:ゴールド
@@ -278,11 +279,11 @@ CREATE TABLE TEST_CASE_TBL
 	no int NOT NULL COMMENT '1~',
 	-- 無い場合はNULL
 	-- 複数ある場合は改行をいれる
-	input_text varchar(2000) COMMENT '無い場合はNULL
+	input_text varchar(8000) COMMENT '無い場合はNULL
 複数ある場合は改行をいれる',
 	-- テストケースの答え
 	-- 実行結果とこの項目が一致するかどうかで正解かどうかを判定する
-	output_txt varchar(2000) NOT NULL COMMENT 'テストケースの答え
+	output_txt varchar(8000) NOT NULL COMMENT 'テストケースの答え
 実行結果とこの項目が一致するかどうかで正解かどうかを判定する',
 	PRIMARY KEY (testcase_id)
 );
