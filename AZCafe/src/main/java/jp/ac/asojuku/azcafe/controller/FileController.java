@@ -139,6 +139,7 @@ public class FileController {
 		//出力！
 		boolean result = userCSVService.outputRnakingCsv(rankingList, csvPath);
 
+		
 		byte[] b  = {};
 		if( result ) {
 			Resource resource = resourceLoader.getResource("file:" + csvPath);

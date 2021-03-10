@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.thymeleaf.util.StringUtils;
 
 import jp.ac.asojuku.azcafe.config.AZCafeConfig;
@@ -20,6 +23,7 @@ import jp.ac.asojuku.azcafe.util.FileUtils;
 
 
 public class GradingJava extends GradingProcess {
+	private static final Logger logger = LoggerFactory.getLogger(GradingJava.class);
 	//クラス情報保持用の内部クラス
 	private class ClassInfo{
 		private boolean isMainClass;
@@ -38,6 +42,7 @@ public class GradingJava extends GradingProcess {
 	private final String COMPLE_RESULT = "comple_result.txt";
 	private final String CHECKSTYLE_RESULT = "checkstyle_result.txt";
 	private final int CHECKSTYLE_FULLSCORE = 50;	//チェックスタイルの満点（原点方式）
+	private final int TIMEOUT = 10;
 
 	public GradingJava(Language lang) {
 		super(lang);
@@ -72,14 +77,19 @@ public class GradingJava extends GradingProcess {
 			//メインクラスを探す
 			String className = getMainFullClassName(classInfoList);
 			//テストケース分ループする
+			logger.info("[debug]exec -start-");
 			for( TestCaseTblEntity testCase : entity.getTestCaseTblSet()) {
+
+				logger.info("[debug]aid="+testCase.getAssignmentId()+",testcaseId="+testCase.getTestcaseId());
 				if( execProgram(batchDir,workDir,className,testCase) ) {
 					//実行成功したので結果を比較する
+					logger.info("[debug]結果をDTOに登録します");
 					GradingTestCaseResultDto testcaseResult = compereOutput(testCase,workDir) ;
 					//結果をDTOに登録する
 					result.addGradingTestCaseResult(testcaseResult);
 				}
 			}
+			logger.info("[debug]exec -end-");
 			//点数チェック
 			checkOutputScore(result);
 
@@ -118,14 +128,18 @@ public class GradingJava extends GradingProcess {
 			//////////////////////////////////////////
 			String className = FileUtils.getPreffix( FileUtils.getFileNameFromPath(srcFile.toString()) );
 			//テストケース分ループする
+			//logger.info("[debug]exec -start-");
 			for( TestCaseTblEntity testCase : entity.getTestCaseTblSet()) {
+				//logger.info("[debug]aid="+testCase.getAssignmentId()+",testcaseId="+testCase.getTestcaseId());
 				if( execProgram(batchDir,workDir,className,testCase) ) {
 					//実行成功したので結果を比較する
 					GradingTestCaseResultDto testcaseResult = compereOutput(testCase,workDir) ;
 					//結果をDTOに登録する
 					result.addGradingTestCaseResult(testcaseResult);
+					//logger.info("[debug]結果をDTOに登録します-testcaseResult["+testcaseResult.getTestcaseId()+"]["+testcaseResult.isCorrect()+"]");
 				}
 			}
+			//logger.info("[debug]exec -end-");
 			//点数チェック
 			checkOutputScore(result);
 
@@ -135,9 +149,9 @@ public class GradingJava extends GradingProcess {
 			checkStyle(batchDir,workDir,result);
 			
 		}catch(IOException e) {
-			
+			logger.info(e.toString());
 		}catch(InterruptedException e) {
-			
+			logger.info(e.toString());
 		}
 		
 		return result;
@@ -325,12 +339,8 @@ public class GradingJava extends GradingProcess {
 			//実行する
 			Process process = pb.start();
 			//バッチ実行タイムアウトは１０秒
-			int ret = process.waitFor();
-	
-			if( ret == 0){
-				//実行成功
-				result = true;
-			}
+			result = process.waitFor(TIMEOUT,TimeUnit.SECONDS);
+			//logger.info("[debug]process.waitFor="+result);
 		}finally {
 			if( inputPath != null ) {
 				FileUtils.delete(inputPath.toFile());

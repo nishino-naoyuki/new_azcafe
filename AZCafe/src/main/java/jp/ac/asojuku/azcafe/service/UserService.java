@@ -317,7 +317,7 @@ public class UserService {
 			dto.setAssigmentId(answerEntity.getAssignmentId());
 			dto.setTitle(answerEntity.getAssignmentTbl().getTitle());
 			dto.setGroup(answerEntity.getAssignmentTbl().getGroupTbl().getName());
-			dto.setScore(answerEntity.getScore());
+			dto.setScore(answerEntity.getPoint());
 			dto.setCommentNum(answerEntity.getCommentTblSet().size());
 			dto.setGoodNum(answerEntity.getAnswerGoodTblSet().size());
 			dto.setAnswerDate(answerEntity.getAnswerDate());

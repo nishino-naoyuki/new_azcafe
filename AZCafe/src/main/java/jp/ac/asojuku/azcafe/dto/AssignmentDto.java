@@ -60,6 +60,10 @@ public class AssignmentDto {
 		skillIdList.add(skillId);
 	}
 	public void addSkillId(List<String> strIdList) throws AZCafeException {
+		if( strIdList == null ) {
+			skillIdList = new ArrayList<>();
+			return;
+		}
 		try {
 			for(String id : strIdList) {
 				int intSkillId = Integer.parseInt(id);

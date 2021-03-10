@@ -1,8 +1,11 @@
 package jp.ac.asojuku.azcafe.service;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -206,8 +209,12 @@ public class UserCSVService {
 		}
 		String encode = AZCafeConfig.getInstance().getCsvoutputencode();
 		//出力する
-		try(Writer writer = new FileWriter(encode)){
-			StatefulBeanToCsv<UserRankingCSV> beanToCsv = new StatefulBeanToCsvBuilder<UserRankingCSV>(writer).build();			
+		OutputStreamWriter osw = null;
+		BufferedWriter bw = null;
+		try{
+			osw  = new OutputStreamWriter(new FileOutputStream(csvPath), encode);
+		    bw = new BufferedWriter(osw);
+			StatefulBeanToCsv<UserRankingCSV> beanToCsv = new StatefulBeanToCsvBuilder<UserRankingCSV>(bw).build();			
 			beanToCsv.write(rankCsvList);
 		} catch (CsvDataTypeMismatchException e) {
 			e.printStackTrace();
@@ -218,6 +225,18 @@ public class UserCSVService {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			result = false;
+		}finally {
+			try {
+				if( bw != null ) {
+						bw.close();
+				}	
+				if( osw != null ) {
+					osw.close();
+				}
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
 		}
 		
 		return result;

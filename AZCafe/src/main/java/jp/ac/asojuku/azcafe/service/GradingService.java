@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,7 @@ import jp.ac.asojuku.azcafe.repository.SkillMapRepository;
 import jp.ac.asojuku.azcafe.repository.TestCaseAnswerRepository;
 import jp.ac.asojuku.azcafe.repository.UserRepository;
 import jp.ac.asojuku.azcafe.service.grading.GradingFactory;
+import jp.ac.asojuku.azcafe.service.grading.GradingJava;
 import jp.ac.asojuku.azcafe.service.grading.GradingProcess;
 import jp.ac.asojuku.azcafe.util.FileUtils;
 
@@ -41,7 +44,7 @@ import jp.ac.asojuku.azcafe.util.FileUtils;
  */
 @Service
 public class GradingService {
-	
+	private static final Logger logger = LoggerFactory.getLogger(GradingService.class);
 	@Autowired
 	AssignmentRepository assignmentRepository;
 	@Autowired
@@ -227,12 +230,13 @@ public class GradingService {
 		//ポイントを更新する
 		result.setPoint( calPoint(answerEntity,result.isCorrect()) );
 		
-		answerRepository.save(answerEntity);
+		answerEntity = answerRepository.save(answerEntity);
+		
+		//logger.info("[debug]AnswerTblEntity["+assignmentId+"]["+userId+"]["+answerEntity.getAnswerId()+"]");
 		
 		//テストケースごとの結果をセット
 		List<TestCaseAnswerTblEntity> TestCaseAnswerTblEntityList = new ArrayList<>();
 		for( GradingTestCaseResultDto testCase : result.getTestCaseResultList()) {
-			
 			//登録済みのものを取得する
 			TestCaseAnswerTblEntity testcaseAnswerEntity = 
 					testCaseAnswerRepository.getOne(testCase.getTestcaseId(), answerEntity.getAnswerId());
@@ -244,7 +248,8 @@ public class GradingService {
 			
 			testcaseAnswerEntity.setCorrectly(testCase.isCorrect()?1:0);
 			testcaseAnswerEntity.setUserOutput(testCase.getUserOutput());
-			
+
+			//logger.info("[debug]GradingTestCaseResultDto["+testcaseAnswerEntity.getAnswerId()+"]["+testcaseAnswerEntity.getTestcaseId()+"]");
 			TestCaseAnswerTblEntityList.add(testcaseAnswerEntity);
 		}
 		testCaseAnswerRepository.saveAll(TestCaseAnswerTblEntityList);

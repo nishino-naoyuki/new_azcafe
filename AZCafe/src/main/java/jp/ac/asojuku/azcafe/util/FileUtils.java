@@ -5,7 +5,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,11 +13,15 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -150,6 +153,10 @@ public class FileUtils {
             //フォルダ作成実行
             f.mkdirs();
         }
+        //権限を７７７に
+        f.setExecutable(true,false);
+        f.setWritable(true, false);
+        f.setReadable(true, false);
 	}
 
 	/**
@@ -373,8 +380,12 @@ public class FileUtils {
 		try (BufferedWriter bw = Files.newBufferedWriter(path, Charset.forName(encode))) {
             // ファイルへの書き込み
 			for(String line : content) {
-				bw.write(line);
-				bw.newLine();
+				try {
+					bw.write(line);
+					bw.newLine();
+				}catch (IOException e) {
+					;//none
+				}
 			}
 
         } catch (IOException e) {

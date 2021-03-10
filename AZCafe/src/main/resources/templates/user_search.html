@@ -217,12 +217,14 @@
 	            		data:"nickName" ,
 	            		type:"userId",
 	                	render: function ( data, type, row ) {
-	                		const url = /*[[@{/bbs/detail}]]*/ "/user/info";
+	                		const url = /*[[@{/user/info}]]*/ "/user/info";
 	                		let img = "";
 	                		if( row.avater == null ){
-	                			img = '<img src="/img/no_image.jpg" class="ranking-user-img elevation-2" alt="User Image">';
+	                			const imgUrl = /*[[@{/img/no_image.jpg}]]*/ "/img/no_image.jpg";
+	                			img = '<img src="'+imgUrl+'" class="ranking-user-img elevation-2" alt="User Image">';
 	                		}else{
-	                			img = '<img src="/getImage/'+row.avater+'" class="ranking-user-img elevation-2" alt="User Image">';
+	                			const imgUrl = /*[[@{/getImage/}]]*/ "/getImage/";
+	                			img = '<img src="'+imgUrl+row.avater+'" class="ranking-user-img elevation-2" alt="User Image">';
 	                		}
 	                		
 	                		return '<a href="'+url+'?userId='+row.userId+'">'+img+'</a>'+data;
@@ -293,12 +295,14 @@
 	            		data:"nickName" ,
 	            		type:"userId",
 	                	render: function ( data, type, row ) {
-	                		const url = /*[[@{/bbs/detail}]]*/ "/user/info";
+	                		const url = /*[[@{/user/info}]]*/ "/user/info";
 	                		let img = "";
 	                		if( row.avater == null ){
-	                			img = '<img src="/img/no_image.jpg" class="ranking-user-img elevation-2" alt="User Image">';
+	                			const imgUrl = /*[[@{/img/no_image.jpg}]]*/ "/img/no_image.jpg";
+	                			img = '<img src="'+imgUrl+'" class="ranking-user-img elevation-2" alt="User Image">';
 	                		}else{
-	                			img = '<img src="/getImage/'+row.avater+'" class="ranking-user-img elevation-2" alt="User Image">';
+	                			const imgUrl = /*[[@{/getImage/}]]*/ "/getImage/";
+	                			img = '<img src="'+imgUrl+row.avater+'" class="ranking-user-img elevation-2" alt="User Image">';
 	                		}
 
 	                		return '<a href="'+url+'?userId='+row.userId+'">'+img+'</a>'+data;
