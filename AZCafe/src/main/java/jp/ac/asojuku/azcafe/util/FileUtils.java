@@ -5,23 +5,23 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.FileAttribute;
-import java.nio.file.attribute.PosixFilePermission;
-import java.nio.file.attribute.PosixFilePermissions;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -371,13 +371,30 @@ public class FileUtils {
 		return path;
 	}
 
+	/**
+	 * 指定されたエンコードでファイルを出力する
+	 * 
+	 * ※newBufferedWriterを使用するとUnmappableCharacterExceptionが発生する。
+	 * 原因は、newBufferedWriterはCharcodeEncoderの設定がREPORTになっており
+	 * 変換できないもいがあると即例外を出すようなせってになっているため。
+	 * 
+	 * 参考）https://www.slideshare.net/chibochibo/niobufferedwriter
+	 * 
+	 * @param filePath
+	 * @param content
+	 * @param encode
+	 * @return
+	 * @throws AZCafeException
+	 */
 	public static Path outputFile(String filePath,List<String> content,String encode) throws AZCafeException {
 		Path path = Paths.get(filePath);
 		
 		if( !Files.isWritable(path.getParent()) ) {
 			makeDir(path.getParent().toString());
 		}
-		try (BufferedWriter bw = Files.newBufferedWriter(path, Charset.forName(encode))) {
+		
+		try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath),Charset.forName(encode))) ) {
+		//try (BufferedWriter bw = Files.newBufferedWriter(path, Charset.forName(encode))) {
             // ファイルへの書き込み
 			for(String line : content) {
 				try {
