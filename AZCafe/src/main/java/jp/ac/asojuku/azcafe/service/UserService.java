@@ -600,7 +600,11 @@ public class UserService {
 		
 		entity.setAvater(createUserDto.getIconFileName());
 		entity.setRole(createUserDto.getRoleId());
-		entity.setOrgNo(createUserDto.getStudentNo());
+		if( RoleId.STUDENT.equals(createUserDto.getRoleId())) {
+			entity.setOrgNo(createUserDto.getStudentNo());
+		}else {
+			entity.setOrgNo(null);
+		}
 		entity.setName(createUserDto.getName());
 		entity.setNickName(createUserDto.getNickname());
 		entity.setMail(createUserDto.getMail());

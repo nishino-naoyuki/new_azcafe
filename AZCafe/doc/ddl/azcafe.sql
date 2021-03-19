@@ -338,7 +338,7 @@ CREATE TABLE USER_TBL
 	user_id int NOT NULL AUTO_INCREMENT,
 	-- 学生の場合は学籍番号
 	-- 教員の場合は社員番号
-	org_no varchar(10) NOT NULL COMMENT '学生の場合は学籍番号
+	org_no varchar(10) COMMENT '学生の場合は学籍番号
 教員の場合は社員番号',
 	nick_name varchar(100) NOT NULL,
 	name varchar(100) NOT NULL,
@@ -559,7 +559,7 @@ ALTER TABLE COMMENT_TBL
 
 
 ALTER TABLE FOLLOW_TBL
-	ADD FOREIGN KEY (user_id)
+	ADD FOREIGN KEY (follew_user_id)
 	REFERENCES USER_TBL (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -567,7 +567,7 @@ ALTER TABLE FOLLOW_TBL
 
 
 ALTER TABLE FOLLOW_TBL
-	ADD FOREIGN KEY (follew_user_id)
+	ADD FOREIGN KEY (user_id)
 	REFERENCES USER_TBL (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT

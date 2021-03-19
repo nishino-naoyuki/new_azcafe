@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -110,7 +111,7 @@ public class FileUtils {
 	 */
 	public static String uploadIconFile(MultipartFile multipartFile) throws AZCafeException  {
 		
-		if( multipartFile == null ) {
+		if( multipartFile == null || StringUtils.isEmpty(multipartFile.getOriginalFilename()) ) {
 			return null;
 		}
 		

@@ -68,9 +68,9 @@
 	                <tbody>
 	                <tr th:each="testcaseAns ,status:${gradingResultDetailDto.gradingResultDto.testCaseResultList}">
 	                  <td th:text="${status.count}"></td>
-	                  <td th:text="${testcaseAns.input}"></td> 
-	                  <td th:text="${testcaseAns.correctOutput}"></td>
-	                  <td th:text="${testcaseAns.userOutput}"></td>
+	                  <td th:utext="${testcaseAns.input}"></td> 
+	                  <td th:utext="${testcaseAns.getCorrectOutputHtml()}"></td>
+	                  <td th:utext="${testcaseAns.getUserOutputHtml()}"></td>
 	                  <td>
 	                  	　<img th:src="@{/img/seikai.gif}" th:if="${testcaseAns.correct}" height="33px"/><img th:src="@{/img/fuseikai.gif}" th:unless="${testcaseAns.correct}"  height="33px" />
 	                  </td>

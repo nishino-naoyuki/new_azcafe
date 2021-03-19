@@ -2,6 +2,7 @@ package jp.ac.asojuku.azcafe.dto;
 
 import org.apache.commons.lang3.StringUtils;
 
+import jp.ac.asojuku.azcafe.util.HtmlUtil;
 import lombok.Data;
 
 /**
@@ -21,6 +22,14 @@ public class GradingTestCaseResultDto {
 		if( StringUtils.isEmpty(input) ) {
 			return "<入力無し>";
 		}
-		return input;
+		return HtmlUtil.nl2be(input);
+	}
+	
+	public String getCorrectOutputHtml() {
+		return  HtmlUtil.nl2be(correctOutput);
+	}
+	
+	public String getUserOutputHtml() {
+		return  HtmlUtil.nl2be(userOutput);
 	}
 }

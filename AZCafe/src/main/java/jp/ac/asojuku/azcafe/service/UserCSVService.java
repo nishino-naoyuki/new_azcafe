@@ -47,7 +47,7 @@ import jp.ac.asojuku.azcafe.util.FileUtils;
 import jp.ac.asojuku.validator.UserValidator;
 
 @Service
-public class UserCSVService {
+public class UserCSVService extends UserService{
 	private static final Logger logger = LoggerFactory.getLogger(UserCSVService.class);
 	@Autowired 
 	UserRepository userRepository;
@@ -265,7 +265,9 @@ public class UserCSVService {
         		UserValidator.useName(userCsv.getName(), err);
         		UserValidator.useNickName(userCsv.getNickName(), err);
         		UserValidator.roleId(String.valueOf(userCsv.getRoleId()), err);
-        		if( RoleId.STUDENT.equals(userCsv.getRoleId())){
+        		if( RoleId.STUDENT.equals(userCsv.getRoleId()) &&
+        				isExistStudentNo(userCsv.getOrgNo())){
+        			UserValidator.setErrorcode("studentNo",err,ErrorCode.ERR_MEMBER_ENTRY_DUPLICATE_STUDENTNO);
         			UserValidator.admissionYear(userCsv.getAdmissionYear(), err);
         		}
         		UserValidator.mailAddress(userCsv.getMailAddress(), err);
@@ -348,7 +350,11 @@ public class UserCSVService {
 		entity.setName(userCSV.getName());
 		entity.setNickName(userCSV.getNickName());
 		entity.setPassword(hashedPwd);
-		entity.setOrgNo(userCSV.getOrgNo());
+		if( RoleId.STUDENT.equals(userCSV.getRoleId())) {
+			entity.setOrgNo(userCSV.getOrgNo());
+		}else {
+			entity.setOrgNo(null);
+		}
 		entity.setEnterYear(Integer.parseInt(userCSV.getAdmissionYear()));
 		entity.setIntroduction("");
 		
