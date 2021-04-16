@@ -208,15 +208,19 @@
       "autoWidth": false,
       "responsive": true,
     });
-    $('#public_list').DataTable({
-      "paging": true,
+    $('#public_list').css('margin-left','0px'); 
+    const publicTbl = $('#public_list').DataTable({
+      "paging": false,
       "lengthChange": false,
-      "searching": false,
-      "ordering": false,
+      "searching": true,
+      "ordering": true,
       "info": true,
       "autoWidth": false,
       "responsive": true,
-    });
+      "scrollY": 200,
+    }).columns.adjust().draw();
+    
+   // publicTbl.columns.adjust();
   });
 </script>
 <script th:unless="${session['LoginInfo'].isStudent()}" th:inline="javascript" >

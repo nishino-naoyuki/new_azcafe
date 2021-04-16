@@ -20,5 +20,11 @@ insert into homeroom_tbl(`homeroom_id`,`course_id`,`name`)values(6,2,'itf');
 insert into homeroom_tbl(`homeroom_id`,`course_id`,`name`)values(7,1,'itg');
 insert into homeroom_tbl(`homeroom_id`,`course_id`,`name`)values(8,1,'ith');
 insert into homeroom_tbl(`homeroom_id`,`course_id`,`name`)values(0,0,'アドバンス');
+insert into homeroom_tbl(`homeroom_id`,`course_id`,`name`)values(11,1,'SDA');
+insert into homeroom_tbl(`homeroom_id`,`course_id`,`name`)values(12,2,'SDB');
+insert into homeroom_tbl(`homeroom_id`,`course_id`,`name`)values(13,2,'SDC');
+insert into homeroom_tbl(`homeroom_id`,`course_id`,`name`)values(14,2,'SDD');
+insert into homeroom_tbl(`homeroom_id`,`course_id`,`name`)values(15,3,'SDE');
+insert into homeroom_tbl(`homeroom_id`,`course_id`,`name`)values(16,3,'SDF');
 
 insert into user_tbl(`org_no`, `nick_name`, `name`, `mail`, `password`, `role`, `homeroom_id`, `grade`, `enter_year`, `introduction`, `point`, `follow_num`, `follower_num`, `good_num`, create_date,update_date) values ('0000000', '西野先生', '西野直幸', 'nishino@asojuku.ac.jp', '64d691f7849b22ccb37673e9864913a9', '1', '1', '1', '2014', 'test', '0', '0', '0', '0',now(),now());
