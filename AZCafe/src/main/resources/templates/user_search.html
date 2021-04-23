@@ -227,7 +227,7 @@
 	                			img = '<img src="'+imgUrl+row.avater+'" class="ranking-user-img elevation-2" alt="User Image">';
 	                		}
 	                		
-	                		return '<a href="'+url+'?userId='+row.userId+'">'+img+'</a>'+data;
+	                		return '<a href="'+url+'?userId='+row.userId+'" target="userInfo">'+img+'</a>'+data;
 	                	}
 	            	},
 	                { data: "followNum" },
@@ -305,7 +305,7 @@
 	                			img = '<img src="'+imgUrl+row.avater+'" class="ranking-user-img elevation-2" alt="User Image">';
 	                		}
 
-	                		return '<a href="'+url+'?userId='+row.userId+'">'+img+'</a>'+data;
+	                		return '<a href="'+url+'?userId='+row.userId+'" target="userInfo">'+img+'</a>'+data;
 	                	}
 	            	},
 	                { data: "name" },

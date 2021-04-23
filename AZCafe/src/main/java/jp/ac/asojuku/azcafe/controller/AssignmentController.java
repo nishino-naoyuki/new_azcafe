@@ -255,8 +255,8 @@ public class AssignmentController {
 		
 		if( userId == null ) {
 			userId = loginInfo.getUserId();
-		}else {
-			//ユーザーが情報を見れるかをチェックする
+		}else if(loginInfo.isStudent() ){
+			//学生の場合はユーザーが情報を見れるかをチェックする
 			if( !answerService.isWatch(assignmentId, userId, loginInfo.getUserId()) ) {
 				throw new AZCafePermissonDeniedException("この画面を見る権限がありません");
 			}
@@ -525,11 +525,12 @@ public class AssignmentController {
 		
 		for(AssignmentPublicForm publicForm : assignmentForm.getPublicStateList()) {
 			AssignmentPublicDto dto = new AssignmentPublicDto();
-			
-			dto.setHomeroomId(publicForm.getHomeroomId());
-			dto.setPublicState(publicForm.getPublicState());
-			
-			publicList.add(dto);
+			if( publicForm.getPublicState() != -1 ) {
+				dto.setHomeroomId(publicForm.getHomeroomId());
+				dto.setPublicState(publicForm.getPublicState());
+				
+				publicList.add(dto);
+			}
 		}
 		
 		return publicList;

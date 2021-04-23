@@ -93,7 +93,7 @@
                       <td th:unless="${session['LoginInfo'].isStudent()}" ><input type="checkbox" name="assSel" class="assSel" th:value="${element.assignmentId}"></td>
                       <td th:text="${element.groupName}"></td>
                       <td>
-                        <a th:href="|@{/assignment/detail}?id=${element.assignmentId}|" class="ranking-user-name" th:text="${element.title}" target="_blank" rel="noopener noreferrer"></a>
+                        <a th:href="|@{/assignment/detail}?id=${element.assignmentId}|" class="ranking-user-name" th:text="${element.title}" target="assignment" rel="noopener noreferrer"></a>
                       </td> 
                       <td th:text="${element.difficulty}"></td>
                       <td th:text="${element.getState()}"></td>
@@ -147,7 +147,10 @@
 	               <input type="hidden" th:name="|publicStateList[${status.index}].homeroomId|" th:value="${dto.homeroomId}">
 	               <div class="btn-group btn-group-toggle" data-toggle="buttons">
 	                 <label class="btn btn-sm bg-primary">
-	                   <input type="radio" th:name="|publicStateList[${status.index}].publicState|"  autocomplete="off" value="0" checked > 未公開
+	                   <input type="radio" th:name="|publicStateList[${status.index}].publicState|"  autocomplete="off" value="-1" checked > 変更しない
+	                 </label>
+	                 <label class="btn btn-sm bg-primary">
+	                   <input type="radio" th:name="|publicStateList[${status.index}].publicState|"  autocomplete="off" value="0" > 未公開
 	                 </label>
 	                 <label class="btn btn-sm bg-primary">
 	                   <input type="radio" th:name="|publicStateList[${status.index}].publicState|"  value="1" autocomplete="off"  > 公開

@@ -27,7 +27,7 @@ public interface AssignmentRepository
 			+ "where p.assignmentId = a.assignmentId and "
 			+ "p.homeroomId = u.homeroomTbl.homeroomId and "
 			+ "((u.role=1 and u.userId = :userId) or (u.role=0 and u.userId = :userId and p.publicState <> 0))  "
-			+ "order by a.groupTbl.name,a.groupInNo")
+			+ "order by a.groupTbl.name,a.title,a.groupInNo")
 	public List<AssignmentTblEntity> getAssignmentList(@Param("userId")Integer userId);
 	
 	@Query("select count(distinct a) from AssignmentTblEntity a "

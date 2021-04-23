@@ -38,4 +38,8 @@ public class LoginInfoDto {
 	public boolean isStudent() {
 		return role == RoleId.STUDENT;
 	}
+	
+	public boolean isTeacher() {
+		return role == RoleId.TEACHER;
+	}
 }

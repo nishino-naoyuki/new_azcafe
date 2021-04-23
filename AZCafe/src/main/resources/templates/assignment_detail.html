@@ -562,7 +562,8 @@ $(function () {
     })
     .fail(function(jqXHR, textStatus, errorThrown){
         alert("fail");
-        $("#waiting").hide();
+        //$("#waiting").hide();
+        hideWaiting();
     });
     //alert(langId+":"+ansText);
     //$("#waiting").hide();
@@ -613,7 +614,8 @@ $(function () {
     })
     .fail(function(jqXHR, textStatus, errorThrown){
         alert("fail");
-        $("#waiting").hide();
+        //$("#waiting").hide();
+        hideWaiting();
     });
     //alert(langId+":"+ansText);
     //$("#waiting").hide();

@@ -39,7 +39,7 @@ azcafe:
   skillmaplimit: 100
   studentdenied: ^/user/reset/password$,^/homeroom/update,^/assignment/(edit|create|confirm|insert),^/manage/.*,^user/csvinput
   nologindisplay: /,/login,/auth,/logout,/css/.+,/img/.+,/getImage/.+,/favicon.ico,/error/.*,/js/.+,/dist/.+,/plugins/.+,/summernote/.+
-  handminus: 5
+  handminus: 0
   difficulty:
     veasy: 0
     easy: 2
